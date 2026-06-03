@@ -1217,3 +1217,428 @@
 .river-section-page-open .page-anchor-river-card {
   pointer-events: auto;
 }
+
+/* Deal nested page cards out from under the anchored card */
+
+.portfolio-page-open .project-river-track {
+  animation: projectRiverDealFromAnchor 780ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: left center;
+}
+
+.portfolio-page-open .project-river-card {
+  animation: projectCardSoftReveal 520ms ease both;
+}
+
+.portfolio-page-open .project-river-card:nth-child(1) {
+  animation-delay: 80ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(3) {
+  animation-delay: 220ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(4) {
+  animation-delay: 290ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(5) {
+  animation-delay: 360ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(6) {
+  animation-delay: 430ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(7) {
+  animation-delay: 500ms;
+}
+
+@keyframes projectRiverDealFromAnchor {
+  from {
+    opacity: 0;
+    transform: translateX(clamp(-420px, -24vw, -260px)) scale(0.94);
+    filter: blur(2px);
+  }
+
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes projectCardSoftReveal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: inherit;
+  }
+}
+
+@media (max-width: 760px) {
+  .portfolio-page-open .project-river-track {
+    animation: projectRiverDealFromTopAnchor 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes projectRiverDealFromTopAnchor {
+    from {
+      opacity: 0;
+      transform: translateY(clamp(-180px, -24vh, -120px)) scale(0.94);
+      filter: blur(2px);
+    }
+
+    60% {
+      opacity: 1;
+      filter: blur(0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+  }
+}
+/* Final sizing + page-card deal tuning */
+
+/*
+  1. Keep all cards inside the real viewport at 100% browser zoom.
+  Card ratio is 8 / 15, so width is derived from available height.
+*/
+
+.river-card {
+  width: min(
+    clamp(300px, 29vw, 420px),
+    calc((100dvh - 120px) * 0.533333)
+  );
+}
+
+.project-river-card {
+  width: min(
+    clamp(270px, 25vw, 360px),
+    calc((100dvh - 155px) * 0.533333)
+  );
+}
+
+/*
+  2. Make the anchored parent card read as the larger / more important card.
+  Page cards become slightly smaller than the anchored card.
+*/
+
+.river-card.opening-anchor-card,
+.river-card.page-anchor-river-card {
+  transform:
+    translateX(calc(-50vw + var(--page-anchor-center-x, clamp(205px, 16vw, 290px))))
+    translateY(-50%)
+    scale(0.84)
+    rotateZ(-2deg);
+}
+
+.river-card.page-anchor-river-card:hover,
+.river-card.page-anchor-river-card:focus-visible {
+  transform:
+    translateX(calc(-50vw + var(--page-anchor-center-x, clamp(205px, 16vw, 290px))))
+    translateY(calc(-50% - 6px))
+    scale(0.84)
+    rotateZ(0deg);
+}
+
+.project-river {
+  left: clamp(430px, 36vw, 620px);
+  height: min(82dvh, 760px);
+}
+
+.project-river-card.active {
+  transform:
+    translateX(-50%)
+    translateY(-50%)
+    scale(0.82)
+    rotateZ(0deg);
+}
+
+.project-river-card.active:hover .project-river-card-inner,
+.project-river-card.active:focus-visible .project-river-card-inner {
+  transform: rotateY(0deg) translateY(-8px);
+}
+
+/*
+  3. Remove the page-card type/eyebrow text.
+  The title and image should carry the card.
+*/
+
+.project-river-card-eyebrow {
+  display: none;
+}
+
+/*
+  4. Prevent text overflow on page cards.
+  Long titles scale down, descriptions clamp.
+*/
+
+.project-river-card-copy {
+  right: clamp(24px, 3vw, 38px);
+  bottom: clamp(36px, 3.5vw, 54px);
+  left: clamp(24px, 3vw, 38px);
+  gap: 10px;
+  padding: clamp(14px, 1.7vw, 20px);
+}
+
+.project-river-card-title {
+  max-width: 100%;
+  font-size: clamp(1.45rem, 2.15vw, 2.65rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.project-river-card-description {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: clamp(0.72rem, 0.86vw, 0.84rem);
+  line-height: 1.32;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.project-river-card-status {
+  display: none;
+}
+
+/*
+  5. Make the nested cards visibly deal from the far left,
+  instead of appearing already centered.
+*/
+
+.portfolio-page-open .project-river-card {
+  animation-duration: 1150ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+.portfolio-page-open .project-river-card.active {
+  animation-name: projectActiveCardDealFromLeft;
+}
+
+.portfolio-page-open .project-river-card.visible:not(.active) {
+  animation-name: projectSideCardDealFromLeft;
+}
+
+.portfolio-page-open .project-river-card:nth-child(1) {
+  animation-delay: 140ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(2) {
+  animation-delay: 260ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(3) {
+  animation-delay: 380ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(4) {
+  animation-delay: 500ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(5) {
+  animation-delay: 620ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(6) {
+  animation-delay: 740ms;
+}
+
+.portfolio-page-open .project-river-card:nth-child(7) {
+  animation-delay: 860ms;
+}
+
+@keyframes projectActiveCardDealFromLeft {
+  from {
+    opacity: 0;
+    transform:
+      translateX(calc(-50vw - 260px))
+      translateY(-50%)
+      scale(0.5)
+      rotateZ(-10deg);
+    filter: blur(2px);
+  }
+
+  55% {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateX(-50%)
+      translateY(-50%)
+      scale(0.82)
+      rotateZ(0deg);
+    filter: blur(0);
+  }
+}
+
+@keyframes projectSideCardDealFromLeft {
+  from {
+    opacity: 0;
+    transform:
+      translateX(calc(-50vw - 260px))
+      translateY(calc(-50% + (var(--project-distance) * 10px)))
+      scale(0.48)
+      rotateZ(-10deg);
+    filter: blur(2px);
+  }
+
+  55% {
+    opacity: 0.92;
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 0.92;
+    transform:
+      translateX(calc(-50% + (var(--project-offset) * clamp(170px, 20vw, 285px))))
+      translateY(calc(-50% + (var(--project-distance) * 10px)))
+      scale(calc(1 - (min(var(--project-distance), 2) * 0.13)))
+      rotateZ(calc(var(--project-offset) * -2.4deg));
+    filter: blur(0);
+  }
+}
+
+/*
+  6. Mobile: parent card stays top and smaller;
+  page cards stay below it without clipping.
+*/
+
+@media (max-width: 760px) {
+  .river-card {
+    width: min(
+      82vw,
+      380px,
+      calc((100dvh - 110px) * 0.533333)
+    );
+  }
+
+  .river-card.opening-anchor-card,
+  .river-card.page-anchor-river-card {
+    transform:
+      translateX(-50%)
+      translateY(calc(-50vh + 118px))
+      scale(0.46)
+      rotateZ(-2deg);
+  }
+
+  .river-card.page-anchor-river-card:hover,
+  .river-card.page-anchor-river-card:focus-visible {
+    transform:
+      translateX(-50%)
+      translateY(calc(-50vh + 112px))
+      scale(0.46)
+      rotateZ(0deg);
+  }
+
+  .project-river {
+    top: 60%;
+    left: 0;
+    right: 0;
+    height: min(64dvh, 620px);
+  }
+
+  .project-river-card {
+    width: min(
+      74vw,
+      330px,
+      calc((100dvh - 220px) * 0.533333)
+    );
+  }
+
+  .project-river-card.active {
+    transform:
+      translateX(-50%)
+      translateY(-50%)
+      scale(0.84)
+      rotateZ(0deg);
+  }
+
+  @keyframes projectActiveCardDealFromLeft {
+    from {
+      opacity: 0;
+      transform:
+        translateX(-120vw)
+        translateY(-50%)
+        scale(0.48)
+        rotateZ(-10deg);
+      filter: blur(2px);
+    }
+
+    55% {
+      opacity: 1;
+      filter: blur(0);
+    }
+
+    to {
+      opacity: 1;
+      transform:
+        translateX(-50%)
+        translateY(-50%)
+        scale(0.84)
+        rotateZ(0deg);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes projectSideCardDealFromLeft {
+    from {
+      opacity: 0;
+      transform:
+        translateX(-120vw)
+        translateY(calc(-50% + (var(--project-distance) * 8px)))
+        scale(0.48)
+        rotateZ(-10deg);
+      filter: blur(2px);
+    }
+
+    55% {
+      opacity: 0.92;
+      filter: blur(0);
+    }
+
+    to {
+      opacity: 0.92;
+      transform:
+        translateX(calc(-50% + (var(--project-offset) * 56vw)))
+        translateY(calc(-50% + (var(--project-distance) * 8px)))
+        scale(calc(1 - (min(var(--project-distance), 2) * 0.14)))
+        rotateZ(calc(var(--project-offset) * -2.4deg));
+      filter: blur(0);
+    }
+  }
+}
+
+@media (max-height: 760px) {
+  .river-card {
+    width: min(
+      360px,
+      calc((100dvh - 96px) * 0.533333)
+    );
+  }
+
+  .project-river-card {
+    width: min(
+      320px,
+      calc((100dvh - 130px) * 0.533333)
+    );
+  }
+}
