@@ -1,44 +1,33 @@
-﻿import PageAnchorCard from "./PageAnchorCard.jsx";
+﻿import ProjectRiverCard from "./ProjectRiverCard.jsx";
+import { getPageCards } from "../data/pageCards.js";
 
-export default function PortfolioPage({ page, onClose }) {
+export default function PortfolioPage({ page, isOpening }) {
+  const pageCards = getPageCards(page);
+
+  function handleNestedCardClick(card) {
+    console.log(`Open nested card: ${card.title}`);
+  }
+
   return (
-    <section className={`portfolio-page accent-${page.accent}`}>
-      <aside className="portfolio-page-anchor">
-        <PageAnchorCard page={page} onClose={onClose} />
-        <p className="portfolio-page-anchor-hint">Click the card to return.</p>
-      </aside>
-
-      <main className="portfolio-page-content">
-        <p className="portfolio-page-kicker">
-          {page.rank} · {page.arcanaType}
-        </p>
-
-        <h1>{page.title}</h1>
-
-        <p className="portfolio-page-subtitle">
-          {page.subtitle}
-        </p>
-
-        <section className="project-card-grid" aria-label={`${page.title} content cards`}>
-          <article className="content-tarot-card">
-            <p>Featured</p>
-            <h2>Project Card</h2>
-            <span>Placeholder for a highlighted project.</span>
-          </article>
-
-          <article className="content-tarot-card">
-            <p>Process</p>
-            <h2>Case Study</h2>
-            <span>Placeholder for methods, decisions, and lessons.</span>
-          </article>
-
-          <article className="content-tarot-card">
-            <p>Links</p>
-            <h2>Resources</h2>
-            <span>Placeholder for GitHub, demos, galleries, or writing samples.</span>
-          </article>
-        </section>
-      </main>
+    <section
+      className={[
+        "portfolio-page",
+        `accent-${page.accent}`,
+        isOpening ? "portfolio-page-opening" : "portfolio-page-open"
+      ].join(" ")}
+    >
+      <section className="project-river" aria-label={`${page.title} section cards`}>
+        {pageCards.map((card) => (
+          <ProjectRiverCard
+            key={card.id}
+            eyebrow={card.eyebrow}
+            title={card.title}
+            description={card.description}
+            status={card.status}
+            onClick={() => handleNestedCardClick(card)}
+          />
+        ))}
+      </section>
     </section>
   );
 }

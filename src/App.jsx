@@ -4,26 +4,28 @@ import CardRiver from "./components/CardRiver.jsx";
 import PortfolioPage from "./components/PortfolioPage.jsx";
 import "./styles/app.css";
 
-const OPEN_TRANSITION_MS = 760;
+const PAGE_OPEN_MS = 780;
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openingPage, setOpeningPage] = useState(null);
   const [openedPage, setOpenedPage] = useState(null);
-  const transitionTimeoutRef = useRef(null);
+  const timeoutRef = useRef(null);
 
   const activePage = portfolioPages[activeIndex];
+  const displayedPage = openingPage || openedPage;
   const isOpeningPage = Boolean(openingPage);
+  const isPageOpen = Boolean(openedPage);
 
-  function clearTransitionTimeout() {
-    if (transitionTimeoutRef.current) {
-      window.clearTimeout(transitionTimeoutRef.current);
-      transitionTimeoutRef.current = null;
+  function clearOpenTimer() {
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
   }
 
   function goToIndex(nextIndex) {
-    if (isOpeningPage || openedPage) {
+    if (isOpeningPage || isPageOpen) {
       return;
     }
 
@@ -43,7 +45,7 @@ export default function App() {
   }
 
   function handleCardSelect(index) {
-    if (isOpeningPage || openedPage) {
+    if (isOpeningPage || isPageOpen) {
       return;
     }
 
@@ -52,20 +54,20 @@ export default function App() {
       return;
     }
 
-    clearTransitionTimeout();
-
     const page = portfolioPages[index];
+
+    clearOpenTimer();
     setOpeningPage(page);
 
-    transitionTimeoutRef.current = window.setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       setOpenedPage(page);
       setOpeningPage(null);
-      transitionTimeoutRef.current = null;
-    }, OPEN_TRANSITION_MS);
+      timeoutRef.current = null;
+    }, PAGE_OPEN_MS);
   }
 
   function closeOpenedPage() {
-    clearTransitionTimeout();
+    clearOpenTimer();
     setOpenedPage(null);
     setOpeningPage(null);
   }
@@ -75,25 +77,29 @@ export default function App() {
       className={[
         "app-shell",
         isOpeningPage ? "app-is-opening-page" : "",
-        openedPage ? "page-is-open" : ""
+        isPageOpen ? "page-is-open" : ""
       ].join(" ")}
     >
-      {!openedPage && (
-        <CardRiver
-          pages={portfolioPages}
-          activeIndex={activeIndex}
-          activePageId={activePage.id}
-          isOpeningPage={isOpeningPage}
-          onSelect={handleCardSelect}
-          onPrevious={goPrevious}
-          onNext={goNext}
-          canGoPrevious={activeIndex > 0 && !isOpeningPage}
-          canGoNext={activeIndex < portfolioPages.length - 1 && !isOpeningPage}
-        />
-      )}
+      <CardRiver
+        pages={portfolioPages}
+        activeIndex={activeIndex}
+        activePageId={activePage.id}
+        isOpeningPage={isOpeningPage}
+        isPageOpen={isPageOpen}
+        onSelect={handleCardSelect}
+        onReturn={closeOpenedPage}
+        onPrevious={goPrevious}
+        onNext={goNext}
+        canGoPrevious={activeIndex > 0 && !isOpeningPage && !isPageOpen}
+        canGoNext={
+          activeIndex < portfolioPages.length - 1 &&
+          !isOpeningPage &&
+          !isPageOpen
+        }
+      />
 
-      {openedPage && (
-        <PortfolioPage page={openedPage} onClose={closeOpenedPage} />
+      {displayedPage && (
+        <PortfolioPage page={displayedPage} isOpening={isOpeningPage} />
       )}
     </main>
   );

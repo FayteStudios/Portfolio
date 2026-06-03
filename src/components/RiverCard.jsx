@@ -6,7 +6,9 @@ export default function RiverCard({
   activeIndex,
   isActive,
   isOpeningPage,
+  isPageOpen,
   isOpeningCard,
+  isPageAnchorCard,
   onSelect
 }) {
   const offset = index - activeIndex;
@@ -22,7 +24,9 @@ export default function RiverCard({
         isActive ? "active" : "",
         isVisible ? "visible" : "",
         isOpeningPage && !isOpeningCard ? "collecting-card" : "",
-        isOpeningCard ? "opening-anchor-card" : ""
+        isPageOpen && !isPageAnchorCard ? "page-hidden-card" : "",
+        isOpeningCard ? "opening-anchor-card compact-card-copy" : "",
+        isPageAnchorCard ? "page-anchor-river-card compact-card-copy" : ""
       ].join(" ")}
       style={{
         "--offset": offset,
@@ -30,7 +34,9 @@ export default function RiverCard({
       }}
       type="button"
       onClick={onSelect}
-      aria-label={`Open ${page.title}`}
+      aria-label={
+        isPageAnchorCard ? "Return to card river" : `Open ${page.title}`
+      }
       aria-pressed={isActive}
     >
       <span className="river-card-inner">

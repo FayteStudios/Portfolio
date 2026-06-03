@@ -10,7 +10,9 @@ export default function CardRiver({
   activeIndex,
   activePageId,
   isOpeningPage,
+  isPageOpen,
   onSelect,
+  onReturn,
   onPrevious,
   onNext,
   canGoPrevious,
@@ -21,7 +23,7 @@ export default function CardRiver({
   const lastWheelTime = useRef(0);
 
   function handleTouchStart(event) {
-    if (isOpeningPage) {
+    if (isOpeningPage || isPageOpen) {
       return;
     }
 
@@ -32,7 +34,7 @@ export default function CardRiver({
   }
 
   function handleTouchEnd(event) {
-    if (isOpeningPage) {
+    if (isOpeningPage || isPageOpen) {
       return;
     }
 
@@ -65,7 +67,7 @@ export default function CardRiver({
   }
 
   function handleWheel(event) {
-    if (isOpeningPage) {
+    if (isOpeningPage || isPageOpen) {
       return;
     }
 
@@ -96,7 +98,7 @@ export default function CardRiver({
   }
 
   function handleKeyDown(event) {
-    if (isOpeningPage) {
+    if (isOpeningPage || isPageOpen) {
       return;
     }
 
@@ -109,9 +111,22 @@ export default function CardRiver({
     }
   }
 
+  function handleCardSelect(index) {
+    if (isPageOpen && index === activeIndex) {
+      onReturn();
+      return;
+    }
+
+    onSelect(index);
+  }
+
   return (
     <section
-      className={`river-section ${isOpeningPage ? "river-section-opening" : ""}`}
+      className={[
+        "river-section",
+        isOpeningPage ? "river-section-opening" : "",
+        isPageOpen ? "river-section-page-open" : ""
+      ].join(" ")}
       aria-label="Portfolio card river"
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -131,8 +146,10 @@ export default function CardRiver({
               activeIndex={activeIndex}
               isActive={index === activeIndex}
               isOpeningPage={isOpeningPage}
+              isPageOpen={isPageOpen}
               isOpeningCard={isOpeningPage && page.id === activePageId}
-              onSelect={() => onSelect(index)}
+              isPageAnchorCard={isPageOpen && page.id === activePageId}
+              onSelect={() => handleCardSelect(index)}
             />
           ))}
         </div>
