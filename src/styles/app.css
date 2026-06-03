@@ -851,3 +851,60 @@
     transition: none;
   }
 }
+
+/* Viewport fit fixes */
+
+.app-shell {
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.river-section {
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.river-viewport {
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  max-width: none;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+/*
+  Keeps the tarot cards inside the viewport with breathing room.
+  8 / 15 = card width-to-height ratio.
+*/
+.river-card {
+  width: min(
+    clamp(320px, 31vw, 450px),
+    calc((100dvh - 96px) * 0.533333)
+  );
+}
+
+@media (max-width: 760px) {
+  .river-card {
+    width: min(
+      84vw,
+      400px,
+      calc((100dvh - 72px) * 0.533333)
+    );
+  }
+}
+
+@media (max-width: 430px) {
+  .river-card {
+    width: min(
+      88vw,
+      365px,
+      calc((100dvh - 64px) * 0.533333)
+    );
+  }
+}
