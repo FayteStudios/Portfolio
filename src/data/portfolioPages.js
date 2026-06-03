@@ -9,7 +9,7 @@ export const portfolioPages = [
   {
     id: "about",
     title: "Nathanael Paulus",
-    subtitle: "Learn about me.",
+    subtitle: "Learn.",
     rank: "Sun",
     arcanaType: "Major",
     accent: "sun",
@@ -18,7 +18,7 @@ export const portfolioPages = [
   {
     id: "game-design",
     title: "Game Design",
-    subtitle: "Systems, prototypes, and play.",
+    subtitle: "Explore.",
     rank: "Queen",
     arcanaType: "Wands",
     accent: "wands",
@@ -27,7 +27,7 @@ export const portfolioPages = [
   {
     id: "coding",
     title: "Coding",
-    subtitle: "A true form of art.",
+    subtitle: "Inspire.",
     rank: "Ace",
     arcanaType: "Swords",
     accent: "swords",
@@ -36,7 +36,7 @@ export const portfolioPages = [
   {
     id: "art",
     title: "Art",
-    subtitle: "Image, form, and atmosphere.",
+    subtitle: "Dream.",
     rank: "Moon",
     arcanaType: "Major",
     accent: "moon",
@@ -45,7 +45,7 @@ export const portfolioPages = [
   {
     id: "writing",
     title: "Writing",
-    subtitle: "Narrative and worldbuilding.",
+    subtitle: "Introspect.",
     rank: "Knight",
     arcanaType: "Cups",
     accent: "cups",
@@ -54,7 +54,7 @@ export const portfolioPages = [
   {
     id: "contact",
     title: "Contact",
-    subtitle: "Let's connect!",
+    subtitle: "Commune.",
     rank: "Page",
     arcanaType: "Pentacles",
     accent: "pentacles",

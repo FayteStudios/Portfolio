@@ -12,21 +12,7 @@ function createDetail({ eyebrow, title, description, pageTitle }) {
     title,
     summary: description,
     paragraphs: [
-      `${title} is set up as a longer-form portfolio page inside the ${pageTitle} section.`,
-      "This panel is meant for deeper written content, project notes, links, screenshots, process explanations, or anything else that needs more room than a river card.",
-      "Replace this placeholder text with final copy when you are ready. The structure is intentionally reusable so most page cards can open this same paragraph-style layout."
-    ],
-    sections: [
-      {
-        title: "Page Content",
-        items: [
-          "Long-form paragraphs",
-          "Project details",
-          "Process notes",
-          "Links or calls to action"
-        ]
-      }
-    ]
+      ]
   };
 }
 
@@ -37,7 +23,8 @@ function createCard({
   description,
   image,
   pageTitle,
-  status = "Placeholder"
+  status = "Placeholder",
+  detail
 }) {
   return {
     id,
@@ -46,12 +33,14 @@ function createCard({
     description,
     status,
     image,
-    detail: createDetail({
-      eyebrow,
-      title,
-      description,
-      pageTitle
-    })
+    detail:
+      detail ||
+      createDetail({
+        eyebrow,
+        title,
+        description,
+        pageTitle
+      })
   };
 }
 
@@ -60,28 +49,67 @@ const pageCardsBySection = {
     createCard({
       id: "about-bio",
       title: "Bio",
-      description: "A quick look at who I am and what I do.",
+      description: "The Man.",
       image: sunImage,
-      pageTitle: "About"
+      pageTitle: "About",
+      detail: {
+        eyebrow: "",
+        title: "The Man.",
+        summary: "",
+        blocks: [
+          {
+            type: "image",
+            "imageSize": "portrait",
+            srcKey: "profile",
+            alt: "Self portrait of Nathanael Paulus.",
+            caption: "A self portrait of Nathanael."
+          },
+          {
+            type: "paragraph",
+            text: "A true renaissance man, Nathanael has spent his life honing the skills he needs to reach his goal of making engaging, memorable video games. Through his journey, he has taken on many titles: artist, writer, teacher, and programmer. His degrees in Studio Art and Computer Science have taught him what he needs to know to succeed and achieve his dreams."
+          },
+          {
+            type: "paragraph",
+            text: "Nathanael grew up in the small town of Santa Maria, CA, where he first fell in love with reading, creating artwork, and video games. Games offered him an escape from the harshness of his childhood, letting him explore worlds unknown. That experience harbored within him a desire to share that feeling with others and let them find a much-needed escape within worlds of his own design."
+          },
+          {
+            type: "paragraph",
+            text: "From the young age of 11, Nathanael began writing stories and poetry. What began as a form of self-expression turned into a full-fledged passion later in life as he learned new ways to speak his mind articulately and share ideas otherwise impossible to convey. He still writes novels and poetry, and he has recently begun writing music with a close friend. He currently has one finished novel and two others nearing completion, as well as a collection of poetry."
+          },
+          {
+            type: "paragraph",
+            text: "In college, he studied animation under the late Kathleen Quaife, who saw great potential in his artistic skills. He took that praise and fashioned a style all his own, leading to the current pieces you can find elsewhere on this site."
+          },
+          {
+            type: "paragraph",
+            text: "Always eager to learn everything he could get his hands on, Nathanael also became a skilled programmer, focusing on C#, Java, and Python. After seven years of working inside the Unity Engine and learning to make his game designs a reality, he developed knowledge most people barely scratch the surface of."
+          },
+          {
+            type: "paragraph",
+            text: "He now lives back home in Santa Maria, developing his projects, writing his stories, and dreaming up the next incredible game. His mind is set, and he is ready to take a leap into the next project, forming into the next stepping stone toward his ultimate goal of impacting the gaming industry."
+          }
+        ]
+      }
     }),
+
     createCard({
       id: "about-resume",
       title: "Resume",
-      description: "Experience, skills, and work history.",
+      description: "His Past.",
       image: aceSwordsImage,
       pageTitle: "About"
     }),
     createCard({
       id: "about-socials",
       title: "Social Links",
-      description: "My platforms and public spaces.",
+      description: "His Present.",
       image: knightCupsImage,
       pageTitle: "About"
     }),
     createCard({
       id: "about-recommendations",
       title: "Recommendations",
-      description: "Comments, references, and feedback.",
+      description: "His Future.",
       image: queenWandsImage,
       pageTitle: "About"
     })
@@ -91,42 +119,42 @@ const pageCardsBySection = {
     createCard({
       id: "gd-beetle-rpg",
       title: "Beetle RPG",
-      description: "A role-playing game project and systems showcase.",
+      description: "A simple roleplaying game where you are a beetle.",
       image: queenWandsImage,
       pageTitle: "Game Design"
     }),
     createCard({
       id: "gd-fayte",
       title: "Fayte",
-      description: "A project space for mechanics and world systems.",
+      description: "An oldschool online rpg fashioned after RPGWO.",
       image: pagePentaclesImage,
       pageTitle: "Game Design"
     }),
     createCard({
       id: "gd-aetheric",
       title: "Aetheric",
-      description: "A game concept or prototype section.",
+      description: "A 3D tactical MMO.",
       image: moonImage,
       pageTitle: "Game Design"
     }),
     createCard({
       id: "gd-hearth-and-harvest",
       title: "Hearth and Harvest",
-      description: "Farming, community, and simulation design work.",
+      description: "A farming simulator inspired trading card game.",
       image: sunImage,
       pageTitle: "Game Design"
     }),
     createCard({
       id: "gd-entangled",
       title: "Entangled",
-      description: "Design notes, mechanics, and project details.",
+      description: "A dating sim with consequences.",
       image: aceSwordsImage,
       pageTitle: "Game Design"
     }),
     createCard({
       id: "gd-boned",
       title: "Boned",
-      description: "A project slot for concept and presentation.",
+      description: "A 3D Playstation 2 style platformer.",
       image: knightCupsImage,
       pageTitle: "Game Design"
     })
@@ -136,7 +164,7 @@ const pageCardsBySection = {
     createCard({
       id: "code-rpgwo-tools",
       title: "RPGWO Tools",
-      description: "Utilities and tools built around RPGWO workflows.",
+      description: "Utilities and tools built around RPGWO servers.",
       image: rpgwoImage,
       pageTitle: "Coding"
     }),
@@ -188,21 +216,28 @@ const pageCardsBySection = {
     createCard({
       id: "art-monsters",
       title: "Monsters",
-      description: "Creature design and monster work.",
+      description: "Creature design and monsters.",
       image: moonImage,
       pageTitle: "Art"
     }),
     createCard({
       id: "art-trading-cards",
       title: "Trading Cards",
-      description: "Card-style compositions and related work.",
+      description: "Art for trading card games, featuring anime inspired characters and landscapes.",
       image: queenWandsImage,
+      pageTitle: "Art"
+    }),
+    createCard({
+      id: "art-traditional",
+      title: "Traditional Art",
+      description: "Art with pen, paper, and dreams.",
+      image: knightCupsImage,
       pageTitle: "Art"
     }),
     createCard({
       id: "art-nsfw",
       title: "NSFW",
-      description: "Eventually this can use a blurred card image.",
+      description: "For something spicier. Must be 18 or older.",
       image: knightCupsImage,
       pageTitle: "Art"
     })
@@ -213,21 +248,21 @@ const pageCardsBySection = {
       id: "writing-hilltops",
       eyebrow: "Writing",
       title: "The Thing about Hilltops",
-      description: "A writing/project card for this piece.",
+      description: "A novel exploring mental illness and trying to cheat destiny.",
       image: knightCupsImage,
       pageTitle: "Writing"
     }),
     createCard({
       id: "writing-charon",
       title: "The Son of Charon",
-      description: "A writing/project card for this piece.",
+      description: "An urban fantasy story of a forgotten deity.",
       image: moonImage,
       pageTitle: "Writing"
     }),
     createCard({
       id: "writing-dylanisms",
       title: "Dylanisms",
-      description: "A writing/project card for this piece.",
+      description: "The story of a man going insane, desperating trying to figure out why.",
       image: sunImage,
       pageTitle: "Writing"
     })

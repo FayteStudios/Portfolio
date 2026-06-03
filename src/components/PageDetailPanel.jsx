@@ -1,4 +1,5 @@
 import ProjectRiverCard from "./ProjectRiverCard.jsx";
+import DetailBlockRenderer from "./DetailBlockRenderer.jsx";
 
 export default function PageDetailPanel({ page, card, isClosing, onBack }) {
   const detail = card.detail || {};
@@ -19,6 +20,8 @@ export default function PageDetailPanel({ page, card, isClosing, onBack }) {
     ...card,
     status: `Return to ${page.title}`
   };
+
+  const hasBlocks = detail.blocks && detail.blocks.length > 0;
 
   return (
     <section
@@ -46,41 +49,52 @@ export default function PageDetailPanel({ page, card, isClosing, onBack }) {
         </header>
 
         <div className="page-detail-body">
-          {paragraphs.map((paragraph, index) => (
-            <p key={`${card.id}-paragraph-${index}`}>{paragraph}</p>
-          ))}
-
-          {detail.sections?.map((section) => (
-            <section className="page-detail-content-section" key={section.title}>
-              <h2>{section.title}</h2>
-
-              {section.paragraphs?.map((paragraph, index) => (
-                <p key={`${section.title}-paragraph-${index}`}>{paragraph}</p>
+          {hasBlocks ? (
+            <DetailBlockRenderer blocks={detail.blocks} />
+          ) : (
+            <>
+              {paragraphs.map((paragraph, index) => (
+                <p key={`${card.id}-paragraph-${index}`}>{paragraph}</p>
               ))}
 
-              {section.items && (
-                <ul>
-                  {section.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          ))}
-
-          {detail.links && (
-            <div className="page-detail-links">
-              {detail.links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  target="_blank"
-                  rel="noreferrer"
+              {detail.sections?.map((section) => (
+                <section
+                  className="page-detail-content-section"
+                  key={section.title}
                 >
-                  {link.label}
-                </a>
+                  <h2>{section.title}</h2>
+
+                  {section.paragraphs?.map((paragraph, index) => (
+                    <p key={`${section.title}-paragraph-${index}`}>
+                      {paragraph}
+                    </p>
+                  ))}
+
+                  {section.items && (
+                    <ul>
+                      {section.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
               ))}
-            </div>
+
+              {detail.links && (
+                <div className="page-detail-links">
+                  {detail.links.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </article>

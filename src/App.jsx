@@ -2,11 +2,18 @@
 import { portfolioPages } from "./data/portfolioPages.js";
 import CardRiver from "./components/CardRiver.jsx";
 import PortfolioPage from "./components/PortfolioPage.jsx";
+import DetailPageBuilder from "./components/DetailPageBuilder.jsx";
 import "./styles/app.css";
 
 const PAGE_OPEN_MS = 780;
 
 export default function App() {
+  const [isEditorMode] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    return params.get("editor") === "true" || window.location.hash === "#editor";
+  });
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [openingPage, setOpeningPage] = useState(null);
   const [openedPage, setOpenedPage] = useState(null);
@@ -18,6 +25,10 @@ export default function App() {
   const displayedPage = openedPage;
   const isOpeningPage = Boolean(openingPage);
   const isPageOpen = Boolean(openedPage);
+
+  if (isEditorMode) {
+    return <DetailPageBuilder />;
+  }
 
   function clearOpenTimer() {
     if (timeoutRef.current) {

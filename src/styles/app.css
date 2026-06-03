@@ -2432,3 +2432,690 @@
     }
   }
 }
+
+/* Detail block renderer */
+
+.detail-blocks {
+  display: grid;
+  gap: clamp(22px, 4vw, 46px);
+}
+
+.detail-block {
+  max-width: 980px;
+}
+
+.detail-block-heading h2 {
+  margin: 0;
+  color: rgba(255, 246, 225, 0.96);
+  font-size: clamp(1.8rem, 3.4vw, 4rem);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.detail-block-paragraph p,
+.detail-block-callout p,
+.detail-block-two-column p {
+  margin: 0;
+  color: rgba(255, 246, 225, 0.84);
+  font-size: clamp(1rem, 1.18vw, 1.18rem);
+  line-height: 1.72;
+}
+
+.detail-block-image {
+  margin: 0;
+}
+
+.detail-block-image img,
+.detail-image-grid img {
+  display: block;
+  width: 100%;
+  border: 1px solid rgba(255, 245, 220, 0.16);
+  border-radius: clamp(18px, 2vw, 30px);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.32);
+}
+
+.detail-block-image figcaption,
+.detail-image-grid figcaption {
+  margin-top: 10px;
+  color: rgba(255, 246, 225, 0.58);
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.detail-block-image-grid h2,
+.detail-block-list h2,
+.detail-block-callout h2,
+.detail-block-two-column h2 {
+  margin: 0 0 16px;
+  color: rgba(255, 246, 225, 0.96);
+  font-size: clamp(1.45rem, 2.4vw, 2.7rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.detail-image-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--detail-grid-columns, 2), minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 24px);
+}
+
+.detail-image-grid figure {
+  margin: 0;
+}
+
+.detail-block-two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 3vw, 34px);
+}
+
+.detail-block-two-column > div,
+.detail-block-callout,
+.detail-stat-card {
+  padding: clamp(18px, 2.6vw, 30px);
+  border: 1px solid rgba(255, 245, 220, 0.16);
+  border-radius: clamp(18px, 2vw, 28px);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.detail-block-callout {
+  border-color: rgba(255, 231, 162, 0.28);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 231, 162, 0.14), transparent 20rem),
+    rgba(255, 255, 255, 0.05);
+}
+
+.detail-block-list ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detail-block-list li {
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 245, 220, 0.18);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 246, 225, 0.82);
+}
+
+.detail-block-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 20px);
+}
+
+.detail-stat-card strong {
+  display: block;
+  color: rgba(255, 246, 225, 0.98);
+  font-size: clamp(1.6rem, 3vw, 3rem);
+  line-height: 1;
+}
+
+.detail-stat-card span {
+  display: block;
+  margin-top: 8px;
+  color: rgba(255, 246, 225, 0.62);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.detail-block-link-button a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid rgba(255, 245, 220, 0.28);
+  border-radius: 999px;
+  color: rgba(255, 246, 225, 0.92);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.detail-block-link-button a:hover,
+.detail-block-link-button a:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
+.detail-block-divider {
+  width: 100%;
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 245, 220, 0.28),
+    transparent
+  );
+}
+
+/* Local detail page builder */
+
+.detail-builder-page {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  min-height: 100vh;
+  color: rgba(255, 246, 225, 0.92);
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 231, 162, 0.12), transparent 28rem),
+    radial-gradient(circle at 88% 78%, rgba(184, 132, 255, 0.12), transparent 34rem),
+    linear-gradient(135deg, #0f0e11, #171117 48%, #0d1714);
+}
+
+.detail-builder-sidebar,
+.detail-builder-editor {
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.detail-builder-sidebar {
+  display: grid;
+  align-content: start;
+  gap: 20px;
+  padding: clamp(22px, 3vw, 38px);
+  border-right: 1px solid rgba(255, 245, 220, 0.13);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.detail-builder-sidebar h1,
+.detail-builder-sidebar h2,
+.detail-builder-editor h2 {
+  margin: 0;
+  color: rgba(255, 246, 225, 0.96);
+}
+
+.detail-builder-sidebar h1 {
+  font-size: clamp(2.2rem, 4vw, 4rem);
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+}
+
+.builder-eyebrow {
+  margin: 0 0 10px;
+  color: rgba(255, 224, 157, 0.74);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.detail-builder-sidebar p {
+  color: rgba(255, 246, 225, 0.66);
+  line-height: 1.5;
+}
+
+.detail-builder-sidebar label,
+.builder-block-editor label {
+  display: grid;
+  gap: 8px;
+  color: rgba(255, 246, 225, 0.72);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.detail-builder-sidebar input,
+.detail-builder-sidebar textarea,
+.detail-builder-sidebar select,
+.builder-block-editor input,
+.builder-block-editor textarea,
+.builder-block-editor select {
+  width: 100%;
+  color: rgba(255, 246, 225, 0.92);
+  border: 1px solid rgba(255, 245, 220, 0.18);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.detail-builder-sidebar input,
+.detail-builder-sidebar select,
+.builder-block-editor input,
+.builder-block-editor select {
+  min-height: 42px;
+  padding: 0 12px;
+}
+
+.detail-builder-sidebar textarea,
+.builder-block-editor textarea {
+  min-height: 96px;
+  padding: 12px;
+  resize: vertical;
+}
+
+.builder-add-blocks {
+  display: grid;
+  gap: 12px;
+}
+
+.builder-add-blocks div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.builder-add-blocks button,
+.builder-block-actions button,
+.builder-export-panel button {
+  min-height: 34px;
+  padding: 0 12px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 245, 220, 0.18);
+  border-radius: 999px;
+  color: rgba(255, 246, 225, 0.88);
+  background: rgba(255, 255, 255, 0.07);
+  font-weight: 800;
+}
+
+.builder-add-blocks button:hover,
+.builder-block-actions button:hover,
+.builder-export-panel button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.builder-image-key-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.builder-image-key-list h2 {
+  width: 100%;
+}
+
+.builder-image-key-list code {
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 245, 220, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 246, 225, 0.7);
+}
+
+.detail-builder-editor {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.9fr) minmax(420px, 1.1fr);
+  grid-template-rows: 1fr 360px;
+  gap: 18px;
+  padding: clamp(18px, 2vw, 30px);
+}
+
+.builder-edit-list,
+.builder-preview-panel,
+.builder-export-panel {
+  overflow: auto;
+  border: 1px solid rgba(255, 245, 220, 0.14);
+  border-radius: 26px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.builder-edit-list {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 18px;
+}
+
+.builder-block-editor {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid rgba(255, 245, 220, 0.14);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.builder-block-header,
+.builder-export-panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.builder-block-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.builder-field-note {
+  color: rgba(255, 246, 225, 0.48);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.builder-muted {
+  color: rgba(255, 246, 225, 0.58);
+}
+
+.builder-preview-panel {
+  padding: 28px;
+}
+
+.builder-preview-card {
+  min-height: 100%;
+  padding: clamp(28px, 4vw, 58px);
+  border: 1px solid rgba(255, 245, 220, 0.16);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 231, 162, 0.14), transparent 28%),
+    linear-gradient(145deg, rgba(27, 18, 39, 0.98), rgba(8, 7, 14, 0.98));
+}
+
+.builder-preview-card h1 {
+  max-width: 10ch;
+  margin: 0;
+  color: rgba(255, 246, 225, 0.98);
+  font-size: clamp(3rem, 7vw, 7rem);
+  line-height: 0.86;
+  letter-spacing: -0.075em;
+}
+
+.builder-export-panel {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 18px;
+}
+
+.builder-export-panel pre {
+  overflow: auto;
+  margin: 0;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.32);
+  color: rgba(255, 246, 225, 0.78);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 960px) {
+  .detail-block-two-column,
+  .detail-block-stats,
+  .detail-builder-page,
+  .detail-builder-editor {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-builder-editor {
+    grid-template-rows: auto;
+  }
+
+  .builder-export-panel {
+    grid-column: auto;
+  }
+
+  .detail-image-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Detail builder scrolling fix
+   The editor should behave like a normal page, not like the portfolio river UI.
+*/
+
+html:has(.detail-builder-page),
+body:has(.detail-builder-page),
+#root:has(.detail-builder-page) {
+  min-height: 100%;
+  height: auto;
+  overflow: auto;
+}
+
+.detail-builder-page {
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
+  align-items: start;
+}
+
+.detail-builder-sidebar,
+.detail-builder-editor {
+  min-height: auto;
+  height: auto;
+  overflow: visible;
+}
+
+.detail-builder-sidebar {
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.detail-builder-editor {
+  grid-template-rows: auto auto auto;
+  align-items: start;
+}
+
+.builder-edit-list,
+.builder-preview-panel,
+.builder-export-panel {
+  overflow: visible;
+}
+
+.builder-preview-panel,
+.builder-export-panel {
+  max-height: none;
+}
+
+.builder-preview-card {
+  min-height: auto;
+}
+
+.builder-export-panel pre {
+  max-height: 520px;
+  overflow: auto;
+}
+
+/* When the viewport gets narrow, do not keep the sidebar sticky. */
+
+@media (max-width: 960px) {
+  .detail-builder-sidebar {
+    position: relative;
+    top: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .detail-builder-page {
+    overflow: visible;
+  }
+}
+
+/* Builder/detail readability hardening */
+
+.detail-builder-page,
+.detail-builder-page *,
+.page-detail-panel,
+.page-detail-panel * {
+  box-sizing: border-box;
+}
+
+.detail-builder-page {
+  color: rgba(255, 246, 225, 0.94);
+}
+
+.detail-builder-page input,
+.detail-builder-page textarea,
+.detail-builder-page select,
+.builder-block-editor input,
+.builder-block-editor textarea,
+.builder-block-editor select {
+  color: #fff4d6;
+  background-color: rgba(10, 10, 14, 0.92);
+  border-color: rgba(255, 245, 220, 0.28);
+  caret-color: #fff4d6;
+}
+
+.detail-builder-page input::placeholder,
+.detail-builder-page textarea::placeholder {
+  color: rgba(255, 246, 225, 0.45);
+}
+
+.detail-builder-page select option,
+.builder-block-editor select option {
+  color: #fff4d6;
+  background-color: #111016;
+}
+
+.detail-builder-page button,
+.builder-add-blocks button,
+.builder-block-actions button,
+.builder-export-panel button {
+  color: #fff4d6;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.detail-builder-page button:hover,
+.builder-add-blocks button:hover,
+.builder-block-actions button:hover,
+.builder-export-panel button:hover {
+  color: #fff9e8;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+.detail-builder-sidebar p,
+.builder-muted,
+.builder-field-note {
+  color: rgba(255, 246, 225, 0.72);
+}
+
+.builder-image-key-list code,
+.builder-export-panel pre,
+.detail-missing-image code {
+  color: #ffe4a3;
+  background-color: rgba(0, 0, 0, 0.42);
+}
+
+.builder-export-panel pre {
+  border: 1px solid rgba(255, 245, 220, 0.14);
+}
+
+.detail-missing-image {
+  padding: 18px;
+  border: 1px solid rgba(255, 120, 120, 0.34);
+  border-radius: 18px;
+  color: #ffd3d3;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(120, 28, 28, 0.24),
+      rgba(20, 10, 10, 0.42)
+    );
+  font-weight: 800;
+}
+
+.detail-block p,
+.detail-block li,
+.detail-block figcaption,
+.detail-block-callout p,
+.detail-block-two-column p {
+  color: rgba(255, 246, 225, 0.88);
+}
+
+.detail-block h2,
+.detail-block-heading h2,
+.detail-block-image-grid h2,
+.detail-block-list h2,
+.detail-block-callout h2,
+.detail-block-two-column h2 {
+  color: rgba(255, 246, 225, 0.98);
+}
+
+.detail-block-list li {
+  color: rgba(255, 246, 225, 0.88);
+}
+
+.detail-block-image figcaption,
+.detail-image-grid figcaption {
+  color: rgba(255, 246, 225, 0.72);
+}
+
+/* Detail image sizing */
+
+.detail-block-image {
+  justify-self: stretch;
+}
+
+.detail-block-image img,
+.detail-image-grid img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.detail-image-size-full {
+  width: 100%;
+}
+
+.detail-image-size-large {
+  width: min(100%, 820px);
+  justify-self: center;
+}
+
+.detail-image-size-medium {
+  width: min(100%, 620px);
+  justify-self: center;
+}
+
+.detail-image-size-small {
+  width: min(100%, 420px);
+  justify-self: center;
+}
+
+.detail-image-size-natural {
+  width: fit-content;
+  max-width: 100%;
+  justify-self: center;
+}
+
+.detail-image-size-natural img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.detail-image-size-portrait {
+  width: min(100%, 520px);
+  justify-self: center;
+}
+
+.detail-image-size-portrait img {
+  aspect-ratio: 4 / 5;
+  height: auto;
+  object-fit: cover;
+}
+
+.detail-image-size-wide {
+  width: 100%;
+}
+
+.detail-image-size-wide img {
+  aspect-ratio: 16 / 7;
+  height: auto;
+  object-fit: cover;
+}
+
+.detail-image-grid .detail-image-size-large,
+.detail-image-grid .detail-image-size-medium,
+.detail-image-grid .detail-image-size-small,
+.detail-image-grid .detail-image-size-natural,
+.detail-image-grid .detail-image-size-portrait,
+.detail-image-grid .detail-image-size-wide {
+  width: 100%;
+}
