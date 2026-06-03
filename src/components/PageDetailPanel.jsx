@@ -1,3 +1,5 @@
+import ProjectRiverCard from "./ProjectRiverCard.jsx";
+
 export default function PageDetailPanel({ page, card, isClosing, onBack }) {
   const detail = card.detail || {};
 
@@ -13,6 +15,11 @@ export default function PageDetailPanel({ page, card, isClosing, onBack }) {
           "Replace this placeholder copy in pageCards.js with project details, story text, resume notes, links, or any longer-form information this section needs."
         ];
 
+  const returnCard = {
+    ...card,
+    status: `Return to ${page.title}`
+  };
+
   return (
     <section
       className={[
@@ -21,31 +28,15 @@ export default function PageDetailPanel({ page, card, isClosing, onBack }) {
       ].join(" ")}
       aria-label={`${title} detail page`}
     >
-      <button
-        className="page-detail-anchor-card"
-        type="button"
-        onClick={onBack}
-        aria-label={`Return to ${page.title} cards`}
-      >
-        {card.image && (
-          <img
-            className="page-detail-anchor-image"
-            src={card.image}
-            alt=""
-            aria-hidden="true"
-          />
-        )}
-
-        <span className="page-detail-anchor-overlay" />
-
-        <span className="page-detail-anchor-content">
-          <span className="page-detail-anchor-eyebrow">{card.eyebrow}</span>
-          <span className="page-detail-anchor-title">{card.title}</span>
-          <span className="page-detail-anchor-description">
-            Return to {page.title}
-          </span>
-        </span>
-      </button>
+      <div className="page-detail-return-card-shell">
+        <ProjectRiverCard
+          card={returnCard}
+          index={0}
+          activeIndex={0}
+          isActive={true}
+          onClick={onBack}
+        />
+      </div>
 
       <article className="page-detail-panel">
         <header className="page-detail-header">

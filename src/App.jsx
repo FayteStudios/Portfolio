@@ -10,6 +10,8 @@ export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openingPage, setOpeningPage] = useState(null);
   const [openedPage, setOpenedPage] = useState(null);
+  const [isDetailPageOpen, setIsDetailPageOpen] = useState(false);
+
   const timeoutRef = useRef(null);
 
   const activePage = portfolioPages[activeIndex];
@@ -25,7 +27,7 @@ export default function App() {
   }
 
   function goToIndex(nextIndex) {
-    if (isOpeningPage || isPageOpen) {
+    if (isOpeningPage || isPageOpen || isDetailPageOpen) {
       return;
     }
 
@@ -45,7 +47,7 @@ export default function App() {
   }
 
   function handleCardSelect(index) {
-    if (isOpeningPage || isPageOpen) {
+    if (isOpeningPage || isPageOpen || isDetailPageOpen) {
       return;
     }
 
@@ -68,6 +70,7 @@ export default function App() {
 
   function closeOpenedPage() {
     clearOpenTimer();
+    setIsDetailPageOpen(false);
     setOpenedPage(null);
     setOpeningPage(null);
   }
@@ -77,29 +80,38 @@ export default function App() {
       className={[
         "app-shell",
         isOpeningPage ? "app-is-opening-page" : "",
-        isPageOpen ? "page-is-open" : ""
+        isPageOpen ? "page-is-open" : "",
+        isDetailPageOpen ? "app-detail-page-open" : ""
       ].join(" ")}
     >
-      <CardRiver
-        pages={portfolioPages}
-        activeIndex={activeIndex}
-        activePageId={activePage.id}
-        isOpeningPage={isOpeningPage}
-        isPageOpen={isPageOpen}
-        onSelect={handleCardSelect}
-        onReturn={closeOpenedPage}
-        onPrevious={goPrevious}
-        onNext={goNext}
-        canGoPrevious={activeIndex > 0 && !isOpeningPage && !isPageOpen}
-        canGoNext={
-          activeIndex < portfolioPages.length - 1 &&
-          !isOpeningPage &&
-          !isPageOpen
-        }
-      />
+      {!isDetailPageOpen && (
+        <CardRiver
+          pages={portfolioPages}
+          activeIndex={activeIndex}
+          activePageId={activePage?.id}
+          isOpeningPage={isOpeningPage}
+          isPageOpen={isPageOpen}
+          onSelect={handleCardSelect}
+          onReturn={closeOpenedPage}
+          onPrevious={goPrevious}
+          onNext={goNext}
+          canGoPrevious={
+            activeIndex > 0 && !isOpeningPage && !isPageOpen
+          }
+          canGoNext={
+            activeIndex < portfolioPages.length - 1 &&
+            !isOpeningPage &&
+            !isPageOpen
+          }
+        />
+      )}
 
       {displayedPage && (
-        <PortfolioPage page={displayedPage} />
+        <PortfolioPage
+          page={displayedPage}
+          onClosePage={closeOpenedPage}
+          onDetailOpenChange={setIsDetailPageOpen}
+        />
       )}
     </main>
   );

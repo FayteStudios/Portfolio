@@ -9,7 +9,11 @@ const WHEEL_COOLDOWN_MS = 520;
 const DEAL_ANIMATION_MS = 1500;
 const DETAIL_CLOSE_MS = 650;
 
-export default function PortfolioPage({ page }) {
+export default function PortfolioPage({
+  page,
+  onClosePage,
+  onDetailOpenChange
+}) {
   const pageCards = getPageCards(page);
 
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
@@ -35,6 +39,7 @@ export default function PortfolioPage({ page }) {
     setActiveProjectIndex(0);
     setOpenedDetailCard(null);
     setIsClosingDetail(false);
+    onDetailOpenChange?.(false);
 
     if (closeTimerRef.current) {
       window.clearTimeout(closeTimerRef.current);
@@ -47,13 +52,14 @@ export default function PortfolioPage({ page }) {
 
     return () => {
       window.clearTimeout(dealTimer);
+      onDetailOpenChange?.(false);
 
       if (closeTimerRef.current) {
         window.clearTimeout(closeTimerRef.current);
         closeTimerRef.current = null;
       }
     };
-  }, [page.id]);
+  }, [page.id, onDetailOpenChange]);
 
   function goToProjectIndex(nextIndex) {
     if (openedDetailCard || isClosingDetail) {
@@ -87,6 +93,7 @@ export default function PortfolioPage({ page }) {
 
     setOpenedDetailCard(card);
     setIsClosingDetail(false);
+    onDetailOpenChange?.(true);
   }
 
   function closeDetailCard() {
@@ -99,6 +106,7 @@ export default function PortfolioPage({ page }) {
     closeTimerRef.current = window.setTimeout(() => {
       setOpenedDetailCard(null);
       setIsClosingDetail(false);
+      onDetailOpenChange?.(false);
       closeTimerRef.current = null;
     }, DETAIL_CLOSE_MS);
   }
@@ -189,6 +197,11 @@ export default function PortfolioPage({ page }) {
         closeDetailCard();
       }
 
+      return;
+    }
+
+    if (event.key === "Escape") {
+      onClosePage?.();
       return;
     }
 
