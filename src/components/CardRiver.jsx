@@ -99,13 +99,21 @@ export default function CardRiver({
       tabIndex={0}
     >
       <button
-        className="river-nav-button previous"
+        className="river-nav-button stingray-nav previous"
         type="button"
         onClick={onPrevious}
         disabled={!canGoPrevious}
         aria-label="Previous portfolio page"
       >
-        ←
+        <span className="stingray-circle" aria-hidden="true">
+          <svg
+            className="stingray-arrow"
+            viewBox="0 0 24 24"
+            focusable="false"
+          >
+            <path d="M15.5 5.5 9 12l6.5 6.5" />
+          </svg>
+        </span>
       </button>
 
       <div
@@ -129,13 +137,21 @@ export default function CardRiver({
       </div>
 
       <button
-        className="river-nav-button next"
+        className="river-nav-button stingray-nav next"
         type="button"
         onClick={onNext}
         disabled={!canGoNext}
         aria-label="Next portfolio page"
       >
-        →
+        <span className="stingray-circle" aria-hidden="true">
+          <svg
+            className="stingray-arrow"
+            viewBox="0 0 24 24"
+            focusable="false"
+          >
+            <path d="M15.5 5.5 9 12l6.5 6.5" />
+          </svg>
+        </span>
       </button>
 
       <div className="river-dots" aria-label="Portfolio page position">

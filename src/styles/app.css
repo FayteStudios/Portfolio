@@ -340,6 +340,8 @@
   line-height: 0.92;
   letter-spacing: -0.06em;
   text-align: center;
+  line-height: 1.08;
+  text-wrap: balance;
 }
 
 .tarot-subtitle {
@@ -433,32 +435,28 @@
 .river-nav-button {
   position: absolute;
   top: 50%;
-  z-index: 20;
+  z-index: 30;
   display: grid;
   place-items: center;
-  width: clamp(44px, 5vw, 62px);
-  height: clamp(44px, 5vw, 62px);
-  color: #1c1a1d;
+  width: clamp(52px, 5.4vw, 74px);
+  height: clamp(52px, 5.4vw, 74px);
+  padding: 0;
   cursor: pointer;
-  border: 1px solid rgba(255, 244, 214, 0.34);
+  border: 0;
   border-radius: 999px;
-  background: rgba(255, 244, 214, 0.78);
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.38);
-  font-size: clamp(1.3rem, 2vw, 1.8rem);
-  font-weight: 900;
+  background: transparent;
   transform: translateY(-50%);
   transition:
-    transform 160ms ease,
-    opacity 160ms ease,
-    background 160ms ease;
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
 .river-nav-button.previous {
-  left: clamp(18px, 4vw, 54px);
+  left: clamp(18px, 4vw, 64px);
 }
 
 .river-nav-button.next {
-  right: clamp(18px, 4vw, 54px);
+  right: clamp(18px, 4vw, 64px);
 }
 
 .river-nav-button:hover:not(:disabled),
@@ -471,49 +469,6 @@
 .river-nav-button:disabled {
   cursor: not-allowed;
   opacity: 0.22;
-}
-
-.river-dots {
-  position: absolute;
-  bottom: clamp(24px, 5vh, 54px);
-  left: 50%;
-  z-index: 20;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  transform: translateX(-50%);
-}
-
-.river-dot {
-  width: 10px;
-  height: 10px;
-  padding: 0;
-  cursor: pointer;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(255, 244, 214, 0.34);
-  transition:
-    width 160ms ease,
-    background 160ms ease;
-}
-
-.river-dot.active {
-  width: 34px;
-  background: #f6e5bd;
-}
-
-.river-instruction {
-  position: absolute;
-  bottom: clamp(50px, 8vh, 88px);
-  left: 50%;
-  z-index: 20;
-  margin: 0;
-  color: rgba(255, 244, 214, 0.48);
-  font-size: clamp(0.76rem, 1.2vw, 0.95rem);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-align: center;
-  transform: translateX(-50%);
 }
 
 .accent-sun .tarot-title {
@@ -631,4 +586,22 @@
   .river-nav-button:focus-visible:not(:disabled) {
     transform: none;
   }
+}
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.river-section {
+  padding: 0;
+}
+
+.river-viewport {
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  min-height: 100vh;
+  border-radius: 0;
 }
