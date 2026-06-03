@@ -1,280 +1,251 @@
-﻿export const pageCardsByPageId = {
+﻿import sunImage from "../assets/sun.png";
+import aceSwordsImage from "../assets/ace-swords.jpg";
+import queenWandsImage from "../assets/queen-wands.jpg";
+import moonImage from "../assets/moon.jpg";
+import knightCupsImage from "../assets/knight-cups.jpg";
+import pagePentaclesImage from "../assets/page-pentacles.jpg";
+import rpgwoImage from "../assets/rpgwo.png";
+
+const pageCardsBySection = {
   about: [
     {
-      id: "bio",
-      eyebrow: "Profile",
+      id: "about-bio",
+      eyebrow: "About Me",
       title: "Bio",
-      description: "A short personal and professional introduction.",
-      status: "Placeholder"
+      description: "A quick look at who I am and what I do.",
+      status: "Placeholder",
+      image: sunImage
     },
     {
-      id: "resume",
-      eyebrow: "Resume",
+      id: "about-resume",
+      eyebrow: "About Me",
       title: "Resume",
-      description: "Download or view my professional resume.",
-      status: "Placeholder"
+      description: "Experience, skills, and work history.",
+      status: "Placeholder",
+      image: aceSwordsImage
     },
     {
-      id: "social-links",
-      eyebrow: "Links",
+      id: "about-socials",
+      eyebrow: "About Me",
       title: "Social Links",
-      description: "Find my professional and creative profiles.",
-      status: "Placeholder"
+      description: "My platforms and public spaces.",
+      status: "Placeholder",
+      image: knightCupsImage
     },
     {
-      id: "recommendations",
-      eyebrow: "Comments",
+      id: "about-recommendations",
+      eyebrow: "About Me",
       title: "Recommendations",
-      description: "Comments, references, and kind words from others.",
-      status: "Placeholder"
+      description: "Comments, references, and feedback.",
+      status: "Placeholder",
+      image: queenWandsImage
     }
   ],
 
   "game-design": [
     {
-      id: "beetle-rpg",
+      id: "gd-beetle-rpg",
       eyebrow: "Game Design",
       title: "Beetle RPG",
       description: "A role-playing game project and systems showcase.",
-      status: "Placeholder"
+      status: "Placeholder",
+      image: queenWandsImage
     },
     {
-      id: "fayte",
+      id: "gd-fayte",
       eyebrow: "Game Design",
       title: "Fayte",
-      description: "A project space for design, mechanics, and world systems.",
-      status: "Placeholder"
+      description: "A project space for mechanics and world systems.",
+      status: "Placeholder",
+      image: pagePentaclesImage
     },
     {
-      id: "aetheric",
+      id: "gd-aetheric",
       eyebrow: "Game Design",
       title: "Aetheric",
       description: "A game concept or prototype section.",
-      status: "Placeholder"
+      status: "Placeholder",
+      image: moonImage
     },
     {
-      id: "hearth-and-harvest",
+      id: "gd-hearth-and-harvest",
       eyebrow: "Game Design",
       title: "Hearth and Harvest",
       description: "Farming, community, and simulation design work.",
-      status: "Placeholder"
+      status: "Placeholder",
+      image: sunImage
     },
     {
-      id: "entangled",
+      id: "gd-entangled",
       eyebrow: "Game Design",
       title: "Entangled",
-      description: "A project card for mechanics and concept work.",
-      status: "Placeholder"
+      description: "Design notes, mechanics, and project details.",
+      status: "Placeholder",
+      image: aceSwordsImage
     },
     {
-      id: "boned",
+      id: "gd-boned",
       eyebrow: "Game Design",
       title: "Boned",
-      description: "A game design placeholder card.",
-      status: "Placeholder"
-    },
-    {
-      id: "more-game-design",
-      eyebrow: "Archive",
-      title: "More",
-      description: "Additional game design work can be added here.",
-      status: "Reserved"
+      description: "A project slot for concept and presentation.",
+      status: "Placeholder",
+      image: knightCupsImage
     }
   ],
 
   coding: [
     {
-      id: "rpgwo-tools",
-      eyebrow: "Tooling",
+      id: "code-rpgwo-tools",
+      eyebrow: "Coding",
       title: "RPGWO Tools",
-      description: "Utilities, tools, and systems for RPGWO-related work.",
-      status: "Placeholder"
+      description: "Utilities and tools built around RPGWO workflows.",
+      status: "Placeholder",
+      image: rpgwoImage
     },
     {
-      id: "ffxiv-shopping-list",
-      eyebrow: "Web App",
+      id: "code-ffxiv-shopping-list",
+      eyebrow: "Coding",
       title: "FFXIV Shopping List",
-      description: "A shopping list web app for Final Fantasy XIV.",
-      status: "Placeholder"
+      description: "A planner/tool project for Final Fantasy XIV.",
+      status: "Placeholder",
+      image: pagePentaclesImage
     },
     {
-      id: "fayte-code",
-      eyebrow: "Code",
+      id: "code-fayte",
+      eyebrow: "Coding",
       title: "Fayte",
       description: "Technical work connected to Fayte.",
-      status: "Placeholder"
+      status: "Placeholder",
+      image: sunImage
     },
     {
-      id: "aetheric-code",
-      eyebrow: "Code",
+      id: "code-aetheric",
+      eyebrow: "Coding",
       title: "Aetheric",
-      description: "Technical work connected to Aetheric.",
-      status: "Placeholder"
+      description: "Code systems, experiments, or tools for Aetheric.",
+      status: "Placeholder",
+      image: moonImage
     },
     {
-      id: "entangled-code",
-      eyebrow: "Code",
+      id: "code-entangled",
+      eyebrow: "Coding",
       title: "Entangled",
-      description: "Technical work connected to Entangled.",
-      status: "Placeholder"
+      description: "Programming work tied to Entangled.",
+      status: "Placeholder",
+      image: knightCupsImage
     },
     {
-      id: "beetle-rpg-code",
-      eyebrow: "Code",
+      id: "code-beetle-rpg",
+      eyebrow: "Coding",
       title: "Beetle RPG",
-      description: "Implementation work connected to Beetle RPG.",
-      status: "Placeholder"
-    }
-  ],
-
-  programming: [
-    {
-      id: "rpgwo-tools",
-      eyebrow: "Tooling",
-      title: "RPGWO Tools",
-      description: "Utilities, tools, and systems for RPGWO-related work.",
-      status: "Placeholder"
-    },
-    {
-      id: "ffxiv-shopping-list",
-      eyebrow: "Web App",
-      title: "FFXIV Shopping List",
-      description: "A shopping list web app for Final Fantasy XIV.",
-      status: "Placeholder"
-    },
-    {
-      id: "fayte-code",
-      eyebrow: "Code",
-      title: "Fayte",
-      description: "Technical work connected to Fayte.",
-      status: "Placeholder"
-    },
-    {
-      id: "aetheric-code",
-      eyebrow: "Code",
-      title: "Aetheric",
-      description: "Technical work connected to Aetheric.",
-      status: "Placeholder"
-    },
-    {
-      id: "entangled-code",
-      eyebrow: "Code",
-      title: "Entangled",
-      description: "Technical work connected to Entangled.",
-      status: "Placeholder"
-    },
-    {
-      id: "beetle-rpg-code",
-      eyebrow: "Code",
-      title: "Beetle RPG",
-      description: "Implementation work connected to Beetle RPG.",
-      status: "Placeholder"
+      description: "Implementation details, systems, and tooling.",
+      status: "Placeholder",
+      image: queenWandsImage
     }
   ],
 
   art: [
     {
-      id: "nature",
-      eyebrow: "Gallery",
+      id: "art-nature",
+      eyebrow: "Art",
       title: "Nature",
-      description: "Artwork inspired by natural forms and environments.",
-      status: "Placeholder"
+      description: "Nature-focused pieces and studies.",
+      status: "Placeholder",
+      image: sunImage
     },
     {
-      id: "monsters",
-      eyebrow: "Gallery",
+      id: "art-monsters",
+      eyebrow: "Art",
       title: "Monsters",
-      description: "Creature, horror, and monster-focused artwork.",
-      status: "Placeholder"
+      description: "Creature design and monster work.",
+      status: "Placeholder",
+      image: moonImage
     },
     {
-      id: "trading-cards",
-      eyebrow: "Gallery",
+      id: "art-trading-cards",
+      eyebrow: "Art",
       title: "Trading Cards",
-      description: "Card-style artwork, layouts, and visual experiments.",
-      status: "Placeholder"
+      description: "Card-style compositions and related work.",
+      status: "Placeholder",
+      image: queenWandsImage
     },
     {
-      id: "nsfw",
-      eyebrow: "Gallery",
+      id: "art-nsfw",
+      eyebrow: "Art",
       title: "NSFW",
-      description: "A future blurred/locked mature art card.",
-      status: "Placeholder"
+      description: "Eventually this can use a blurred card image.",
+      status: "Placeholder",
+      image: knightCupsImage
     }
   ],
 
   writing: [
     {
-      id: "thing-about-hilltops",
-      eyebrow: "Story",
+      id: "writing-hilltops",
+      eyebrow: "Writing",
       title: "The Thing about Hilltops",
-      description: "A writing project placeholder.",
-      status: "Placeholder"
+      description: "A writing/project card for this piece.",
+      status: "Placeholder",
+      image: knightCupsImage
     },
     {
-      id: "son-of-charon",
-      eyebrow: "Story",
+      id: "writing-charon",
+      eyebrow: "Writing",
       title: "The Son of Charon",
-      description: "A writing project placeholder.",
-      status: "Placeholder"
+      description: "A writing/project card for this piece.",
+      status: "Placeholder",
+      image: moonImage
     },
     {
-      id: "dylanisms",
-      eyebrow: "Collection",
+      id: "writing-dylanisms",
+      eyebrow: "Writing",
       title: "Dylanisms",
-      description: "A collection or writing concept placeholder.",
-      status: "Placeholder"
-    },
-    {
-      id: "more-writing",
-      eyebrow: "Archive",
-      title: "More",
-      description: "Additional writing projects can be added here.",
-      status: "Reserved"
+      description: "A writing/project card for this piece.",
+      status: "Placeholder",
+      image: sunImage
     }
   ],
 
   contact: [
     {
-      id: "email-form",
+      id: "contact-email",
       eyebrow: "Contact",
       title: "Email Form",
-      description: "A future form for direct email contact.",
-      status: "Placeholder"
+      description: "A direct message or inquiry form.",
+      status: "Placeholder",
+      image: pagePentaclesImage
     },
     {
-      id: "socials",
-      eyebrow: "Links",
-      title: "Socials",
-      description: "Links to professional and creative profiles.",
-      status: "Placeholder"
+      id: "contact-socials",
+      eyebrow: "Contact",
+      title: "Social Links",
+      description: "A central place for all social platforms.",
+      status: "Placeholder",
+      image: knightCupsImage
     },
     {
-      id: "comment-submission",
-      eyebrow: "Comments",
-      title: "Comment Submission",
-      description: "A future form for comments or recommendations.",
-      status: "Placeholder"
+      id: "contact-comments",
+      eyebrow: "Contact",
+      title: "Comment Form",
+      description: "A feedback or comment submission form.",
+      status: "Placeholder",
+      image: moonImage
     },
     {
-      id: "commissions",
-      eyebrow: "Work",
+      id: "contact-commissions",
+      eyebrow: "Contact",
       title: "Commissions",
-      description: "A future form for commission inquiries.",
-      status: "Placeholder"
+      description: "A form or page for commission inquiries.",
+      status: "Placeholder",
+      image: queenWandsImage
     }
   ]
 };
 
 export function getPageCards(page) {
-  const normalizedTitle = page.title
-    ?.toLowerCase()
-    .replaceAll(" ", "-")
-    .replaceAll("/", "-");
+  if (!page?.id) {
+    return [];
+  }
 
-  return (
-    pageCardsByPageId[page.id] ||
-    pageCardsByPageId[normalizedTitle] ||
-    []
-  );
+  return pageCardsBySection[page.id] ?? [];
 }

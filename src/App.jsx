@@ -13,7 +13,7 @@ export default function App() {
   const timeoutRef = useRef(null);
 
   const activePage = portfolioPages[activeIndex];
-  const displayedPage = openingPage || openedPage;
+  const displayedPage = openedPage;
   const isOpeningPage = Boolean(openingPage);
   const isPageOpen = Boolean(openedPage);
 
@@ -99,7 +99,7 @@ export default function App() {
       />
 
       {displayedPage && (
-        <PortfolioPage page={displayedPage} isOpening={isOpeningPage} />
+        <PortfolioPage page={displayedPage} />
       )}
     </main>
   );

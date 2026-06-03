@@ -623,7 +623,7 @@
     linear-gradient(180deg, rgba(10, 10, 12, 0.08), rgba(10, 10, 12, 0.26));
   content: "";
 }
-/* Final page mode: persistent anchor card + dealt project cards */
+/* Clean page mode: main card anchor + nested project river */
 
 .app-is-opening-page,
 .page-is-open {
@@ -643,7 +643,7 @@
   pointer-events: auto;
 }
 
-/* Other river cards collect away */
+/* Other main river cards collect away */
 
 .river-card.collecting-card,
 .river-card.page-hidden-card {
@@ -666,7 +666,7 @@
   transform: rotateY(180deg);
 }
 
-/* Active river card becomes the page anchor */
+/* Main selected card becomes the static page anchor */
 
 .river-card.opening-anchor-card,
 .river-card.page-anchor-river-card {
@@ -697,18 +697,11 @@
     rotateZ(0deg);
 }
 
-/*
-  Page anchor card copy:
-  Keep the title.
-  Remove arcana top text and subtitle.
-*/
+/* Anchor card: keep title, remove arcana/subtitle */
 
 .compact-card-copy .tarot-topline {
   opacity: 0;
   transform: translateY(-8px);
-  transition:
-    opacity 180ms ease,
-    transform 180ms ease;
 }
 
 .compact-card-copy .tarot-subtitle {
@@ -716,6 +709,8 @@
 }
 
 .compact-card-copy .tarot-haze {
+  opacity: 1;
+  transform: none;
   padding: clamp(14px, 1.6vw, 22px);
   gap: 0;
 }
@@ -724,11 +719,11 @@
   display: block;
   opacity: 1;
   transform: none;
-  font-size: clamp(1.8rem, 12cqw, 2.8rem);
+  font-size: clamp(1.75rem, 12cqw, 2.8rem);
   line-height: 1;
 }
 
-/* Page layer */
+/* Page shell */
 
 .portfolio-page {
   --page-anchor-center-x: clamp(190px, 15vw, 260px);
@@ -738,44 +733,55 @@
   z-index: 2;
   width: 100vw;
   height: 100dvh;
+  min-height: 100dvh;
+  padding: 0;
   overflow: hidden;
+  overscroll-behavior: none;
   color: #fff4d6;
   background:
     radial-gradient(circle at 18% 50%, rgba(255, 244, 214, 0.08), transparent 24rem),
     radial-gradient(circle at 88% 24%, rgba(120, 69, 151, 0.16), transparent 34rem),
     radial-gradient(circle at 80% 88%, rgba(30, 82, 67, 0.22), transparent 34rem),
     linear-gradient(135deg, #0f0e11, #171117 48%, #0d1714);
-  animation: portfolioPageFadeIn 260ms ease both;
 }
 
-/* Dealt page cards */
+.portfolio-page::before {
+  display: none;
+}
+
+/* Nested project river stage */
 
 .project-river {
   position: absolute;
   top: 50%;
-  left: clamp(410px, 34vw, 560px);
-  right: clamp(24px, 4vw, 72px);
-  display: flex;
-  align-items: center;
-  gap: clamp(22px, 2.6vw, 42px);
-  height: min(86dvh, 820px);
-  overflow-x: auto;
-  overflow-y: visible;
-  padding: 42px clamp(18px, 2vw, 32px);
+  left: clamp(390px, 32vw, 540px);
+  right: 0;
+  z-index: 12;
+  height: min(88dvh, 860px);
+  overflow: hidden;
+  perspective: 1500px;
   transform: translateY(-50%);
-  scrollbar-width: none;
+  touch-action: pan-y;
+  outline: none;
 }
 
-.project-river::-webkit-scrollbar {
-  display: none;
+.project-river-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
 }
+
+/* Nested project cards mimic the main river */
 
 .project-river-card {
-  position: relative;
-  flex: 0 0 auto;
-  width: min(30vw, 420px);
-  max-width: calc((100dvh - 105px) * 0.533333);
-  min-width: 300px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(
+    clamp(300px, 29vw, 420px),
+    calc((100dvh - 110px) * 0.533333)
+  );
   aspect-ratio: 8 / 15;
   padding: 0;
   cursor: pointer;
@@ -783,488 +789,119 @@
   background: transparent;
   color: #fff4d6;
   opacity: 0;
-  transform:
-    translateX(-420px)
-    translateY(20px)
-    rotateZ(-4deg)
-    scale(0.9);
-  animation: projectCardDealIn 820ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.project-river-card:nth-child(1) {
-  animation-delay: 280ms;
-}
-
-.project-river-card:nth-child(2) {
-  animation-delay: 430ms;
-  margin-top: -20px;
-}
-
-.project-river-card:nth-child(3) {
-  animation-delay: 580ms;
-  margin-top: 14px;
-}
-
-.project-river-card:hover,
-.project-river-card:focus-visible {
-  z-index: 4;
-  outline: none;
-}
-
-.project-river-card:hover .project-river-card-inner,
-.project-river-card:focus-visible .project-river-card-inner {
-  transform: translateY(-12px) rotateZ(0deg);
-  filter: brightness(1.08);
-}
-
-.project-river-card-inner {
-  position: absolute;
-  inset: 0;
-  display: block;
-  transform: rotateZ(-1.4deg);
-  transition:
-    transform 180ms ease,
-    filter 180ms ease;
-}
-
-.project-river-card:nth-child(2) .project-river-card-inner {
-  transform: rotateZ(0.8deg);
-}
-
-.project-river-card:nth-child(3) .project-river-card-inner {
-  transform: rotateZ(1.6deg);
-}
-
-.project-river-card-face {
-  position: absolute;
-  inset: 0;
-  display: block;
-  overflow: hidden;
-  border: 1px solid rgba(255, 244, 214, 0.22);
-  border-radius: clamp(18px, 2vw, 28px);
-  background:
-    radial-gradient(circle at 50% 16%, rgba(255, 244, 214, 0.2), transparent 13rem),
-    linear-gradient(145deg, rgba(55, 51, 55, 0.96), rgba(20, 20, 23, 0.98));
-  box-shadow:
-    0 34px 76px rgba(0, 0, 0, 0.5),
-    inset 0 0 0 1px rgba(255, 244, 214, 0.1);
-}
-
-.project-river-card-art {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 50% 24%, rgba(255, 244, 214, 0.22), transparent 14rem),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 48%);
-}
-
-.project-river-card-art::before {
-  position: absolute;
-  top: 16%;
-  left: 50%;
-  width: clamp(130px, 12vw, 190px);
-  aspect-ratio: 1;
-  border: 1px solid rgba(255, 244, 214, 0.26);
-  border-radius: 999px;
-  background:
-    radial-gradient(circle, rgba(255, 244, 214, 0.22), transparent 62%);
-  transform: translateX(-50%);
-  content: "";
-}
-
-.project-river-card-art::after {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      transparent 0 52%,
-      rgba(15, 15, 18, 0.2) 68%,
-      rgba(15, 15, 18, 0.7) 100%
-    );
-  content: "";
-}
-
-.project-river-card-frame {
-  position: absolute;
-  inset: clamp(8px, 1.2vw, 12px);
-  display: block;
-  border: 1px solid rgba(255, 244, 214, 0.22);
-  border-radius: clamp(16px, 1.8vw, 24px);
-}
-
-.project-river-card-frame::before {
-  position: absolute;
-  inset: clamp(18px, 2vw, 27px);
-  border: 1px solid rgba(255, 244, 214, 0.15);
-  border-radius: clamp(12px, 1.4vw, 19px);
-  content: "";
-}
-
-.project-river-card-corner {
-  position: absolute;
-  z-index: 2;
-  width: clamp(30px, 3vw, 46px);
-  height: clamp(30px, 3vw, 46px);
-  border-color: rgba(255, 244, 214, 0.48);
   pointer-events: none;
-}
-
-.project-river-card-corner.top-left {
-  top: clamp(17px, 2vw, 24px);
-  left: clamp(17px, 2vw, 24px);
-  border-top: 2px solid;
-  border-left: 2px solid;
-  border-top-left-radius: 12px;
-}
-
-.project-river-card-corner.top-right {
-  top: clamp(17px, 2vw, 24px);
-  right: clamp(17px, 2vw, 24px);
-  border-top: 2px solid;
-  border-right: 2px solid;
-  border-top-right-radius: 12px;
-}
-
-.project-river-card-corner.bottom-left {
-  bottom: clamp(17px, 2vw, 24px);
-  left: clamp(17px, 2vw, 24px);
-  border-bottom: 2px solid;
-  border-left: 2px solid;
-  border-bottom-left-radius: 12px;
-}
-
-.project-river-card-corner.bottom-right {
-  right: clamp(17px, 2vw, 24px);
-  bottom: clamp(17px, 2vw, 24px);
-  border-right: 2px solid;
-  border-bottom: 2px solid;
-  border-bottom-right-radius: 12px;
-}
-
-.project-river-card-eyebrow {
-  position: absolute;
-  top: clamp(30px, 3vw, 44px);
-  right: clamp(42px, 4vw, 60px);
-  left: clamp(42px, 4vw, 60px);
-  z-index: 3;
-  color: rgba(255, 244, 214, 0.58);
-  font-size: clamp(0.58rem, 0.8vw, 0.72rem);
-  font-weight: 950;
-  letter-spacing: 0.18em;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.project-river-card-copy {
-  position: absolute;
-  right: clamp(28px, 3.5vw, 46px);
-  bottom: clamp(44px, 4vw, 62px);
-  left: clamp(28px, 3.5vw, 46px);
-  z-index: 3;
-  display: grid;
-  gap: 14px;
-  padding: clamp(16px, 2vw, 24px);
-  border: 1px solid rgba(255, 244, 214, 0.12);
-  border-radius: clamp(17px, 2vw, 25px);
-  background:
-    linear-gradient(180deg, rgba(24, 23, 26, 0.28), rgba(20, 19, 22, 0.78));
-  backdrop-filter: blur(16px);
-}
-
-.project-river-card-title {
-  color: #fff4d6;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.9rem, 3vw, 3.25rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -0.06em;
-  text-align: center;
-}
-
-.project-river-card-description {
-  color: rgba(255, 244, 214, 0.68);
-  font-size: clamp(0.76rem, 1vw, 0.9rem);
-  font-weight: 700;
-  line-height: 1.35;
-  text-align: center;
-}
-
-@keyframes portfolioPageFadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes projectCardDealIn {
-  from {
-    opacity: 0;
-    transform:
-      translateX(-420px)
-      translateY(20px)
-      rotateZ(-4deg)
-      scale(0.9);
-  }
-
-  to {
-    opacity: 1;
-    transform:
-      translateX(0)
-      translateY(0)
-      rotateZ(0deg)
-      scale(1);
-  }
-}
-
-@media (max-width: 900px) {
-  .project-river-card {
-    width: min(34vw, 360px);
-    min-width: 270px;
-  }
-}
-
-@media (max-width: 760px) {
-  .river-card.opening-anchor-card,
-  .river-card.page-anchor-river-card {
-    transform:
-      translateX(-50%)
-      translateY(calc(-50vh + 126px))
-      scale(0.42)
-      rotateZ(-2deg);
-  }
-
-  .river-card.page-anchor-river-card:hover,
-  .river-card.page-anchor-river-card:focus-visible {
-    transform:
-      translateX(-50%)
-      translateY(calc(-50vh + 120px))
-      scale(0.42)
-      rotateZ(0deg);
-  }
-
-  .portfolio-page {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .project-river {
-    position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
-    display: flex;
-    gap: 22px;
-    height: auto;
-    min-height: 100dvh;
-    padding:
-      clamp(250px, 43vh, 340px)
-      22px
-      44px;
-    overflow-x: auto;
-    transform: none;
-  }
-
-  .project-river-card {
-    width: min(76vw, 340px);
-    min-width: min(76vw, 340px);
-    max-width: calc((100dvh - 180px) * 0.533333);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .river-card.collecting-card,
-  .river-card.page-hidden-card,
-  .river-card.opening-anchor-card,
-  .river-card.page-anchor-river-card,
-  .project-river-card,
-  .project-river-card-inner {
-    animation: none;
-    transition: none;
-  }
-}
-/* Placeholder visuals for nested page cards */
-
-.project-river-card-art {
-  display: grid;
-  place-items: center;
-}
-
-.project-river-card-symbol {
-  position: absolute;
-  top: 18%;
-  left: 50%;
-  z-index: 2;
-  color: rgba(255, 244, 214, 0.7);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(3.6rem, 5vw, 6rem);
-  line-height: 1;
-  text-shadow:
-    0 0 28px rgba(255, 244, 214, 0.16),
-    0 18px 40px rgba(0, 0, 0, 0.28);
-  transform: translateX(-50%);
-}
-
-.project-river-card-status {
-  display: inline-flex;
-  justify-self: center;
-  width: max-content;
-  margin-top: 4px;
-  padding: 6px 10px;
-  color: rgba(255, 244, 214, 0.72);
-  border: 1px solid rgba(255, 244, 214, 0.14);
-  border-radius: 999px;
-  background: rgba(255, 244, 214, 0.06);
-  font-size: 0.62rem;
-  font-weight: 950;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.project-river-card-title {
-  text-wrap: balance;
-}
-
-/* Final nested page-card river overrides */
-
-.portfolio-page::before {
-  display: none;
-}
-
-.project-river {
-  position: absolute;
-  top: 50%;
-  left: clamp(390px, 32vw, 540px);
-  right: 0;
-  display: flex;
-  align-items: center;
-  gap: clamp(26px, 3vw, 52px);
-  height: min(88dvh, 860px);
-  overflow-x: auto;
-  overflow-y: visible;
-  padding:
-    clamp(42px, 5vh, 72px)
-    max(7vw, 72px)
-    clamp(42px, 5vh, 72px)
-    clamp(28px, 4vw, 56px);
-  transform: translateY(-50%);
-  scroll-snap-type: x mandatory;
-  scroll-padding-left: clamp(28px, 4vw, 56px);
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.project-river::-webkit-scrollbar {
-  display: none;
-}
-
-.project-river-card {
-  position: relative;
-  flex: 0 0 auto;
-  width: min(30vw, 410px);
-  max-width: calc((100dvh - 110px) * 0.533333);
-  min-width: 300px;
-  aspect-ratio: 8 / 15;
-  padding: 0;
-  cursor: pointer;
-  border: 0;
-  background: transparent;
-  color: #fff4d6;
-  opacity: 1;
-  scroll-snap-align: center;
+  perspective: 1500px;
   transform:
-    translateX(-420px)
-    translateY(20px)
-    rotateZ(-4deg)
-    scale(0.94);
-  animation: projectCardDealIn 820ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    translateX(calc(-50% + (var(--project-offset) * clamp(170px, 20vw, 285px))))
+    translateY(calc(-50% + (var(--project-distance) * 10px)))
+    scale(calc(1 - (min(var(--project-distance), 2) * 0.13)))
+    rotateZ(calc(var(--project-offset) * -2.4deg));
+  z-index: calc(30 - var(--project-distance));
+  transition:
+    transform 640ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    opacity 360ms ease,
+    filter 360ms ease;
 }
 
-.project-river-card:nth-child(1) {
-  animation-delay: 240ms;
+.project-river-card.visible {
+  opacity: 0.72;
+  pointer-events: auto;
 }
 
-.project-river-card:nth-child(2) {
-  animation-delay: 370ms;
-}
-
-.project-river-card:nth-child(3) {
-  animation-delay: 500ms;
-}
-
-.project-river-card:nth-child(4) {
-  animation-delay: 630ms;
-}
-
-.project-river-card:nth-child(5) {
-  animation-delay: 760ms;
-}
-
-.project-river-card:nth-child(6) {
-  animation-delay: 890ms;
-}
-
-.project-river-card:nth-child(7) {
-  animation-delay: 1020ms;
+.project-river-card.active {
+  opacity: 1;
+  z-index: 40;
+  transform:
+    translateX(-50%)
+    translateY(-50%)
+    scale(0.92)
+    rotateZ(0deg);
 }
 
 .project-river-card-inner {
-  position: absolute;
-  inset: 0;
+  position: relative;
   display: block;
-  transform: rotateZ(-1.2deg);
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
   transition:
-    transform 180ms ease,
-    filter 180ms ease;
+    transform 760ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    filter 240ms ease;
 }
 
-.project-river-card:nth-child(2n) .project-river-card-inner {
-  transform: translateY(-12px) rotateZ(0.8deg);
+.project-river-card.active .project-river-card-inner {
+  transform: rotateY(0deg);
 }
 
-.project-river-card:nth-child(3n) .project-river-card-inner {
-  transform: translateY(10px) rotateZ(1.5deg);
+.project-river-card:not(.active):hover .project-river-card-inner,
+.project-river-card:not(.active):focus-visible .project-river-card-inner {
+  transform: rotateY(154deg) translateY(-6px);
 }
 
-.project-river-card:hover,
+.project-river-card.active:hover .project-river-card-inner,
+.project-river-card.active:focus-visible .project-river-card-inner {
+  transform: rotateY(0deg) translateY(-8px);
+}
+
 .project-river-card:focus-visible {
-  z-index: 10;
   outline: none;
 }
 
-.project-river-card:hover .project-river-card-inner,
-.project-river-card:focus-visible .project-river-card-inner {
-  transform: translateY(-14px) rotateZ(0deg) scale(1.015);
-  filter: brightness(1.08);
-}
+/* Nested card faces */
 
 .project-river-card-face {
   position: absolute;
   inset: 0;
   display: block;
   overflow: hidden;
-  border: 1px solid rgba(255, 244, 214, 0.26);
   border-radius: clamp(20px, 2vw, 30px);
-  background:
-    radial-gradient(circle at 50% 18%, rgba(255, 244, 214, 0.22), transparent 13rem),
-    linear-gradient(145deg, rgba(54, 50, 55, 0.98), rgba(19, 19, 22, 0.98));
+  backface-visibility: hidden;
   box-shadow:
-    0 34px 76px rgba(0, 0, 0, 0.5),
-    inset 0 0 0 1px rgba(255, 244, 214, 0.1),
-    inset 0 0 44px rgba(255, 255, 255, 0.025);
+    0 34px 76px rgba(0, 0, 0, 0.54),
+    inset 0 0 0 1px rgba(255, 244, 214, 0.14);
 }
+
+.project-river-card-front {
+  color: #f4ead0;
+  background:
+    radial-gradient(circle at 50% 16%, rgba(255, 244, 214, 0.16), transparent 13rem),
+    linear-gradient(145deg, rgba(54, 50, 55, 0.98), rgba(19, 19, 22, 0.98));
+}
+
+.project-river-card-back {
+  transform: rotateY(180deg);
+}
+
+.project-river-card-back-image {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  filter: saturate(0.9) contrast(1.02) brightness(0.76);
+}
+
+.project-river-card-back-image::after {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255, 244, 214, 0.08), transparent 16rem),
+    linear-gradient(180deg, rgba(10, 10, 12, 0.08), rgba(10, 10, 12, 0.26));
+  content: "";
+}
+
+/* Placeholder front art */
 
 .project-river-card-art {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(circle at 50% 24%, rgba(255, 244, 214, 0.25), transparent 14rem),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 48%);
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  filter: saturate(0.92) contrast(0.96) brightness(0.88);
 }
 
 .project-river-card-art::before {
@@ -1287,10 +924,13 @@
   background:
     linear-gradient(
       180deg,
-      transparent 0 52%,
-      rgba(15, 15, 18, 0.22) 68%,
-      rgba(15, 15, 18, 0.76) 100%
-    );
+      rgba(14, 14, 16, 0.08) 0%,
+      rgba(14, 14, 16, 0.02) 36%,
+      rgba(14, 14, 16, 0.18) 55%,
+      rgba(14, 14, 16, 0.58) 74%,
+      rgba(14, 14, 16, 0.84) 100%
+    ),
+    radial-gradient(circle at 50% 18%, rgba(255, 244, 214, 0.14), transparent 18rem);
   content: "";
 }
 
@@ -1308,6 +948,8 @@
     0 18px 40px rgba(0, 0, 0, 0.28);
   transform: translateX(-50%);
 }
+
+/* Nested card frame */
 
 .project-river-card-frame {
   position: absolute;
@@ -1367,6 +1009,8 @@
   border-bottom: 2px solid;
   border-bottom-right-radius: 12px;
 }
+
+/* Nested card copy */
 
 .project-river-card-eyebrow {
   position: absolute;
@@ -1433,62 +1077,143 @@
   text-transform: uppercase;
 }
 
-@keyframes projectCardDealIn {
-  from {
-    opacity: 0;
-    transform:
-      translateX(-420px)
-      translateY(20px)
-      rotateZ(-4deg)
-      scale(0.9);
-  }
-
-  to {
-    opacity: 1;
-    transform:
-      translateX(0)
-      translateY(0)
-      rotateZ(0deg)
-      scale(1);
-  }
-}
-
 @media (max-width: 900px) {
   .project-river {
-    left: clamp(320px, 38vw, 440px);
+    left: clamp(310px, 38vw, 430px);
   }
 
   .project-river-card {
-    width: min(36vw, 360px);
-    min-width: 270px;
+    width: min(
+      clamp(270px, 36vw, 360px),
+      calc((100dvh - 110px) * 0.533333)
+    );
   }
 }
 
 @media (max-width: 760px) {
+  .river-card.opening-anchor-card,
+  .river-card.page-anchor-river-card {
+    transform:
+      translateX(-50%)
+      translateY(calc(-50vh + 126px))
+      scale(0.42)
+      rotateZ(-2deg);
+  }
+
+  .river-card.page-anchor-river-card:hover,
+  .river-card.page-anchor-river-card:focus-visible {
+    transform:
+      translateX(-50%)
+      translateY(calc(-50vh + 120px))
+      scale(0.42)
+      rotateZ(0deg);
+  }
+
   .project-river {
-    position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
-    display: flex;
-    gap: 24px;
-    height: auto;
-    min-height: 100dvh;
-    padding:
-      clamp(250px, 43vh, 340px)
-      22px
-      44px;
-    overflow-x: auto;
-    overflow-y: visible;
-    transform: none;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 22px;
+    top: 58%;
+    left: 0;
+    right: 0;
+    height: min(68dvh, 640px);
+    transform: translateY(-50%);
   }
 
   .project-river-card {
-    width: min(76vw, 350px);
-    min-width: min(76vw, 350px);
-    max-width: calc((100dvh - 180px) * 0.533333);
-    scroll-snap-align: center;
+    width: min(
+      76vw,
+      350px,
+      calc((100dvh - 190px) * 0.533333)
+    );
+    transform:
+      translateX(calc(-50% + (var(--project-offset) * 56vw)))
+      translateY(calc(-50% + (var(--project-distance) * 8px)))
+      scale(calc(1 - (min(var(--project-distance), 2) * 0.14)))
+      rotateZ(calc(var(--project-offset) * -2.4deg));
   }
+
+  .project-river-card.active {
+    transform:
+      translateX(-50%)
+      translateY(-50%)
+      scale(0.92)
+      rotateZ(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .river-card.collecting-card,
+  .river-card.page-hidden-card,
+  .river-card.opening-anchor-card,
+  .river-card.page-anchor-river-card,
+  .project-river-card,
+  .project-river-card-inner {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Real image support for nested project cards */
+
+.river-section-page-open {
+  background: transparent;
+}
+
+.river-section-page-open .river-viewport {
+  background: transparent;
+  box-shadow: none;
+}
+
+.river-section-page-open .river-viewport::before,
+.river-section-page-open .river-viewport::after {
+  display: none;
+}
+
+.river-section-page-open .river-track {
+  pointer-events: none;
+}
+
+.river-section-page-open .page-anchor-river-card {
+  pointer-events: auto;
+}
+
+/* Bring the nested river cards visually forward under the static anchor card. */
+.portfolio-page {
+  z-index: 2;
+}
+
+.project-river {
+  z-index: 20;
+}
+
+.project-river-card.active {
+  opacity: 1;
+  filter: none;
+}
+
+.project-river-card.visible:not(.active) {
+  opacity: 0.92;
+}
+
+/* Clear main river overlay before nested page cards mount */
+
+.river-section-opening .river-viewport,
+.river-section-page-open .river-viewport {
+  background: transparent;
+  box-shadow: none;
+}
+
+.river-section-opening .river-viewport::before,
+.river-section-opening .river-viewport::after,
+.river-section-page-open .river-viewport::before,
+.river-section-page-open .river-viewport::after {
+  display: none;
+}
+
+.river-section-opening .river-track,
+.river-section-page-open .river-track {
+  pointer-events: none;
+}
+
+.river-section-opening .opening-anchor-card,
+.river-section-page-open .page-anchor-river-card {
+  pointer-events: auto;
 }

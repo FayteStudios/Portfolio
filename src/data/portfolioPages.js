@@ -18,14 +18,14 @@ export const portfolioPages = [
   {
     id: "game-design",
     title: "Game Design",
-    subtitle: "Turning ideas into fun.",
+    subtitle: "Systems, prototypes, and play.",
     rank: "Queen",
     arcanaType: "Wands",
     accent: "wands",
     artImage: queenWandsImage
   },
   {
-    id: "programming",
+    id: "coding",
     title: "Coding",
     subtitle: "A true form of art.",
     rank: "Ace",
@@ -36,8 +36,8 @@ export const portfolioPages = [
   {
     id: "art",
     title: "Art",
-    subtitle: "A different perspective.",
-    rank: "Moon",
+    subtitle: "Image, form, and atmosphere.",
+    rank: "XVIII",
     arcanaType: "Major Arcana",
     accent: "moon",
     artImage: moonImage
@@ -45,7 +45,7 @@ export const portfolioPages = [
   {
     id: "writing",
     title: "Writing",
-    subtitle: "A thousand things to say.",
+    subtitle: "Narrative and worldbuilding.",
     rank: "Knight",
     arcanaType: "Cups",
     accent: "cups",
