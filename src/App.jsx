@@ -1,34 +1,41 @@
-@'
-import { useState } from "react";
-import { portfolioCards } from "./data/portfolioCards.js";
-import CardTable from "./components/CardTable.jsx";
-import CardDetailPanel from "./components/CardDetailPanel.jsx";
+﻿import { useState } from "react";
+import { portfolioPages } from "./data/portfolioPages.js";
+import CardRiver from "./components/CardRiver.jsx";
 import "./styles/app.css";
 
 export default function App() {
-  const [selectedCard, setSelectedCard] = useState(portfolioCards[0]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const canGoPrevious = activeIndex > 0;
+  const canGoNext = activeIndex < portfolioPages.length - 1;
+
+  function goToIndex(nextIndex) {
+    if (nextIndex < 0 || nextIndex >= portfolioPages.length) {
+      return;
+    }
+
+    setActiveIndex(nextIndex);
+  }
+
+  function goPrevious() {
+    goToIndex(activeIndex - 1);
+  }
+
+  function goNext() {
+    goToIndex(activeIndex + 1);
+  }
 
   return (
     <main className="app-shell">
-      <section className="hero">
-        <p className="eyebrow">Professional Portfolio Hub</p>
-        <h1>Creative work, technical systems, and interactive projects.</h1>
-        <p className="hero-copy">
-          A tabletop-style portfolio where each card represents a discipline,
-          project area, or professional resource.
-        </p>
-      </section>
-
-      <section className="portfolio-layout">
-        <CardTable
-          cards={portfolioCards}
-          selectedCardId={selectedCard?.id}
-          onSelectCard={setSelectedCard}
-        />
-
-        <CardDetailPanel card={selectedCard} />
-      </section>
+      <CardRiver
+        pages={portfolioPages}
+        activeIndex={activeIndex}
+        onSelect={goToIndex}
+        onPrevious={goPrevious}
+        onNext={goNext}
+        canGoPrevious={canGoPrevious}
+        canGoNext={canGoNext}
+      />
     </main>
   );
 }
-'@ | Set-Content -Encoding UTF8 src\App.jsx
