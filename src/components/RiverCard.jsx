@@ -7,6 +7,7 @@
     <button
       className={[
         "river-card",
+        "tarot-card",
         `accent-${page.accent}`,
         isActive ? "active" : "",
         isVisible ? "visible" : ""
@@ -17,59 +18,45 @@
       }}
       type="button"
       onClick={onSelect}
-      aria-label={`Open ${page.title}`}
+      aria-label={`Open ${page.sectionName}`}
       aria-pressed={isActive}
     >
       <span className="river-card-inner">
         <span className="river-card-face river-card-back">
-          <span className="card-back-border">
-            <span className="card-back-pattern" />
-            <span className="card-back-logo">FS</span>
+          <span className="tarot-glow" />
+          <span className="tarot-back-frame">
+            <span className="tarot-back-pattern" />
+            <span className="tarot-back-orbit">
+              <span>FS</span>
+            </span>
           </span>
         </span>
 
         <span className="river-card-face river-card-front">
-          <span className="river-card-corner top">
-            <span>{page.rank}</span>
-            <span>{page.suit}</span>
-          </span>
+          <span
+            className="tarot-art-image"
+            style={{ backgroundImage: `url(${page.artImage})` }}
+            aria-hidden="true"
+          />
 
-          <span className="snapshot">
-            <span className="snapshot-browser">
-              <span />
-              <span />
-              <span />
+          <span className="tarot-glow" />
+
+          <span className="tarot-frame">
+            <span className="tarot-corner tarot-corner-top-left" />
+            <span className="tarot-corner tarot-corner-top-right" />
+            <span className="tarot-corner tarot-corner-bottom-left" />
+            <span className="tarot-corner tarot-corner-bottom-right" />
+
+            <span className="tarot-topline">
+              <span>{page.rank}</span>
+              <span>{page.arcanaType}</span>
             </span>
 
-            <span className="snapshot-content">
-              <span className="snapshot-label">{page.previewMeta}</span>
-              <span className="snapshot-title">{page.previewTitle}</span>
-
-              <span className="snapshot-lines">
-                <span />
-                <span />
-                <span />
-                <span />
-              </span>
+            <span className="tarot-haze">
+              <span className="tarot-section-name">{page.sectionName}</span>
+              <span className="tarot-title">{page.title}</span>
+              <span className="tarot-subtitle">{page.subtitle}</span>
             </span>
-          </span>
-
-          <span className="river-card-title">
-            <span>{page.title}</span>
-            <small>{page.subtitle}</small>
-          </span>
-
-          <span className="river-card-summary">
-            {page.summary}
-          </span>
-
-          <span className="river-card-action">
-            Open section
-          </span>
-
-          <span className="river-card-corner bottom">
-            <span>{page.rank}</span>
-            <span>{page.suit}</span>
           </span>
         </span>
       </span>
