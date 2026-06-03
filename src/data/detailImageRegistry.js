@@ -45,7 +45,7 @@ function titleCase(value) {
 }
 
 function createImageKey(filePath) {
-  return removeExtension(filePath.replace("../assets/", ""));
+  return removeExtension(filePath.replace("../assets/", "")).toLowerCase();
 }
 
 function createImageLabel(filePath) {
@@ -64,18 +64,10 @@ const generatedImages = Object.fromEntries(
   ])
 );
 
-const generatedOptions = imageEntries
-  .map(([filePath]) => ({
-    key: createImageKey(filePath),
-    label: createImageLabel(filePath),
-    path: filePath.replace("../assets/", "")
-  }))
-  .sort((a, b) => a.label.localeCompare(b.label));
-
 export const detailImages = {
   ...generatedImages,
 
-  // Backward-compatible aliases for older detail objects.
+  // Backward-compatible aliases for older exported detail objects.
   ...Object.fromEntries(
     Object.entries(legacyAliases)
       .filter(([, generatedKey]) => generatedImages[generatedKey])
@@ -83,4 +75,18 @@ export const detailImages = {
   )
 };
 
-export const detailImageOptions = generatedOptions;
+export const detailImageOptions = imageEntries
+  .map(([filePath]) => ({
+    key: createImageKey(filePath),
+    label: createImageLabel(filePath),
+    path: filePath.replace("../assets/", "")
+  }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+export function getDetailImage(imageKey) {
+  if (!imageKey) {
+    return "";
+  }
+
+  return detailImages[imageKey] || detailImages[String(imageKey).toLowerCase()] || "";
+}

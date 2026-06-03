@@ -1,63 +1,81 @@
-﻿import sunImage from "../assets/sun.png";
-import queenWandsImage from "../assets/queen-wands.jpg";
-import aceSwordsImage from "../assets/ace-swords.jpg";
-import moonImage from "../assets/moon.jpg";
-import knightCupsImage from "../assets/knight-cups.jpg";
-import pagePentaclesImage from "../assets/page-pentacles.jpg";
+﻿import { getDetailImage } from "./detailImageRegistry.js";
+
+
+function createPortfolioPage({
+  id,
+  title,
+  subtitle,
+  rank,
+  arcanaType,
+  accent,
+  artImageKey,
+  artImage
+}) {
+  return {
+    id,
+    title,
+    subtitle,
+    rank,
+    arcanaType,
+    accent,
+    artImageKey,
+    artImage: artImage || getDetailImage(artImageKey)
+  };
+}
 
 export const portfolioPages = [
-  {
+  createPortfolioPage({
     id: "about",
     title: "Nathanael Paulus",
     subtitle: "Learn.",
     rank: "Sun",
     arcanaType: "Major",
     accent: "sun",
-    artImage: sunImage
-  },
-  {
+    artImageKey: "sun"
+  }),
+  createPortfolioPage({
     id: "game-design",
     title: "Game Design",
     subtitle: "Explore.",
     rank: "Queen",
     arcanaType: "Wands",
     accent: "wands",
-    artImage: queenWandsImage
-  },
-  {
+    artImageKey: "queen-wands"
+  }),
+  createPortfolioPage({
     id: "coding",
     title: "Coding",
-    subtitle: "Inspire.",
+    subtitle: "Emerge.",
     rank: "Ace",
     arcanaType: "Swords",
     accent: "swords",
-    artImage: aceSwordsImage
-  },
-  {
+    artImageKey: "ace-swords"
+  }),
+  createPortfolioPage({
     id: "art",
     title: "Art",
-    subtitle: "Dream.",
+    subtitle: "Discover.",
     rank: "Moon",
     arcanaType: "Major",
     accent: "moon",
-    artImage: moonImage
-  },
-  {
+    artImageKey: "moon"
+  }),
+  createPortfolioPage({
     id: "writing",
     title: "Writing",
-    subtitle: "Introspect.",
+    subtitle: "Inspire.",
     rank: "Knight",
     arcanaType: "Cups",
     accent: "cups",
-    artImage: knightCupsImage
-  },
-  {
+    artImageKey: "knight-cups"
+  }),
+  createPortfolioPage({
     id: "contact",
     title: "Contact",
-    subtitle: "Commune.",
+    subtitle: "Commune",
     rank: "Page",
     arcanaType: "Pentacles",
     accent: "pentacles",
-    artImage: pagePentaclesImage
-  }
+    artImageKey: "page-pentacles"
+  })
 ];
