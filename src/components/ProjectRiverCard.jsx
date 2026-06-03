@@ -11,10 +11,18 @@ export default function ProjectRiverCard({
   const distance = Math.abs(offset);
   const isVisible = distance <= 2;
 
+  const compactTitleClass =
+    card.title.length >= 22
+      ? "title-extra-long"
+      : card.title.length >= 15
+        ? "title-long"
+        : "";
+
   return (
     <button
       className={[
         "project-river-card",
+        compactTitleClass,
         isActive ? "active" : "",
         isVisible ? "visible" : ""
       ].join(" ")}

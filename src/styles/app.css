@@ -1642,3 +1642,321 @@
     );
   }
 }
+
+/* Deal animation only on initial nested-river mount */
+
+.portfolio-page-open .project-river-card {
+  animation: none;
+  animation-delay: 0ms;
+}
+
+.project-river-dealing .project-river-card {
+  animation-duration: 1350ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+.project-river-dealing .project-river-card.active {
+  animation-name: projectActiveCardDealFromLeft;
+}
+
+.project-river-dealing .project-river-card.visible:not(.active) {
+  animation-name: projectSideCardDealFromLeft;
+}
+
+.project-river-dealing .project-river-card:nth-child(1) {
+  animation-delay: 120ms;
+}
+
+.project-river-dealing .project-river-card:nth-child(2) {
+  animation-delay: 230ms;
+}
+
+.project-river-dealing .project-river-card:nth-child(3) {
+  animation-delay: 340ms;
+}
+
+.project-river-dealing .project-river-card:nth-child(4) {
+  animation-delay: 450ms;
+}
+
+.project-river-dealing .project-river-card:nth-child(5) {
+  animation-delay: 560ms;
+}
+
+.project-river-dealing .project-river-card:nth-child(6) {
+  animation-delay: 670ms;
+}
+
+.project-river-dealing .project-river-card:nth-child(7) {
+  animation-delay: 780ms;
+}
+
+.project-river:not(.project-river-dealing) .project-river-card {
+  animation: none;
+}
+
+/* Page-river positioning + long-title control */
+
+/*
+  Move the active nested card closer to the left side of the page river.
+  Previously, the active page card was centered in the whole remaining area.
+*/
+
+.project-river {
+  --project-active-x: clamp(190px, 22vw, 340px);
+}
+
+.project-river-card {
+  left: var(--project-active-x);
+}
+
+/*
+  Keep the nested cards inside the viewport at 100% zoom.
+*/
+
+.project-river-card {
+  width: min(
+    clamp(260px, 24vw, 350px),
+    calc((100dvh - 150px) * 0.533333)
+  );
+}
+
+.project-river-card.active {
+  transform:
+    translateX(-50%)
+    translateY(-50%)
+    scale(0.84)
+    rotateZ(0deg);
+}
+
+/*
+  Adjust side-card spacing around the new left-biased active position.
+*/
+
+.project-river-card {
+  transform:
+    translateX(calc(-50% + (var(--project-offset) * clamp(155px, 18vw, 260px))))
+    translateY(calc(-50% + (var(--project-distance) * 10px)))
+    scale(calc(1 - (min(var(--project-distance), 2) * 0.13)))
+    rotateZ(calc(var(--project-offset) * -2.4deg));
+}
+
+/*
+  Text containment.
+  The card title should never escape the haze panel.
+*/
+
+.project-river-card-copy {
+  container-type: inline-size;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.project-river-card-title {
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: auto;
+  font-size: clamp(1.35rem, 12cqw, 2.45rem);
+  line-height: 1.02;
+}
+
+.project-river-card.title-long .project-river-card-title {
+  font-size: clamp(1.18rem, 10cqw, 2.05rem);
+  line-height: 1.05;
+}
+
+.project-river-card.title-extra-long .project-river-card-title {
+  font-size: clamp(1rem, 8.5cqw, 1.7rem);
+  line-height: 1.08;
+}
+
+.project-river-card-description {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/*
+  Update the deal animation so it lands at the same left-biased anchor point.
+*/
+
+@keyframes projectActiveCardDealFromLeft {
+  from {
+    opacity: 0;
+    transform:
+      translateX(calc(-1 * var(--project-active-x) - 240px))
+      translateY(-50%)
+      scale(0.5)
+      rotateZ(-10deg);
+    filter: blur(2px);
+  }
+
+  55% {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateX(-50%)
+      translateY(-50%)
+      scale(0.84)
+      rotateZ(0deg);
+    filter: blur(0);
+  }
+}
+
+@keyframes projectSideCardDealFromLeft {
+  from {
+    opacity: 0;
+    transform:
+      translateX(calc(-1 * var(--project-active-x) - 240px))
+      translateY(calc(-50% + (var(--project-distance) * 10px)))
+      scale(0.48)
+      rotateZ(-10deg);
+    filter: blur(2px);
+  }
+
+  55% {
+    opacity: 0.92;
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 0.92;
+    transform:
+      translateX(calc(-50% + (var(--project-offset) * clamp(155px, 18vw, 260px))))
+      translateY(calc(-50% + (var(--project-distance) * 10px)))
+      scale(calc(1 - (min(var(--project-distance), 2) * 0.13)))
+      rotateZ(calc(var(--project-offset) * -2.4deg));
+    filter: blur(0);
+  }
+}
+
+@media (max-width: 760px) {
+  .project-river {
+    --project-active-x: 50%;
+  }
+
+  .project-river-card {
+    left: 50%;
+    width: min(
+      74vw,
+      330px,
+      calc((100dvh - 220px) * 0.533333)
+    );
+  }
+
+  .project-river-card {
+    transform:
+      translateX(calc(-50% + (var(--project-offset) * 56vw)))
+      translateY(calc(-50% + (var(--project-distance) * 8px)))
+      scale(calc(1 - (min(var(--project-distance), 2) * 0.14)))
+      rotateZ(calc(var(--project-offset) * -2.4deg));
+  }
+
+  .project-river-card.active {
+    transform:
+      translateX(-50%)
+      translateY(-50%)
+      scale(0.84)
+      rotateZ(0deg);
+  }
+
+  @keyframes projectActiveCardDealFromLeft {
+    from {
+      opacity: 0;
+      transform:
+        translateX(-120vw)
+        translateY(-50%)
+        scale(0.48)
+        rotateZ(-10deg);
+      filter: blur(2px);
+    }
+
+    55% {
+      opacity: 1;
+      filter: blur(0);
+    }
+
+    to {
+      opacity: 1;
+      transform:
+        translateX(-50%)
+        translateY(-50%)
+        scale(0.84)
+        rotateZ(0deg);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes projectSideCardDealFromLeft {
+    from {
+      opacity: 0;
+      transform:
+        translateX(-120vw)
+        translateY(calc(-50% + (var(--project-distance) * 8px)))
+        scale(0.48)
+        rotateZ(-10deg);
+      filter: blur(2px);
+    }
+
+    55% {
+      opacity: 0.92;
+      filter: blur(0);
+    }
+
+    to {
+      opacity: 0.92;
+      transform:
+        translateX(calc(-50% + (var(--project-offset) * 56vw)))
+        translateY(calc(-50% + (var(--project-distance) * 8px)))
+        scale(calc(1 - (min(var(--project-distance), 2) * 0.14)))
+        rotateZ(calc(var(--project-offset) * -2.4deg));
+      filter: blur(0);
+    }
+  }
+}
+
+/* Main river card long-title control */
+
+.tarot-haze {
+  container-type: inline-size;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.tarot-title {
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: auto;
+  font-size: clamp(1.85rem, 16cqw, 3.3rem);
+  line-height: 1.04;
+}
+
+.river-card.title-long .tarot-title {
+  font-size: clamp(1.55rem, 13cqw, 2.65rem);
+  line-height: 1.06;
+}
+
+.river-card.title-extra-long .tarot-title {
+  font-size: clamp(1.25rem, 10.5cqw, 2.15rem);
+  line-height: 1.08;
+}
+
+.river-card.title-long .tarot-haze,
+.river-card.title-extra-long .tarot-haze {
+  padding-inline: clamp(14px, 1.6vw, 22px);
+}
+
+.river-card.title-long .tarot-subtitle,
+.river-card.title-extra-long .tarot-subtitle {
+  font-size: clamp(0.7rem, 0.78vw, 0.86rem);
+}

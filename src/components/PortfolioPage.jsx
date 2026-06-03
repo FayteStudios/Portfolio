@@ -1,14 +1,16 @@
-﻿import { useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import ProjectRiverCard from "./ProjectRiverCard.jsx";
 import { getPageCards } from "../data/pageCards.js";
 
 const SWIPE_THRESHOLD = 45;
 const WHEEL_THRESHOLD = 40;
 const WHEEL_COOLDOWN_MS = 520;
+const DEAL_ANIMATION_MS = 1500;
 
 export default function PortfolioPage({ page }) {
   const pageCards = getPageCards(page);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const [isDealing, setIsDealing] = useState(true);
 
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
@@ -16,6 +18,19 @@ export default function PortfolioPage({ page }) {
 
   const canGoPrevious = activeProjectIndex > 0;
   const canGoNext = activeProjectIndex < pageCards.length - 1;
+
+  useEffect(() => {
+    setIsDealing(true);
+    setActiveProjectIndex(0);
+
+    const dealTimer = window.setTimeout(() => {
+      setIsDealing(false);
+    }, DEAL_ANIMATION_MS);
+
+    return () => {
+      window.clearTimeout(dealTimer);
+    };
+  }, [page.id]);
 
   function goToProjectIndex(nextIndex) {
     if (nextIndex < 0 || nextIndex >= pageCards.length) {
@@ -81,6 +96,10 @@ export default function PortfolioPage({ page }) {
   function handleWheel(event) {
     event.preventDefault();
 
+    if (isDealing) {
+      return;
+    }
+
     const now = Date.now();
 
     if (now - lastWheelTime.current < WHEEL_COOLDOWN_MS) {
@@ -108,6 +127,10 @@ export default function PortfolioPage({ page }) {
   }
 
   function handleKeyDown(event) {
+    if (isDealing) {
+      return;
+    }
+
     if (event.key === "ArrowRight" && canGoNext) {
       goNext();
     }
@@ -118,11 +141,12 @@ export default function PortfolioPage({ page }) {
   }
 
   return (
+    <section className={`portfolio-page accent-${page.accent} portfolio-page-open`}>
       <section
-        className={`portfolio-page accent-${page.accent} portfolio-page-open`}
-      >
-      <section
-        className="project-river"
+        className={[
+          "project-river",
+          isDealing ? "project-river-dealing" : ""
+        ].join(" ")}
         aria-label={`${page.title} section cards`}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}

@@ -15,12 +15,20 @@ export default function RiverCard({
   const distance = Math.abs(offset);
   const isVisible = distance <= 2;
 
+  const compactTitleClass =
+    page.title.length >= 22
+      ? "title-extra-long"
+      : page.title.length >= 15
+        ? "title-long"
+        : "";
+
   return (
     <button
       className={[
         "river-card",
         "tarot-card",
         `accent-${page.accent}`,
+        compactTitleClass,
         isActive ? "active" : "",
         isVisible ? "visible" : "",
         isOpeningPage && !isOpeningCard ? "collecting-card" : "",
