@@ -1,12 +1,18 @@
 import ProjectRiverCard from "./ProjectRiverCard.jsx";
 import DetailBlockRenderer from "./DetailBlockRenderer.jsx";
 
+function valueOrFallback(value, fallback) {
+  return value === undefined || value === null ? fallback : value;
+}
+
 export default function PageDetailPanel({ page, card, isClosing, onBack }) {
   const detail = card.detail || {};
 
-  const title = detail.title || card.title;
-  const eyebrow = detail.eyebrow || card.eyebrow || page.title;
-  const summary = detail.summary || card.description;
+  const title = valueOrFallback(detail.title, card.title);
+  const eyebrow = valueOrFallback(detail.eyebrow, card.eyebrow || "");
+  const summary = valueOrFallback(detail.summary, card.description || "");
+
+  const hasBlocks = Array.isArray(detail.blocks) && detail.blocks.length > 0;
 
   const paragraphs =
     detail.paragraphs && detail.paragraphs.length > 0
@@ -20,8 +26,6 @@ export default function PageDetailPanel({ page, card, isClosing, onBack }) {
     ...card,
     status: `Return to ${page.title}`
   };
-
-  const hasBlocks = detail.blocks && detail.blocks.length > 0;
 
   return (
     <section
@@ -43,8 +47,8 @@ export default function PageDetailPanel({ page, card, isClosing, onBack }) {
 
       <article className="page-detail-panel">
         <header className="page-detail-header">
-          <p className="page-detail-eyebrow">{eyebrow}</p>
-          <h1>{title}</h1>
+          {eyebrow && <p className="page-detail-eyebrow">{eyebrow}</p>}
+          {title && <h1>{title}</h1>}
           {summary && <p className="page-detail-summary">{summary}</p>}
         </header>
 
