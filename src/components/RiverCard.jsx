@@ -1,4 +1,6 @@
-﻿export default function RiverCard({ page, index, activeIndex, isActive, onSelect }) {
+﻿import cardBackImage from "../assets/back.jpg";
+
+export default function RiverCard({ page, index, activeIndex, isActive, onSelect }) {
   const offset = index - activeIndex;
   const distance = Math.abs(offset);
   const isVisible = distance <= 2;
@@ -18,18 +20,16 @@
       }}
       type="button"
       onClick={onSelect}
-      aria-label={`Open ${page.sectionName}`}
+      aria-label={`Open ${page.title}`}
       aria-pressed={isActive}
     >
       <span className="river-card-inner">
         <span className="river-card-face river-card-back">
-          <span className="tarot-glow" />
-          <span className="tarot-back-frame">
-            <span className="tarot-back-pattern" />
-            <span className="tarot-back-orbit">
-              <span>FS</span>
-            </span>
-          </span>
+          <span
+            className="tarot-back-image"
+            style={{ backgroundImage: `url(${cardBackImage})` }}
+            aria-hidden="true"
+          />
         </span>
 
         <span className="river-card-face river-card-front">
@@ -53,7 +53,6 @@
             </span>
 
             <span className="tarot-haze">
-              <span className="tarot-section-name">{page.sectionName}</span>
               <span className="tarot-title">{page.title}</span>
               <span className="tarot-subtitle">{page.subtitle}</span>
             </span>
