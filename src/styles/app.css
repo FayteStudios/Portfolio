@@ -2170,73 +2170,13 @@
 
 /* Detail page: nested return card */
 
-.page-detail-return-card-shell {
-  position: fixed;
-  left: clamp(10px, 1.35vw, 22px);
-  top: 50%;
-  z-index: 90;
-  width: min(
-    clamp(190px, 17vw, 300px),
-    calc((100dvh - 96px) * 0.533333)
-  );
-  aspect-ratio: 8 / 15;
-  transform: translateY(-50%);
-  animation: detailReturnCardSlideIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
 .page-detail-stage-closing .page-detail-return-card-shell {
   animation: detailReturnCardSlideOut 520ms cubic-bezier(0.64, 0, 0.78, 0) both;
 }
 
-.page-detail-return-card-shell .project-river-card {
-  position: relative;
-  inset: auto;
-  width: 100%;
-  height: 100%;
-  transform: none !important;
-  opacity: 1 !important;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.page-detail-return-card-shell .project-river-card:hover,
-.page-detail-return-card-shell .project-river-card:focus-visible {
-  transform: translateY(-6px) scale(1.015) !important;
-}
 
 /* Give the detail panel enough left clearance for the anchored return card. */
 
-.page-detail-panel {
-  left: clamp(270px, 23vw, 400px);
-}
-
-@keyframes detailReturnCardSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-120%) translateY(-50%) scale(0.88);
-    filter: blur(3px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0) translateY(-50%) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes detailReturnCardSlideOut {
-  from {
-    opacity: 1;
-    transform: translateX(0) translateY(-50%) scale(1);
-    filter: blur(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateX(-120%) translateY(-50%) scale(0.88);
-    filter: blur(3px);
-  }
-}
 
 @media (max-width: 860px) {
   .page-detail-return-card-shell {
@@ -2288,6 +2228,185 @@
     to {
       opacity: 0;
       transform: translateX(-50%) translateY(-90px) scale(0.92);
+      filter: blur(2px);
+    }
+  }
+}
+
+/* Mobile tier-anchor behavior
+   On phone screens, previous-tier cards anchor to the top instead of the left/center.
+*/
+
+@media (max-width: 760px) {
+  /*
+    Main page anchor card:
+    When a main portfolio card opens a section, keep that parent card visible
+    at the top of the screen instead of centered.
+  */
+
+  .river-card.opening-anchor-card,
+  .river-card.page-anchor-river-card {
+    top: clamp(10px, 2vh, 18px);
+    left: 50%;
+    width: min(
+      82vw,
+      380px,
+      calc((100dvh - 110px) * 0.533333)
+    );
+    transform:
+      translateX(-50%)
+      translateY(0)
+      scale(0.38)
+      rotateZ(-2deg);
+    transform-origin: top center;
+  }
+
+  .river-card.page-anchor-river-card:hover,
+  .river-card.page-anchor-river-card:focus-visible {
+    transform:
+      translateX(-50%)
+      translateY(-4px)
+      scale(0.38)
+      rotateZ(0deg);
+  }
+
+  /*
+    Move the nested page-card river down so the top anchor card
+    does not block the active nested card.
+  */
+
+  .project-river {
+    top: 66%;
+    left: 0;
+    right: 0;
+    height: min(58dvh, 560px);
+    transform: translateY(-50%);
+  }
+
+  .project-river-card {
+    left: 50%;
+    width: min(
+      74vw,
+      330px,
+      calc((100dvh - 250px) * 0.533333)
+    );
+  }
+
+  .project-river-card.active {
+    transform:
+      translateX(-50%)
+      translateY(-50%)
+      scale(0.84)
+      rotateZ(0deg);
+  }
+}
+
+/* Mobile detail page return-card behavior */
+
+@media (max-width: 860px) {
+  /*
+    The detail-page return card should also be a real top-anchored card,
+    not a collapsed horizontal button.
+  */
+
+  .page-detail-return-card-shell {
+    position: fixed;
+    top: clamp(10px, 2vh, 18px);
+    left: 50%;
+    z-index: 95;
+    width: min(
+      82vw,
+      380px,
+      calc((100dvh - 110px) * 0.533333)
+    );
+    min-height: 0;
+    aspect-ratio: 8 / 15;
+    transform:
+      translateX(-50%)
+      translateY(0)
+      scale(0.38);
+    transform-origin: top center;
+    animation: detailReturnCardSlideDownMobile 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .page-detail-stage-closing .page-detail-return-card-shell {
+    animation: detailReturnCardSlideUpMobile 420ms cubic-bezier(0.64, 0, 0.78, 0) both;
+  }
+
+  .page-detail-return-card-shell .project-river-card {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    aspect-ratio: 8 / 15;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto;
+  }
+
+  .page-detail-return-card-shell .project-river-card:hover,
+  .page-detail-return-card-shell .project-river-card:focus-visible {
+    transform: translateY(-6px) scale(1.015) !important;
+  }
+
+  /*
+    Push the long-form detail panel below the top return card.
+  */
+
+  .page-detail-panel {
+    top: clamp(250px, 38vh, 330px);
+    right: -12px;
+    bottom: -28px;
+    left: -12px;
+    border-radius: clamp(22px, 6vw, 34px);
+    padding:
+      clamp(28px, 8vw, 48px)
+      clamp(26px, 8vw, 42px)
+      clamp(82px, 14vh, 130px);
+  }
+
+  .page-detail-header h1 {
+    max-width: 100%;
+    font-size: clamp(2.65rem, 14vw, 4.8rem);
+  }
+
+  @keyframes detailReturnCardSlideDownMobile {
+    from {
+      opacity: 0;
+      transform:
+        translateX(-50%)
+        translateY(-120px)
+        scale(0.34);
+      filter: blur(2px);
+    }
+
+    to {
+      opacity: 1;
+      transform:
+        translateX(-50%)
+        translateY(0)
+        scale(0.38);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes detailReturnCardSlideUpMobile {
+    from {
+      opacity: 1;
+      transform:
+        translateX(-50%)
+        translateY(0)
+        scale(0.38);
+      filter: blur(0);
+    }
+
+    to {
+      opacity: 0;
+      transform:
+        translateX(-50%)
+        translateY(-120px)
+        scale(0.34);
       filter: blur(2px);
     }
   }
