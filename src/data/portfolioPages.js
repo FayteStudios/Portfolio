@@ -53,11 +53,10 @@ export const portfolioPages = [
   },
   {
     id: "contact",
-    title: "Page of Pentacles",
-    sectionName: "Contact",
-    subtitle: "Reach out and connect.",
+    title: "Contact",
+    subtitle: "Let's connect!",
     rank: "Page",
-    arcanaType: "Court Card",
+    arcanaType: "Pentacles",
     accent: "pentacles",
     artImage: pagePentaclesImage
   }
