@@ -6,239 +6,262 @@ import knightCupsImage from "../assets/knight-cups.jpg";
 import pagePentaclesImage from "../assets/page-pentacles.jpg";
 import rpgwoImage from "../assets/rpgwo.png";
 
+function createDetail({ eyebrow, title, description, pageTitle }) {
+  return {
+    eyebrow,
+    title,
+    summary: description,
+    paragraphs: [
+      `${title} is set up as a longer-form portfolio page inside the ${pageTitle} section.`,
+      "This panel is meant for deeper written content, project notes, links, screenshots, process explanations, or anything else that needs more room than a river card.",
+      "Replace this placeholder text with final copy when you are ready. The structure is intentionally reusable so most page cards can open this same paragraph-style layout."
+    ],
+    sections: [
+      {
+        title: "Page Content",
+        items: [
+          "Long-form paragraphs",
+          "Project details",
+          "Process notes",
+          "Links or calls to action"
+        ]
+      }
+    ]
+  };
+}
+
+function createCard({
+  id,
+  eyebrow,
+  title,
+  description,
+  image,
+  pageTitle,
+  status = "Placeholder"
+}) {
+  return {
+    id,
+    eyebrow,
+    title,
+    description,
+    status,
+    image,
+    detail: createDetail({
+      eyebrow,
+      title,
+      description,
+      pageTitle
+    })
+  };
+}
+
 const pageCardsBySection = {
   about: [
-    {
+    createCard({
       id: "about-bio",
-      eyebrow: "About Me",
       title: "Bio",
       description: "A quick look at who I am and what I do.",
-      status: "Placeholder",
-      image: sunImage
-    },
-    {
+      image: sunImage,
+      pageTitle: "About"
+    }),
+    createCard({
       id: "about-resume",
-      eyebrow: "About Me",
       title: "Resume",
       description: "Experience, skills, and work history.",
-      status: "Placeholder",
-      image: aceSwordsImage
-    },
-    {
+      image: aceSwordsImage,
+      pageTitle: "About"
+    }),
+    createCard({
       id: "about-socials",
-      eyebrow: "About Me",
       title: "Social Links",
       description: "My platforms and public spaces.",
-      status: "Placeholder",
-      image: knightCupsImage
-    },
-    {
+      image: knightCupsImage,
+      pageTitle: "About"
+    }),
+    createCard({
       id: "about-recommendations",
-      eyebrow: "About Me",
       title: "Recommendations",
       description: "Comments, references, and feedback.",
-      status: "Placeholder",
-      image: queenWandsImage
-    }
+      image: queenWandsImage,
+      pageTitle: "About"
+    })
   ],
 
   "game-design": [
-    {
+    createCard({
       id: "gd-beetle-rpg",
-      eyebrow: "Game Design",
       title: "Beetle RPG",
       description: "A role-playing game project and systems showcase.",
-      status: "Placeholder",
-      image: queenWandsImage
-    },
-    {
+      image: queenWandsImage,
+      pageTitle: "Game Design"
+    }),
+    createCard({
       id: "gd-fayte",
-      eyebrow: "Game Design",
       title: "Fayte",
       description: "A project space for mechanics and world systems.",
-      status: "Placeholder",
-      image: pagePentaclesImage
-    },
-    {
+      image: pagePentaclesImage,
+      pageTitle: "Game Design"
+    }),
+    createCard({
       id: "gd-aetheric",
-      eyebrow: "Game Design",
       title: "Aetheric",
       description: "A game concept or prototype section.",
-      status: "Placeholder",
-      image: moonImage
-    },
-    {
+      image: moonImage,
+      pageTitle: "Game Design"
+    }),
+    createCard({
       id: "gd-hearth-and-harvest",
-      eyebrow: "Game Design",
       title: "Hearth and Harvest",
       description: "Farming, community, and simulation design work.",
-      status: "Placeholder",
-      image: sunImage
-    },
-    {
+      image: sunImage,
+      pageTitle: "Game Design"
+    }),
+    createCard({
       id: "gd-entangled",
-      eyebrow: "Game Design",
       title: "Entangled",
       description: "Design notes, mechanics, and project details.",
-      status: "Placeholder",
-      image: aceSwordsImage
-    },
-    {
+      image: aceSwordsImage,
+      pageTitle: "Game Design"
+    }),
+    createCard({
       id: "gd-boned",
-      eyebrow: "Game Design",
       title: "Boned",
       description: "A project slot for concept and presentation.",
-      status: "Placeholder",
-      image: knightCupsImage
-    }
+      image: knightCupsImage,
+      pageTitle: "Game Design"
+    })
   ],
 
   coding: [
-    {
+    createCard({
       id: "code-rpgwo-tools",
-      eyebrow: "Coding",
       title: "RPGWO Tools",
       description: "Utilities and tools built around RPGWO workflows.",
-      status: "Placeholder",
-      image: rpgwoImage
-    },
-    {
+      image: rpgwoImage,
+      pageTitle: "Coding"
+    }),
+    createCard({
       id: "code-ffxiv-shopping-list",
-      eyebrow: "Coding",
       title: "FFXIV Shopping List",
       description: "A planner/tool project for Final Fantasy XIV.",
-      status: "Placeholder",
-      image: pagePentaclesImage
-    },
-    {
+      image: pagePentaclesImage,
+      pageTitle: "Coding"
+    }),
+    createCard({
       id: "code-fayte",
-      eyebrow: "Coding",
       title: "Fayte",
       description: "Technical work connected to Fayte.",
-      status: "Placeholder",
-      image: sunImage
-    },
-    {
+      image: sunImage,
+      pageTitle: "Coding"
+    }),
+    createCard({
       id: "code-aetheric",
-      eyebrow: "Coding",
       title: "Aetheric",
       description: "Code systems, experiments, or tools for Aetheric.",
-      status: "Placeholder",
-      image: moonImage
-    },
-    {
+      image: moonImage,
+      pageTitle: "Coding"
+    }),
+    createCard({
       id: "code-entangled",
-      eyebrow: "Coding",
       title: "Entangled",
       description: "Programming work tied to Entangled.",
-      status: "Placeholder",
-      image: knightCupsImage
-    },
-    {
+      image: knightCupsImage,
+      pageTitle: "Coding"
+    }),
+    createCard({
       id: "code-beetle-rpg",
-      eyebrow: "Coding",
       title: "Beetle RPG",
       description: "Implementation details, systems, and tooling.",
-      status: "Placeholder",
-      image: queenWandsImage
-    }
+      image: queenWandsImage,
+      pageTitle: "Coding"
+    })
   ],
 
   art: [
-    {
+    createCard({
       id: "art-nature",
-      eyebrow: "Art",
       title: "Nature",
       description: "Nature-focused pieces and studies.",
-      status: "Placeholder",
-      image: sunImage
-    },
-    {
+      image: sunImage,
+      pageTitle: "Art"
+    }),
+    createCard({
       id: "art-monsters",
-      eyebrow: "Art",
       title: "Monsters",
       description: "Creature design and monster work.",
-      status: "Placeholder",
-      image: moonImage
-    },
-    {
+      image: moonImage,
+      pageTitle: "Art"
+    }),
+    createCard({
       id: "art-trading-cards",
-      eyebrow: "Art",
       title: "Trading Cards",
       description: "Card-style compositions and related work.",
-      status: "Placeholder",
-      image: queenWandsImage
-    },
-    {
+      image: queenWandsImage,
+      pageTitle: "Art"
+    }),
+    createCard({
       id: "art-nsfw",
-      eyebrow: "Art",
       title: "NSFW",
       description: "Eventually this can use a blurred card image.",
-      status: "Placeholder",
-      image: knightCupsImage
-    }
+      image: knightCupsImage,
+      pageTitle: "Art"
+    })
   ],
 
   writing: [
-    {
+    createCard({
       id: "writing-hilltops",
       eyebrow: "Writing",
       title: "The Thing about Hilltops",
       description: "A writing/project card for this piece.",
-      status: "Placeholder",
-      image: knightCupsImage
-    },
-    {
+      image: knightCupsImage,
+      pageTitle: "Writing"
+    }),
+    createCard({
       id: "writing-charon",
-      eyebrow: "Writing",
       title: "The Son of Charon",
       description: "A writing/project card for this piece.",
-      status: "Placeholder",
-      image: moonImage
-    },
-    {
+      image: moonImage,
+      pageTitle: "Writing"
+    }),
+    createCard({
       id: "writing-dylanisms",
-      eyebrow: "Writing",
       title: "Dylanisms",
       description: "A writing/project card for this piece.",
-      status: "Placeholder",
-      image: sunImage
-    }
+      image: sunImage,
+      pageTitle: "Writing"
+    })
   ],
 
   contact: [
-    {
+    createCard({
       id: "contact-email",
-      eyebrow: "Contact",
       title: "Email Form",
       description: "A direct message or inquiry form.",
-      status: "Placeholder",
-      image: pagePentaclesImage
-    },
-    {
+      image: pagePentaclesImage,
+      pageTitle: "Contact"
+    }),
+    createCard({
       id: "contact-socials",
-      eyebrow: "Contact",
       title: "Social Links",
       description: "A central place for all social platforms.",
-      status: "Placeholder",
-      image: knightCupsImage
-    },
-    {
+      image: knightCupsImage,
+      pageTitle: "Contact"
+    }),
+    createCard({
       id: "contact-comments",
-      eyebrow: "Contact",
       title: "Comment Form",
       description: "A feedback or comment submission form.",
-      status: "Placeholder",
-      image: moonImage
-    },
-    {
+      image: moonImage,
+      pageTitle: "Contact"
+    }),
+    createCard({
       id: "contact-commissions",
-      eyebrow: "Contact",
       title: "Commissions",
       description: "A form or page for commission inquiries.",
-      status: "Placeholder",
-      image: queenWandsImage
-    }
+      image: queenWandsImage,
+      pageTitle: "Contact"
+    })
   ]
 };
 

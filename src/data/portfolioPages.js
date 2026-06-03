@@ -10,8 +10,8 @@ export const portfolioPages = [
     id: "about",
     title: "Nathanael Paulus",
     subtitle: "Learn about me.",
-    rank: "XIX",
-    arcanaType: "Major Arcana",
+    rank: "Sun",
+    arcanaType: "Major",
     accent: "sun",
     artImage: sunImage
   },
@@ -37,8 +37,8 @@ export const portfolioPages = [
     id: "art",
     title: "Art",
     subtitle: "Image, form, and atmosphere.",
-    rank: "XVIII",
-    arcanaType: "Major Arcana",
+    rank: "Moon",
+    arcanaType: "Major",
     accent: "moon",
     artImage: moonImage
   },
