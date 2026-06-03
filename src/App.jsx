@@ -4,17 +4,16 @@ import CardRiver from "./components/CardRiver.jsx";
 import PortfolioPage from "./components/PortfolioPage.jsx";
 import "./styles/app.css";
 
-const PAGE_TRANSITION_MS = 900;
+const OPEN_TRANSITION_MS = 760;
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [openingPage, setOpeningPage] = useState(null);
   const [openedPage, setOpenedPage] = useState(null);
-  const [isOpeningPage, setIsOpeningPage] = useState(false);
   const transitionTimeoutRef = useRef(null);
 
   const activePage = portfolioPages[activeIndex];
-  const canGoPrevious = activeIndex > 0 && !isOpeningPage;
-  const canGoNext = activeIndex < portfolioPages.length - 1 && !isOpeningPage;
+  const isOpeningPage = Boolean(openingPage);
 
   function clearTransitionTimeout() {
     if (transitionTimeoutRef.current) {
@@ -55,23 +54,30 @@ export default function App() {
 
     clearTransitionTimeout();
 
-    setIsOpeningPage(true);
+    const page = portfolioPages[index];
+    setOpeningPage(page);
 
     transitionTimeoutRef.current = window.setTimeout(() => {
-      setOpenedPage(portfolioPages[index]);
-      setIsOpeningPage(false);
+      setOpenedPage(page);
+      setOpeningPage(null);
       transitionTimeoutRef.current = null;
-    }, PAGE_TRANSITION_MS);
+    }, OPEN_TRANSITION_MS);
   }
 
   function closeOpenedPage() {
     clearTransitionTimeout();
     setOpenedPage(null);
-    setIsOpeningPage(false);
+    setOpeningPage(null);
   }
 
   return (
-    <main className={`app-shell ${openedPage ? "page-is-open" : ""}`}>
+    <main
+      className={[
+        "app-shell",
+        isOpeningPage ? "app-is-opening-page" : "",
+        openedPage ? "page-is-open" : ""
+      ].join(" ")}
+    >
       {!openedPage && (
         <CardRiver
           pages={portfolioPages}
@@ -81,8 +87,8 @@ export default function App() {
           onSelect={handleCardSelect}
           onPrevious={goPrevious}
           onNext={goNext}
-          canGoPrevious={canGoPrevious}
-          canGoNext={canGoNext}
+          canGoPrevious={activeIndex > 0 && !isOpeningPage}
+          canGoNext={activeIndex < portfolioPages.length - 1 && !isOpeningPage}
         />
       )}
 

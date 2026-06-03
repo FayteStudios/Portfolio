@@ -908,3 +908,510 @@
     );
   }
 }
+
+/* Shared card-to-page transition */
+
+.app-is-opening-page {
+  overflow: hidden;
+}
+
+.river-section-opening {
+  pointer-events: none;
+}
+
+.river-card.collecting-card {
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(2px);
+  transform:
+    translateX(-50%)
+    translateY(56vh)
+    scale(0.2)
+    rotateZ(calc(var(--offset) * 12deg));
+  transition:
+    transform 760ms cubic-bezier(0.68, -0.18, 0.24, 1),
+    opacity 420ms ease,
+    filter 420ms ease;
+}
+
+.river-card.collecting-card .river-card-inner {
+  transform: rotateY(180deg);
+}
+
+.river-card.opening-source-card {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.opening-card-overlay .tarot-frame {
+  animation: openingFrameFade 950ms ease forwards;
+}
+
+.opening-card-overlay .tarot-haze {
+  animation: openingHazeFade 720ms ease forwards;
+}
+
+/* Bare content pages */
+
+.page-is-open {
+  overflow: auto;
+}
+
+.portfolio-page {
+  position: relative;
+  min-height: 100dvh;
+  padding: clamp(28px, 6vw, 88px);
+  color: #fff4d6;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255, 244, 214, 0.09), transparent 28rem),
+    radial-gradient(circle at 12% 88%, rgba(120, 69, 151, 0.18), transparent 34rem),
+    radial-gradient(circle at 88% 82%, rgba(30, 82, 67, 0.26), transparent 34rem),
+    linear-gradient(135deg, #0f0e11, #171117 48%, #0d1714);
+  animation: portfolioPageIn 420ms ease both;
+}
+
+.portfolio-page::before {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 8, 10, 0.18),
+      transparent 24%,
+      rgba(8, 8, 10, 0.24)
+    );
+  content: "";
+}
+
+.portfolio-page-inner {
+  position: relative;
+  z-index: 1;
+  width: min(920px, 100%);
+  margin: 0 auto;
+  padding-top: clamp(48px, 8vh, 110px);
+}
+
+.portfolio-page-kicker {
+  margin: 0 0 18px;
+  color: rgba(255, 244, 214, 0.64);
+  font-size: clamp(0.72rem, 1vw, 0.88rem);
+  font-weight: 950;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.portfolio-page h1 {
+  max-width: 12ch;
+  margin: 0;
+  color: #fff4d6;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.4rem, 10vw, 8.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.075em;
+}
+
+.portfolio-page-subtitle {
+  max-width: 680px;
+  margin: 24px 0 0;
+  color: rgba(255, 244, 214, 0.68);
+  font-size: clamp(1rem, 1.5vw, 1.28rem);
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.portfolio-page-placeholder {
+  display: grid;
+  gap: 14px;
+  max-width: 760px;
+  margin-top: clamp(34px, 6vw, 72px);
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(255, 244, 214, 0.14);
+  border-radius: 24px;
+  background: rgba(20, 19, 22, 0.48);
+  backdrop-filter: blur(18px);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.28),
+    inset 0 0 40px rgba(255, 255, 255, 0.02);
+}
+
+.portfolio-page-placeholder p {
+  margin: 0;
+  color: rgba(255, 244, 214, 0.68);
+  line-height: 1.7;
+}
+
+.portfolio-page-back {
+  position: fixed;
+  top: clamp(18px, 3vw, 34px);
+  left: clamp(18px, 3vw, 34px);
+  z-index: 5;
+  min-height: 42px;
+  padding: 9px 16px;
+  color: #171117;
+  cursor: pointer;
+  border: 1px solid rgba(255, 244, 214, 0.34);
+  border-radius: 999px;
+  background: rgba(255, 244, 214, 0.78);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  transition:
+    transform 160ms ease,
+    background 160ms ease;
+}
+
+.portfolio-page-back:hover,
+.portfolio-page-back:focus-visible {
+  background: #fff4d6;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+@keyframes portfolioPageIn {
+  from {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 760px) {
+  .river-card.collecting-card {
+    transform:
+      translateX(-50%)
+      translateY(58vh)
+      scale(0.16)
+      rotateZ(calc(var(--offset) * 13deg));
+  }
+
+  .portfolio-page {
+    padding: 24px;
+  }
+
+  .portfolio-page-inner {
+    padding-top: 86px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .river-card.collecting-card,
+  .river-card.opening-source-card,
+  .opening-card-overlay,
+  .opening-card-overlay .tarot-frame,
+  .opening-card-overlay .tarot-haze,
+  .portfolio-page {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Text stability fix for deployed builds */
+
+.tarot-haze {
+  container-type: inline-size;
+}
+
+.tarot-title {
+  max-width: 100%;
+  line-height: 1.08;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  font-size: clamp(1.85rem, 17cqw, 3.3rem);
+}
+
+/* Non-stretch page transition */
+
+.app-is-opening-page {
+  overflow: hidden;
+}
+
+.river-section-opening {
+  pointer-events: none;
+}
+
+.river-card.collecting-card {
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(2px);
+  transform:
+    translateX(-50%)
+    translateY(56vh)
+    scale(0.2)
+    rotateZ(calc(var(--offset) * 12deg));
+  transition:
+    transform 760ms cubic-bezier(0.68, -0.18, 0.24, 1),
+    opacity 420ms ease,
+    filter 420ms ease;
+}
+
+.river-card.collecting-card .river-card-inner {
+  transform: rotateY(180deg);
+}
+
+.river-card.opening-anchor-card {
+  z-index: 80;
+  pointer-events: none;
+  transform:
+    translateX(calc(-50% - min(27vw, 390px)))
+    translateY(-50%)
+    scale(0.72)
+    rotateZ(-2deg);
+  transition:
+    transform 760ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 360ms ease;
+}
+
+.river-card.opening-anchor-card .river-card-inner {
+  transform: rotateY(0deg);
+}
+
+/* Anchored content page */
+
+.page-is-open {
+  width: 100vw;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.portfolio-page {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(260px, 34vw) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 76px);
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  padding: clamp(28px, 5vw, 72px);
+  overflow: hidden;
+  color: #fff4d6;
+  background:
+    radial-gradient(circle at 18% 50%, rgba(255, 244, 214, 0.08), transparent 24rem),
+    radial-gradient(circle at 88% 24%, rgba(120, 69, 151, 0.16), transparent 34rem),
+    radial-gradient(circle at 80% 88%, rgba(30, 82, 67, 0.22), transparent 34rem),
+    linear-gradient(135deg, #0f0e11, #171117 48%, #0d1714);
+  animation: portfolioPageIn 420ms ease both;
+}
+
+.portfolio-page-anchor {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-width: 0;
+}
+
+.page-anchor-card {
+  position: relative;
+  width: min(100%, 330px);
+  aspect-ratio: 8 / 15;
+  padding: 0;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  transform: rotateZ(-2deg);
+  transition:
+    transform 180ms ease,
+    filter 180ms ease;
+}
+
+.page-anchor-card:hover,
+.page-anchor-card:focus-visible {
+  transform: rotateZ(0deg) translateY(-6px);
+  outline: none;
+  filter: brightness(1.04);
+}
+
+.page-anchor-card-inner {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.page-anchor-card .river-card-face {
+  border-radius: clamp(18px, 2vw, 28px);
+}
+
+.page-anchor-card-back-reference {
+  display: none;
+}
+
+.portfolio-page-anchor-hint {
+  margin: 18px 0 0;
+  color: rgba(255, 244, 214, 0.48);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.portfolio-page-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  animation: portfolioContentIn 520ms ease both;
+}
+
+.portfolio-page-kicker {
+  margin: 0 0 18px;
+  color: rgba(255, 244, 214, 0.64);
+  font-size: clamp(0.72rem, 1vw, 0.88rem);
+  font-weight: 950;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.portfolio-page h1 {
+  max-width: 12ch;
+  margin: 0;
+  color: #fff4d6;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.4rem, 9vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.075em;
+}
+
+.portfolio-page-subtitle {
+  max-width: 680px;
+  margin: 24px 0 0;
+  color: rgba(255, 244, 214, 0.68);
+  font-size: clamp(1rem, 1.5vw, 1.28rem);
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.project-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  margin-top: clamp(34px, 5vw, 62px);
+}
+
+.content-tarot-card {
+  min-height: 220px;
+  padding: clamp(18px, 2vw, 26px);
+  border: 1px solid rgba(255, 244, 214, 0.14);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 244, 214, 0.08), transparent 12rem),
+    rgba(20, 19, 22, 0.52);
+  backdrop-filter: blur(18px);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.24),
+    inset 0 0 40px rgba(255, 255, 255, 0.02);
+}
+
+.content-tarot-card p {
+  margin: 0 0 12px;
+  color: rgba(255, 244, 214, 0.48);
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.content-tarot-card h2 {
+  margin: 0;
+  color: #fff4d6;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.6rem, 2.4vw, 2.35rem);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.content-tarot-card span {
+  display: block;
+  margin-top: 18px;
+  color: rgba(255, 244, 214, 0.58);
+  line-height: 1.55;
+}
+
+@keyframes portfolioPageIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes portfolioContentIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .project-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .river-card.opening-anchor-card {
+    transform:
+      translateX(-50%)
+      translateY(calc(-50% - 26vh))
+      scale(0.5)
+      rotateZ(-2deg);
+  }
+
+  .portfolio-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 22px;
+    padding: 22px;
+    overflow: auto;
+  }
+
+  .portfolio-page-anchor {
+    align-content: start;
+  }
+
+  .page-anchor-card {
+    width: min(42vw, 170px);
+  }
+
+  .portfolio-page-anchor-hint {
+    margin-top: 10px;
+    font-size: 0.64rem;
+  }
+
+  .portfolio-page-content {
+    align-content: start;
+  }
+
+  .portfolio-page h1 {
+    font-size: clamp(2.9rem, 15vw, 5rem);
+  }
+
+  .portfolio-page-subtitle {
+    margin-top: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .river-card.collecting-card,
+  .river-card.opening-anchor-card,
+  .portfolio-page,
+  .portfolio-page-content,
+  .page-anchor-card {
+    animation: none;
+    transition: none;
+  }
+}

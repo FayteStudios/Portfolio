@@ -1,47 +1,14 @@
 ﻿import cardBackImage from "../assets/back.jpg";
 
-export default function RiverCard({
-  page,
-  index,
-  activeIndex,
-  isActive,
-  isOpeningPage,
-  isOpeningCard,
-  onSelect
-}) {
-  const offset = index - activeIndex;
-  const distance = Math.abs(offset);
-  const isVisible = distance <= 2;
-
+export default function PageAnchorCard({ page, onClose }) {
   return (
     <button
-      className={[
-        "river-card",
-        "tarot-card",
-        `accent-${page.accent}`,
-        isActive ? "active" : "",
-        isVisible ? "visible" : "",
-        isOpeningPage && !isOpeningCard ? "collecting-card" : "",
-        isOpeningCard ? "opening-anchor-card" : ""
-      ].join(" ")}
-      style={{
-        "--offset": offset,
-        "--distance": distance
-      }}
+      className={`page-anchor-card accent-${page.accent}`}
       type="button"
-      onClick={onSelect}
-      aria-label={`Open ${page.title}`}
-      aria-pressed={isActive}
+      onClick={onClose}
+      aria-label="Return to card river"
     >
-      <span className="river-card-inner">
-        <span className="river-card-face river-card-back">
-          <span
-            className="tarot-back-image"
-            style={{ backgroundImage: `url(${cardBackImage})` }}
-            aria-hidden="true"
-          />
-        </span>
-
+      <span className="page-anchor-card-inner">
         <span className="river-card-face river-card-front">
           <span
             className="tarot-art-image"
@@ -68,6 +35,12 @@ export default function RiverCard({
             </span>
           </span>
         </span>
+
+        <span
+          className="page-anchor-card-back-reference"
+          style={{ backgroundImage: `url(${cardBackImage})` }}
+          aria-hidden="true"
+        />
       </span>
     </button>
   );

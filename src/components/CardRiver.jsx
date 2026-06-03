@@ -15,12 +15,16 @@ export default function CardRiver({
   onNext,
   canGoPrevious,
   canGoNext
-  }) {
+}) {
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
   const lastWheelTime = useRef(0);
 
   function handleTouchStart(event) {
+    if (isOpeningPage) {
+      return;
+    }
+
     const touch = event.touches[0];
 
     touchStartX.current = touch.clientX;
@@ -28,6 +32,10 @@ export default function CardRiver({
   }
 
   function handleTouchEnd(event) {
+    if (isOpeningPage) {
+      return;
+    }
+
     if (touchStartX.current === null || touchStartY.current === null) {
       return;
     }
@@ -57,6 +65,10 @@ export default function CardRiver({
   }
 
   function handleWheel(event) {
+    if (isOpeningPage) {
+      return;
+    }
+
     const now = Date.now();
 
     if (now - lastWheelTime.current < WHEEL_COOLDOWN_MS) {
@@ -84,6 +96,10 @@ export default function CardRiver({
   }
 
   function handleKeyDown(event) {
+    if (isOpeningPage) {
+      return;
+    }
+
     if (event.key === "ArrowRight" && canGoNext) {
       onNext();
     }
@@ -100,24 +116,6 @@ export default function CardRiver({
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      <button
-        className="river-nav-button stingray-nav previous"
-        type="button"
-        onClick={onPrevious}
-        disabled={!canGoPrevious}
-        aria-label="Previous portfolio page"
-      >
-        <span className="stingray-circle" aria-hidden="true">
-          <svg
-            className="stingray-arrow"
-            viewBox="0 0 24 24"
-            focusable="false"
-          >
-            <path d="M15.5 5.5 9 12l6.5 6.5" />
-          </svg>
-        </span>
-      </button>
-
       <div
         className="river-viewport"
         onTouchStart={handleTouchStart}
