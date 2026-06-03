@@ -8,12 +8,14 @@ const WHEEL_COOLDOWN_MS = 520;
 export default function CardRiver({
   pages,
   activeIndex,
+  activePageId,
+  isOpeningPage,
   onSelect,
   onPrevious,
   onNext,
   canGoPrevious,
   canGoNext
-}) {
+  }) {
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
   const lastWheelTime = useRef(0);
@@ -93,7 +95,7 @@ export default function CardRiver({
 
   return (
     <section
-      className="river-section"
+      className={`river-section ${isOpeningPage ? "river-section-opening" : ""}`}
       aria-label="Portfolio card river"
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -130,46 +132,13 @@ export default function CardRiver({
               index={index}
               activeIndex={activeIndex}
               isActive={index === activeIndex}
+              isOpeningPage={isOpeningPage}
+              isOpeningCard={isOpeningPage && page.id === activePageId}
               onSelect={() => onSelect(index)}
             />
           ))}
         </div>
       </div>
-
-      <button
-        className="river-nav-button stingray-nav next"
-        type="button"
-        onClick={onNext}
-        disabled={!canGoNext}
-        aria-label="Next portfolio page"
-      >
-        <span className="stingray-circle" aria-hidden="true">
-          <svg
-            className="stingray-arrow"
-            viewBox="0 0 24 24"
-            focusable="false"
-          >
-            <path d="M15.5 5.5 9 12l6.5 6.5" />
-          </svg>
-        </span>
-      </button>
-
-      <div className="river-dots" aria-label="Portfolio page position">
-        {pages.map((page, index) => (
-          <button
-            key={page.id}
-            className={`river-dot ${index === activeIndex ? "active" : ""}`}
-            type="button"
-            onClick={() => onSelect(index)}
-            aria-label={`Open ${page.title}`}
-            aria-current={index === activeIndex ? "step" : undefined}
-          />
-        ))}
-      </div>
-
-      <p className="river-instruction">
-        Swipe, scroll, or use arrow keys.
-      </p>
     </section>
   );
 }

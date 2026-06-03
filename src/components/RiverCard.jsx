@@ -1,9 +1,19 @@
 ﻿import cardBackImage from "../assets/back.jpg";
 
-export default function RiverCard({ page, index, activeIndex, isActive, onSelect }) {
+  export default function RiverCard({
+    page,
+    index,
+    activeIndex,
+    isActive,
+    isOpeningPage,
+    isOpeningCard,
+    onSelect
+  }) {
   const offset = index - activeIndex;
   const distance = Math.abs(offset);
   const isVisible = distance <= 2;
+
+  
 
   return (
     <button
@@ -12,7 +22,9 @@ export default function RiverCard({ page, index, activeIndex, isActive, onSelect
         "tarot-card",
         `accent-${page.accent}`,
         isActive ? "active" : "",
-        isVisible ? "visible" : ""
+        isVisible ? "visible" : "",
+        isOpeningPage && !isOpeningCard ? "collecting-card" : "",
+        isOpeningCard ? "opening-card" : ""
       ].join(" ")}
       style={{
         "--offset": offset,
