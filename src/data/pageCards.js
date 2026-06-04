@@ -251,7 +251,7 @@ const pageCardsBySection = {
       id: "beetlerpg",
       title: "Beetle RPG",
       description: "A roleplaying game about beetles.",
-      imageKey: "",
+      imageKey: "beetle",
       pageTitle: "About",
       detail: {
         eyebrow: "",
@@ -299,12 +299,12 @@ const pageCardsBySection = {
       id: "entangled",
       title: "Entangled",
       description: "A dating sim with consequences.",
-      imageKey: "",
+      imageKey: "barista-luna-confused",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "",
-        summary: "",
+        title: "Entangled",
+        summary: "A dating sim with consequences.",
         blocks: [
           {
           }
@@ -350,7 +350,7 @@ const pageCardsBySection = {
       id: "code-entangled",
       title: "Entangled",
       description: "Programming work tied to Entangled.",
-      imageKey: "",
+      imageKey: "emma",
       pageTitle: "About",
       detail: {
         eyebrow: "",
@@ -366,7 +366,7 @@ const pageCardsBySection = {
       id: "code-beetle-rpg",
       title: "Beetle RPG",
       description: "Implementation details, systems, and tooling.",
-      imageKey: "",
+      imageKey: "beetle",
       pageTitle: "About",
       detail: {
         eyebrow: "",
@@ -401,7 +401,7 @@ const pageCardsBySection = {
       id: "art-monsters",
       title: "Monsters",
       description: "Creature design and monsters.",
-      imageKey: "",
+      imageKey: "cow-monster",
       pageTitle: "About",
       detail: {
         eyebrow: "",
@@ -417,7 +417,23 @@ const pageCardsBySection = {
       id: "art-trading-cards",
       title: "Trading Cards",
       description: "Art for trading card games, featuring anime inspired characters and landscapes.",
-      imageKey: "",
+      imageKey: "suletta",
+      pageTitle: "About",
+      detail: {
+        eyebrow: "",
+        title: "",
+        summary: "",
+        blocks: [
+          {
+          }
+        ]
+      }
+    }),
+    createCard({
+      id: "digital",
+      title: "Digital Art",
+      description: "Photoshop, Procreate, and Maya.",
+      imageKey: "mitz",
       pageTitle: "About",
       detail: {
         eyebrow: "",
@@ -433,7 +449,7 @@ const pageCardsBySection = {
       id: "art-traditional",
       title: "Traditional Art",
       description: "Art with pen, paper, and dreams.",
-      imageKey: "",
+      imageKey: "lean-back",
       pageTitle: "About",
       detail: {
         eyebrow: "",
@@ -449,7 +465,7 @@ const pageCardsBySection = {
       id: "art-nsfw",
       title: "NSFW",
       description: "For something spicier. Must be 18 or older.",
-      imageKey: "",
+      imageKey: "lighthouse-girl",
       pageTitle: "About",
       detail: {
         eyebrow: "",
@@ -500,7 +516,7 @@ const pageCardsBySection = {
       id: "writing-dylanisms",
       title: "Dylanisms",
       description: "The story of a man going insane, desperating trying to figure out why.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
@@ -508,11 +524,6 @@ const pageCardsBySection = {
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
