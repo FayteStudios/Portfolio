@@ -10,7 +10,6 @@ function createId() {
     : `block-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-const [cardImageKey, setCardImageKey] = useState(selectedCard?.imageKey || "");
 
 const imageSizeOptions = [
   {
@@ -534,10 +533,7 @@ export default function DetailPageBuilder() {
     [selectedPageId]
   );
 
-  const pageCards = useMemo(
-    () => getPageCards(selectedPage),
-    [selectedPage]
-  );
+  const pageCards = useMemo(() => getPageCards(selectedPage), [selectedPage]);
 
   const [selectedCardId, setSelectedCardId] = useState(pageCards[0]?.id || "");
 
@@ -546,24 +542,31 @@ export default function DetailPageBuilder() {
     [pageCards, selectedCardId]
   );
 
-    const [detail, setDetail] = useState(() =>
-    createEditableDetailFromCard(selectedCard)
-    );
-
-  const exportText = useMemo(
-    () => JSON.stringify(cleanDetailForExport(detail), null, 2),
-    [detail]
+  const [cardImageKey, setCardImageKey] = useState(
+    selectedCard?.imageKey || ""
   );
+
+  const [detail, setDetail] = useState(() =>
+    createEditableDetailFromCard(selectedCard)
+  );
+
+  const exportText = useMemo(() => {
+    const exportedCardData = {
+      imageKey: cardImageKey || undefined,
+      detail: cleanDetailForExport(detail)
+    };
+
+    return JSON.stringify(exportedCardData, null, 2);
+  }, [cardImageKey, detail]);
 
   function handlePageChange(pageId) {
     const nextPage = portfolioPages.find((page) => page.id === pageId);
     const nextCards = getPageCards(nextPage);
     const nextCard = nextCards[0];
 
-    setCardImageKey(nextCard?.imageKey || "");
     setSelectedPageId(pageId);
     setSelectedCardId(nextCard?.id || "");
-
+    setCardImageKey(nextCard?.imageKey || "");
     setDetail(createEditableDetailFromCard(nextCard));
   }
 
@@ -572,20 +575,7 @@ export default function DetailPageBuilder() {
 
     setSelectedCardId(cardId);
     setCardImageKey(nextCard?.imageKey || "");
-    setDetail({
-      eyebrow: nextCard?.detail?.eyebrow || nextCard?.eyebrow || "",
-      title: nextCard?.detail?.title || nextCard?.title || "",
-      summary: nextCard?.detail?.summary || nextCard?.description || "",
-      blocks:
-        nextCard?.detail?.blocks?.map((block) => ({
-          ...block,
-          id: createId()
-        })) || [
-          createBlock("paragraph"),
-          createBlock("heading"),
-          createBlock("imageGrid")
-        ]
-    });
+    setDetail(createEditableDetailFromCard(nextCard));
   }
 
   function addBlock(type) {
@@ -626,7 +616,9 @@ export default function DetailPageBuilder() {
   function deleteBlock(index) {
     setDetail((currentDetail) => ({
       ...currentDetail,
-      blocks: currentDetail.blocks.filter((_, blockIndex) => blockIndex !== index)
+      blocks: currentDetail.blocks.filter(
+        (_, blockIndex) => blockIndex !== index
+      )
     }));
   }
 
@@ -673,21 +665,23 @@ export default function DetailPageBuilder() {
             ))}
           </select>
         </label>
+
         <label>
-        Card Image
-        <select
+          Card Image
+          <select
             value={cardImageKey}
             onChange={(event) => setCardImageKey(event.target.value)}
-        >
+          >
             <option value="">No card image</option>
 
             {detailImageOptions.map((image) => (
-            <option value={image.key} key={image.key}>
+              <option value={image.key} key={image.key}>
                 {image.label}
-            </option>
+              </option>
             ))}
-        </select>
+          </select>
         </label>
+
         <label>
           Eyebrow
           <input
@@ -778,13 +772,13 @@ export default function DetailPageBuilder() {
         <section className="builder-preview-panel">
           <div className="builder-preview-card">
             {detail.eyebrow && (
-            <p className="page-detail-eyebrow">{detail.eyebrow}</p>
+              <p className="page-detail-eyebrow">{detail.eyebrow}</p>
             )}
 
             {detail.title && <h1>{detail.title}</h1>}
 
             {detail.summary && (
-            <p className="page-detail-summary">{detail.summary}</p>
+              <p className="page-detail-summary">{detail.summary}</p>
             )}
 
             <DetailBlockRenderer blocks={detail.blocks} />

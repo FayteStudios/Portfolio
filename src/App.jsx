@@ -27,7 +27,11 @@ export default function App() {
   const isPageOpen = Boolean(openedPage);
 
   if (isEditorMode) {
-    return <DetailPageBuilder />;
+    return (
+      <main className="editor-shell">
+        <DetailPageBuilder />
+      </main>
+    );
   }
 
   function clearOpenTimer() {

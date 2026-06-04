@@ -66,45 +66,73 @@ export default function DetailBlockRenderer({ blocks = [] }) {
         }
 
         if (block.type === "image") {
-        const imageSource = getImageSource(block.srcKey, block.src);
-        const imageSize = block.imageSize || "full";
+          const imageSource = getImageSource(block.srcKey, block.src);
+          const imageSize = block.imageSize || "full";
 
-        if (!imageSource) {
+          if (!imageSource) {
             return (
-            <section className="detail-block" key={key}>
+              <section className="detail-block" key={key}>
                 <MissingImageNotice srcKey={block.srcKey} />
-            </section>
+              </section>
             );
-        }
+          }
 
-        return (
+          return (
             <figure
-            className={[
+              className={[
                 "detail-block",
                 "detail-block-image",
                 `detail-image-size-${imageSize}`
-            ].join(" ")}
-            key={key}
+              ].join(" ")}
+              key={key}
             >
-            <img src={imageSource} alt={block.alt || ""} />
+              <img src={imageSource} alt={block.alt || ""} />
 
-            {block.caption && <figcaption>{block.caption}</figcaption>}
+              {block.caption && <figcaption>{block.caption}</figcaption>}
             </figure>
-        );
+          );
         }
 
-        return (
-        <figure
-            className={`detail-image-size-${image.imageSize || "full"}`}
-            key={`${key}-image-${imageIndex}`}
-        >
-            <img src={imageSource} alt={image.alt || ""} />
+        if (block.type === "imageGrid") {
+          const images = block.images || [];
 
-            {image.caption && (
-            <figcaption>{image.caption}</figcaption>
-            )}
-        </figure>
-        );
+          return (
+            <section
+              className="detail-block detail-block-image-grid"
+              style={{ "--detail-grid-columns": block.columns || 2 }}
+              key={key}
+            >
+              {block.title && <h2>{block.title}</h2>}
+
+              <div className="detail-image-grid">
+                {images.map((image, imageIndex) => {
+                  const imageSource = getImageSource(image.srcKey, image.src);
+
+                  if (!imageSource) {
+                    return (
+                      <figure key={`${key}-image-${imageIndex}`}>
+                        <MissingImageNotice srcKey={image.srcKey} />
+                      </figure>
+                    );
+                  }
+
+                  return (
+                    <figure
+                      className={`detail-image-size-${image.imageSize || "full"}`}
+                      key={`${key}-image-${imageIndex}`}
+                    >
+                      <img src={imageSource} alt={image.alt || ""} />
+
+                      {image.caption && (
+                        <figcaption>{image.caption}</figcaption>
+                      )}
+                    </figure>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        }
 
         if (block.type === "twoColumn") {
           return (
