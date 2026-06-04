@@ -93,19 +93,85 @@ const pageCardsBySection = {
       id: "resume",
       title: "Resume",
       description: "His Past.",
-      imageKey: "profile",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "The Man.",
-        summary: "",
-        blocks: [
+      "imageKey": "",
+      "detail": {
+        "eyebrow": "",
+        "title": "Game Designer",
+        "summary": "",
+        "blocks": [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
+            "type": "heading",
+            "text": ""
+          },
+          {
+            "type": "heading",
+            "text": "Bachelor of Arts - Studio Art"
+          },
+          {
+            "type": "paragraph",
+            "text": "During my undergrad years, I spent a lot of time honing my ability to design characters, scenes, and worlds. With an Adobe Suite Certificate in hand, and 2 full years learning to use Maya and ZBrush, I am confident in my ability to utilize industry standard tools to convey my design ideas and create assets for any project I am a part of. My background in animation also lends to creating dynamic and memorable experiences, bring my creative ideas to life"
+          },
+          {
+            "type": "heading",
+            "text": "Masters - Computer Science"
+          },
+          {
+            "type": "paragraph",
+            "text": "After graduating with my art degree, I returned to another passion of mine: programming. Projects involving app development, AI designs, and database systems taught me about project management, Agile team workflows, and Github utilization. My final project involved creating a digital client for my trading card game Hearth and Harvest."
+          },
+          {
+            "type": "heading",
+            "text": "Experience"
+          },
+          {
+            "type": "list",
+            "title": "Game Designer - Icarus Alpha",
+            "items": [
+              "June 2026 - Present",
+              "Designs system for \"The Come Up\"",
+              "Develops Unity tools and systems to implement and iterate designs",
+              "Collaborates across multiple departments to make designs smooth and consistent"
+            ]
+          },
+          {
+            "type": "list",
+            "title": "Unity VR Developer - CSUCI Research",
+            "items": [
+              "September 2022 - May 2023",
+              "Designed and implemented virtual reality scenarios to help patients recovering from brain injuries to regain motor skills",
+              "Worked closely with compromised individuals to iterate and improve systems through practical application",
+              "Documented and analyzed findings, forming cohesive, peer reviews papers",
+              "Conducted seminars on the project, showcasing the effectiveness of the scenarios"
+            ]
+          },
+          {
+            "type": "list",
+            "title": "Solo Developer - Fayte Studios",
+            "items": [
+              "Designs, documents, and executes tasks across all disciplines",
+              "Creates code architectures, develops tools, and produces assets within Unity",
+              "Draws, models, and animates assets for active pojects",
+              "Recruits talent, builds communities, and promotes work through social media"
+            ]
+          },
+          {
+            "type": "list",
+            "title": "Relevant Skills and Traits",
+            "items": [
+              "7+ years working in Unity Game Engine",
+              "Fluent in C#, Python, and React",
+              "Talented problem solver",
+              "Vast knowledge of game design principles",
+              "Excellent written and communication skills",
+              "Experienced working in Agile team structures and working under strict deadlines",
+              "Certified in Adobe's Creative Suite, including Photoshop, Premiere, and After Effects",
+              "Educated in using Maya and Zbrush to make 3D models and animations",
+              "Skilled in creating technical tools to improve project workflow",
+              "Avid gamer, focusing on roleplaying games, card games, and visual novels",
+              "Participated in multiple stages of prototyping and testing stages for major titles like Hearthstone, Final Fantasy 14, and Albion Online",
+              "Articulate, organized, and dependable",
+              "A team player who values comradery, dedication, and cooperation during projects"
+            ]
           }
         ]
       }
@@ -114,40 +180,46 @@ const pageCardsBySection = {
       id: "sociallinks",
       title: "Social Links",
       description: "His Present.",
-      imageKey: "profile",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "The Man.",
-        summary: "",
-        blocks: [
+      "imageKey": "",
+      "detail": {
+        "eyebrow": "",
+        "title": "Social Links",
+        "summary": "Nathanael is currently working on developing his online presence to increase his reach. For now:",
+        "blocks": [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
+            "type": "heading",
+            "text": ""
+          },
+          {
+            "type": "list",
+            "title": "",
+            "items": [
+              "www.linkedin.com/in/nathanael-paulus"
+            ]
           }
         ]
       }
     }),
     createCard({
-      id: "reccomandations",
-      title: "Reccomendations",
+      id: "commendations",
+      title: "Commendations",
       description: "His Future.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "The Man.",
-        summary: "",
-        blocks: [
-          {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
+      "detail": {
+        "eyebrow": "",
+        "title": "Commends",
+        "summary": "",
+        "blocks": [
+          {      
+            "type": "list",
+            "title": "",
+            "items": [
+              "\"Mr. Paulus is a positive person that works readily with his colleagues. He is always open to suggestions and regularly works to perfect his craft.\" ",
+              "\"Nathanael stepped in at the last minute  and did a stellar job. He took the initiative to review extensive protocols and assured that they were strictly followed. Nathanael was punctual, flexible, and eager to cover wherever he was needed. It was comforting to know that I could depend on him to carry out his duties with little or no supervision.\"",
+              "\"It always surprised me how calm and diligent Nathanael was when working with our clients. This wasn't an easy job, and without him, our research would have gone nowhere. We are so grateful he was able to create such immersive scenarios for our clients to recover.\"",
+              "\"The Thing about Hilltops captivated me so quickly. I found myself reading the whole thing in a single weekend, AND I DON'T READ. I can't wait to see the next projects he makes.\"",
+            ]
           }
         ]
       }
@@ -159,19 +231,14 @@ const pageCardsBySection = {
       id: "beetlerpg",
       title: "Beetle RPG",
       description: "A roleplaying game about beetles.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -180,19 +247,14 @@ const pageCardsBySection = {
       id: "fayte",
       title: "Fayte",
       description: "An oldschool online rpg fashioned after RPGWO.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -201,19 +263,14 @@ const pageCardsBySection = {
       id: "aetheric",
       title: "Aetheric",
       description: "A 3D tactical MMO.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -222,40 +279,14 @@ const pageCardsBySection = {
       id: "entangled",
       title: "Entangled",
       description: "A dating sim with consequences.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
-          }
-        ]
-      }
-    }),
-    createCard({
-      id: "boned",
-      title: "Boned",
-      description: "A 3D Playstation 2 style platformer.",
-      imageKey: "profile",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "The Man.",
-        summary: "",
-        blocks: [
-          {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -267,19 +298,14 @@ const pageCardsBySection = {
       id: "code-rpgwo-tools",
       title: "RPGWO Tools",
       description: "Utilities and tools built around RPGWO servers.",
-      imageKey: "profile",
+      imageKey: "rpgwo",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -288,19 +314,14 @@ const pageCardsBySection = {
       id: "code-fayte",
       title: "Fayte",
       description: "Technical work connected to Fayte.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -309,19 +330,14 @@ const pageCardsBySection = {
       id: "code-entangled",
       title: "Entangled",
       description: "Programming work tied to Entangled.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -330,19 +346,14 @@ const pageCardsBySection = {
       id: "code-beetle-rpg",
       title: "Beetle RPG",
       description: "Implementation details, systems, and tooling.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -354,19 +365,14 @@ const pageCardsBySection = {
       id: "art-nature",
       title: "Nature",
       description: "Nature-focused pieces and studies.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "T",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -375,19 +381,14 @@ const pageCardsBySection = {
       id: "art-monsters",
       title: "Monsters",
       description: "Creature design and monsters.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -396,19 +397,14 @@ const pageCardsBySection = {
       id: "art-trading-cards",
       title: "Trading Cards",
       description: "Art for trading card games, featuring anime inspired characters and landscapes.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -417,19 +413,14 @@ const pageCardsBySection = {
       id: "art-traditional",
       title: "Traditional Art",
       description: "Art with pen, paper, and dreams.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -438,19 +429,14 @@ const pageCardsBySection = {
       id: "art-nsfw",
       title: "NSFW",
       description: "For something spicier. Must be 18 or older.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -462,19 +448,14 @@ const pageCardsBySection = {
       id: "writing-hilltops",
       title: "The Thing about Hilltops",
       description: "A novel exploring mental illness and trying to cheat destiny.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }
@@ -483,19 +464,14 @@ const pageCardsBySection = {
       id: "writing-charon",
       title: "The Son of Charon",
       description: "An urban fantasy story of a forgotten deity.",
-      imageKey: "profile",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
-        title: "The Man.",
+        title: "",
         summary: "",
         blocks: [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
           }
         ]
       }

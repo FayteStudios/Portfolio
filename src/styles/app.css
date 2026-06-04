@@ -3119,3 +3119,41 @@ body:has(.detail-builder-page),
 .detail-image-grid .detail-image-size-wide {
   width: 100%;
 }
+
+.detail-block-list h2,
+.detail-block-list h3,
+.detail-block-list-title {
+  margin-bottom: 1rem;
+}
+
+.detail-block-list ul {
+  margin-top: 0;
+}
+
+.detail-block-paragraph-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.detail-block-paragraph-list p {
+  margin: 0;
+}
+
+.builder-item-editor {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.builder-item-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.builder-item-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+}

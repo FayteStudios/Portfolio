@@ -80,104 +80,24 @@ function createBlock(type) {
     };
   }
 
+    if (type === "paragraphList") {
+    return {
+        id: createId(),
+        type: "paragraphList",
+        items: [""]
+    };
+    }
+
   if (type === "list") {
     return {
       id: createId(),
       type: "list",
       title: "List Title",
-      items: ["First item", "Second item", "Third item"]
+      items: ["First item", "Second item", "Third item", "Fourth item"]
     };
   }
 
-  if (type === "callout") {
-    return {
-      id: createId(),
-      type: "callout",
-      title: "Callout Title",
-      text: "Use this for important notes, highlights, or context."
-    };
-  }
-
-    if (type === "image") {
-        return {
-            id: createId(),
-            type: "image",
-            srcKey: detailImageOptions[0]?.key || "",
-            imageSize: "full",
-            alt: "",
-            caption: "Image caption"
-        };
-        
-    }
-
-    if (type === "imageGrid") {
-        return {
-            id: createId(),
-            type: "imageGrid",
-            title: "Image Grid",
-            columns: 2,
-            images: [
-            {
-                srcKey: detailImageOptions[0]?.key || "",
-                imageSize: "full",
-                alt: "",
-                caption: "First image"
-            },
-            {
-                srcKey: detailImageOptions[1]?.key || detailImageOptions[0]?.key || "",
-                imageSize: "full",
-                alt: "",
-                caption: "Second image"
-            }
-            ]
-        };
-  }
-
-  if (type === "twoColumn") {
-    return {
-      id: createId(),
-      type: "twoColumn",
-      leftTitle: "Left Column",
-      leftText: "Write left column content here.",
-      rightTitle: "Right Column",
-      rightText: "Write right column content here."
-    };
-  }
-
-  if (type === "stats") {
-    return {
-      id: createId(),
-      type: "stats",
-      items: [
-        {
-          value: "2026",
-          label: "Year"
-        },
-        {
-          value: "React",
-          label: "Tech"
-        },
-        {
-          value: "Solo",
-          label: "Role"
-        }
-      ]
-    };
-  }
-
-  if (type === "linkButton") {
-    return {
-      id: createId(),
-      type: "linkButton",
-      label: "View Project",
-      href: "https://example.com"
-    };
-  }
-
-  return {
-    id: createId(),
-    type: "divider"
-  };
+  // keep the rest of your existing createBlock function below this
 }
 
 function cleanDetailForExport(detail) {
@@ -274,6 +194,30 @@ function BlockEditor({ block, onChange, onMoveUp, onMoveDown, onDelete }) {
     onChange({
       ...block,
       [field]: value
+    });
+  }
+
+  function updateItem(itemIndex, value) {
+    const nextItems = [...(block.items || [])];
+    nextItems[itemIndex] = value;
+
+    onChange({
+      ...block,
+      items: nextItems
+    });
+  }
+
+  function addItem() {
+    onChange({
+      ...block,
+      items: [...(block.items || []), ""]
+    });
+  }
+
+  function deleteItem(itemIndex) {
+    onChange({
+      ...block,
+      items: (block.items || []).filter((_, index) => index !== itemIndex)
     });
   }
 
@@ -458,28 +402,68 @@ function BlockEditor({ block, onChange, onMoveUp, onMoveDown, onDelete }) {
         </>
       )}
 
-      {block.type === "list" && (
-        <>
-          <label>
-            Title
-            <input
-              value={block.title || ""}
-              onChange={(event) => updateField("title", event.target.value)}
-            />
-          </label>
+    {block.type === "list" && (
+    <>
+        <label>
+        Title
+        <input
+            value={block.title || ""}
+            onChange={(event) => updateField("title", event.target.value)}
+        />
+        </label>
 
-          <label>
-            Items
-            <span className="builder-field-note">One item per line</span>
-            <textarea
-              value={blockToEditableText(block)}
-              onChange={(event) =>
-                onChange(updateBlockFromEditableText(block, event.target.value))
-              }
+        <div className="builder-item-editor">
+        <div className="builder-item-editor-header">
+            <strong>Items</strong>
+            <button type="button" onClick={addItem}>
+            Add Item
+            </button>
+        </div>
+
+        {(block.items || []).map((item, itemIndex) => (
+            <div className="builder-item-row" key={`${block.id}-item-${itemIndex}`}>
+            <input
+                value={item}
+                placeholder={`Item ${itemIndex + 1}`}
+                onChange={(event) => updateItem(itemIndex, event.target.value)}
             />
-          </label>
-        </>
-      )}
+
+            <button type="button" onClick={() => deleteItem(itemIndex)}>
+                Delete
+            </button>
+            </div>
+        ))}
+        </div>
+    </>
+    )}
+    {block.type === "paragraphList" && (
+        <div className="builder-item-editor">
+            <div className="builder-item-editor-header">
+            <strong>Paragraph Entries</strong>
+            <button type="button" onClick={addItem}>
+                Add Entry
+            </button>
+            </div>
+
+            <span className="builder-field-note">
+            Each entry renders as paragraph-styled text with tighter spacing.
+            </span>
+
+            {(block.items || []).map((item, itemIndex) => (
+            <div className="builder-item-row" key={`${block.id}-paragraph-${itemIndex}`}>
+                <input
+                value={item}
+                placeholder={`Entry ${itemIndex + 1}`}
+                onChange={(event) => updateItem(itemIndex, event.target.value)}
+                />
+
+                <button type="button" onClick={() => deleteItem(itemIndex)}>
+                Delete
+                </button>
+            </div>
+            ))}
+        </div>
+        )}
 
       {block.type === "stats" && (
         <label>
@@ -726,17 +710,18 @@ export default function DetailPageBuilder() {
 
           <div>
             {[
-              "heading",
-              "paragraph",
-              "image",
-              "imageGrid",
-              "twoColumn",
-              "callout",
-              "list",
-              "stats",
-              "linkButton",
-              "divider"
-            ].map((type) => (
+                "heading",
+                "paragraph",
+                "paragraphList",
+                "image",
+                "imageGrid",
+                "twoColumn",
+                "callout",
+                "list",
+                "stats",
+                "linkButton",
+                "divider"
+                ].map((type) => (
               <button type="button" onClick={() => addBlock(type)} key={type}>
                 {type}
               </button>
