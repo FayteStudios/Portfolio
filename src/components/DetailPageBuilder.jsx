@@ -80,24 +80,134 @@ function createBlock(type) {
     };
   }
 
-    if (type === "paragraphList") {
+  if (type === "paragraphList") {
     return {
-        id: createId(),
-        type: "paragraphList",
-        items: [""]
+      id: createId(),
+      type: "paragraphList",
+      items: [""]
     };
-    }
+  }
+
+  if (type === "commendation") {
+    return {
+      id: createId(),
+      type: "commendation",
+      quote: "He did this task well.",
+      attribution: "Person who said it"
+    };
+  }
 
   if (type === "list") {
     return {
       id: createId(),
       type: "list",
       title: "List Title",
-      items: ["First item", "Second item", "Third item", "Fourth item"]
+      items: [""]
     };
   }
 
-  // keep the rest of your existing createBlock function below this
+  if (type === "callout") {
+    return {
+      id: createId(),
+      type: "callout",
+      title: "Callout Title",
+      text: "Use this for important notes, highlights, or context."
+    };
+  }
+
+  if (type === "image") {
+    return {
+      id: createId(),
+      type: "image",
+      srcKey: detailImageOptions[0]?.key || "",
+      imageSize: "full",
+      alt: "",
+      caption: "Image caption"
+    };
+  }
+
+  if (type === "imageGrid") {
+    return {
+      id: createId(),
+      type: "imageGrid",
+      title: "Image Grid",
+      columns: 2,
+      images: [
+        {
+          srcKey: detailImageOptions[0]?.key || "",
+          imageSize: "full",
+          alt: "",
+          caption: "First image"
+        },
+        {
+          srcKey: detailImageOptions[1]?.key || detailImageOptions[0]?.key || "",
+          imageSize: "full",
+          alt: "",
+          caption: "Second image"
+        }
+      ]
+    };
+  }
+
+  if (type === "twoColumn") {
+    return {
+      id: createId(),
+      type: "twoColumn",
+      leftTitle: "Left Column",
+      leftText: "Write left column content here.",
+      rightTitle: "Right Column",
+      rightText: "Write right column content here."
+    };
+  }
+
+  if (type === "stats") {
+    return {
+      id: createId(),
+      type: "stats",
+      items: [
+        {
+          value: "2026",
+          label: "Year"
+        }
+      ]
+    };
+  }
+
+  if (type === "linkButton") {
+    return {
+      id: createId(),
+      type: "linkButton",
+      label: "View Project",
+      href: "https://example.com"
+    };
+  }
+
+  if (type === "videoEmbed") {
+    return {
+      id: createId(),
+      type: "videoEmbed",
+      title: "Video Demo",
+      src: "",
+      caption: ""
+    };
+  }
+
+  if (type === "webglEmbed") {
+    return {
+      id: createId(),
+      type: "webglEmbed",
+      title: "Playable Demo",
+      src: "",
+      height: 600,
+      buttonLabel: "Open demo in new tab",
+      caption: ""
+    };
+  }
+
+  return {
+    id: createId(),
+    type: "divider"
+  };
 }
 
 function cleanDetailForExport(detail) {
@@ -365,7 +475,100 @@ function BlockEditor({ block, onChange, onMoveUp, onMoveDown, onDelete }) {
           </label>
         </>
       )}
+      {block.type === "commendation" && (
+        <>
+            <label>
+            Quote
+            <textarea
+                value={block.quote || ""}
+                onChange={(event) => updateField("quote", event.target.value)}
+            />
+            </label>
 
+            <label>
+            Attribution
+            <input
+                value={block.attribution || ""}
+                onChange={(event) => updateField("attribution", event.target.value)}
+            />
+            </label>
+        </>
+        )}
+        {block.type === "videoEmbed" && (
+        <>
+            <label>
+            Title
+            <input
+                value={block.title || ""}
+                onChange={(event) => updateField("title", event.target.value)}
+            />
+            </label>
+
+            <label>
+            Video URL
+            <input
+                value={block.src || ""}
+                placeholder="YouTube, Vimeo, or direct embed URL"
+                onChange={(event) => updateField("src", event.target.value)}
+            />
+            </label>
+
+            <label>
+            Caption
+            <input
+                value={block.caption || ""}
+                onChange={(event) => updateField("caption", event.target.value)}
+            />
+            </label>
+        </>
+        )}
+        {block.type === "webglEmbed" && (
+        <>
+            <label>
+            Title
+            <input
+                value={block.title || ""}
+                onChange={(event) => updateField("title", event.target.value)}
+            />
+            </label>
+
+            <label>
+            Demo URL
+            <input
+                value={block.src || ""}
+                placeholder="URL to your WebGL build or playable demo page"
+                onChange={(event) => updateField("src", event.target.value)}
+            />
+            </label>
+
+            <label>
+            Embed Height
+            <input
+                type="number"
+                value={block.height || 600}
+                onChange={(event) =>
+                updateField("height", Number(event.target.value) || 600)
+                }
+            />
+            </label>
+
+            <label>
+            Button Label
+            <input
+                value={block.buttonLabel || ""}
+                onChange={(event) => updateField("buttonLabel", event.target.value)}
+            />
+            </label>
+
+            <label>
+            Caption
+            <input
+                value={block.caption || ""}
+                onChange={(event) => updateField("caption", event.target.value)}
+            />
+            </label>
+        </>
+        )}
       {block.type === "twoColumn" && (
         <>
           <label>
@@ -710,18 +913,21 @@ export default function DetailPageBuilder() {
 
           <div>
             {[
-                "heading",
-                "paragraph",
-                "paragraphList",
-                "image",
-                "imageGrid",
-                "twoColumn",
-                "callout",
-                "list",
-                "stats",
-                "linkButton",
-                "divider"
-                ].map((type) => (
+            "heading",
+            "paragraph",
+            "paragraphList",
+            "commendation",
+            "image",
+            "imageGrid",
+            "twoColumn",
+            "callout",
+            "list",
+            "stats",
+            "linkButton",
+            "videoEmbed",
+            "webglEmbed",
+            "divider"
+            ].map((type) => (
               <button type="button" onClick={() => addBlock(type)} key={type}>
                 {type}
               </button>

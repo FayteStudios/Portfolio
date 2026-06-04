@@ -211,16 +211,36 @@ const pageCardsBySection = {
         "title": "Commends",
         "summary": "",
         "blocks": [
-          {      
-            "type": "list",
-            "title": "",
-            "items": [
-              "\"Mr. Paulus is a positive person that works readily with his colleagues. He is always open to suggestions and regularly works to perfect his craft.\" ",
-              "\"Nathanael stepped in at the last minute  and did a stellar job. He took the initiative to review extensive protocols and assured that they were strictly followed. Nathanael was punctual, flexible, and eager to cover wherever he was needed. It was comforting to know that I could depend on him to carry out his duties with little or no supervision.\"",
-              "\"It always surprised me how calm and diligent Nathanael was when working with our clients. This wasn't an easy job, and without him, our research would have gone nowhere. We are so grateful he was able to create such immersive scenarios for our clients to recover.\"",
-              "\"The Thing about Hilltops captivated me so quickly. I found myself reading the whole thing in a single weekend, AND I DON'T READ. I can't wait to see the next projects he makes.\"",
-            ]
-          }
+        {
+        "type": "commendation",
+        "quote": "\Mr. Paulus is a positive person that works readily with his colleagues. He is always open to suggestions and regularly works to perfect his craft.",
+        "attribution": "Cheryl Foster, Ernest Righetti High School"
+        },
+        {
+        "type": "commendation",
+        "quote": "Nathanael stepped in at the last minute and did a stellar job. He took the initiative to review extensive protocols and assured that they were strictly followed. Nathanael was punctual, flexible, and eager to cover wherever he was needed. It was comforting to know that I could depend on him to carry out his duties with little or no supervision.",
+        "attribution": "Stacie Wilson, Ernest Righetti High School"
+        },
+        {
+        "type": "commendation",
+        "quote": "It always surprised me how calm and diligent Nathanael was when working with our clients. This wasn't an easy job, and without him, our research would have gone nowhere. We are so grateful he was able to create such immersive scenarios for our clients to recover.",
+        "attribution": "Kristen Linton, VR Brain Injury Recovery Project"
+        },
+        {
+        "type": "commendation",
+        "quote": "The Thing about Hilltops captivated me so quickly. I found myself reading the whole thing in a single weekend, AND I DON'T READ. I can't wait to see the next project he makes.",
+        "attribution": "Amazon Review, The Thing about Hilltops"
+        },
+        {
+        "type": "commendation",
+        "quote": "The discord icon I commissioned Nathanael to make is perfect. Seriously, I am ecstatic. My husband was saying he might need him to do one too!",
+        "attribution": "Private Commission for discord icon"
+        },
+        {
+        "type": "commendation",
+        "quote": "Absolutely thrilled to be working with Nathanael on Entangled. I take my role as Luna very seriously, and I can't wait to see what he has in store for the game!",
+        "attribution": "Luna's Voice Actor, Entangled"
+        },
         ]
       }
     })
