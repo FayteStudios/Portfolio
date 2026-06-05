@@ -280,6 +280,22 @@ const pageCardsBySection = {
       }
     }),
     createCard({
+      id: "revel",
+      title: "Revel",
+      description: "A Persona-inspired inventory management rpg.",
+      imageKey: "",
+      pageTitle: "About",
+      detail: {
+        eyebrow: "",
+        title: "",
+        summary: "",
+        blocks: [
+          {
+          }
+        ]
+      }
+    }),
+    createCard({
       id: "aetheric",
       title: "Aetheric",
       description: "A 3D tactical MMO.",
@@ -326,6 +342,43 @@ const pageCardsBySection = {
         summary: "",
         blocks: [
           {
+          }
+        ]
+      }
+    }),
+    createCard({
+      id: "prototype",
+      title: "Unity Prototyping",
+      description: "Systems lead to dreams.",
+      "detail": {
+        "eyebrow": "",
+        "title": "Unity Prototypes",
+        "summary": "Some examples of prototype systems I've worked with while learning Unity. I will keep more recent items at the top.",
+        "blocks": [
+          {},
+          {
+            "type": "videoEmbed",
+            "title": "Grid Inventory System v1",
+            "src": "https://youtu.be/sUXk8WYSHbE",
+            "caption": "The first prototype for my game, Revel, which will utilize a grid-tetris style inventory system. Also applicable for Fayte, and any other inventory system related game. The different grids own their own array of items, and they can be referenced for things like passive buffs, ownership, and permissions. Items are stored as scriptables and can be produced rapidly in engine, as well as procedurally in game for more diverse item types and effects."
+          },
+          {
+            "type": "videoEmbed",
+            "title": "Networked 3D Combat",
+            "src": "https://youtu.be/sQlq9PGP_88",
+            "caption": "An exploration into Unity's built in netcode features. Allowing for seamless multiplayer interactions, including combat, transfer for data packets, and seamless integration of interactions, progression, and animations across multiple clients"
+          },
+          {
+            "type": "videoEmbed",
+            "title": "Networked Multiplayer Movement",
+            "src": "https://youtu.be/d-PwNaxZt8A",
+            "caption": "A study in running several clients at once, allowing players to receive realtime updates of the other players involved. This allows for future games I make to have the groundwork for networked play. "
+          },
+          {
+            "type": "videoEmbed",
+            "title": "Basic Character Controls",
+            "src": "https://youtu.be/XW51kPhIsow",
+            "caption": "A core character movement system. Allows for independent camera controls, movement, and animations. The setup allows for network packets to display all movement and animations to all clients in realtime. Also incorporates sounds and other animated elements to add immersion."
           }
         ]
       }
@@ -384,15 +437,123 @@ const pageCardsBySection = {
     createCard({
       id: "art-nature",
       title: "Nature",
-      description: "Nature-focused pieces and studies.",
-      imageKey: "",
+      description: "Inspired by the world.",
+      imageKey: "flower-5",
       pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "T",
-        summary: "",
-        blocks: [
+      "detail": {
+        "eyebrow": "",
+        "title": "Nature",
+        "summary": "The world is inspiring.",
+        "blocks": [
+          {},
           {
+            "type": "image",
+            "srcKey": "bird-1",
+            "imageSize": "natural",
+            "alt": "A bird with its mouth open.",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "bird-2",
+            "imageSize": "small",
+            "alt": "Two images of the same bird. One has been colored in.",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "bird-3",
+            "imageSize": "full",
+            "alt": "A line art drawing of a bird.",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "bird-4",
+            "imageSize": "full",
+            "alt": "A bird next to a flower.",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "flower-1",
+            "imageSize": "small",
+            "alt": "A flower.",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "flower-2",
+            "imageSize": "small",
+            "alt": "A flower.",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "flower-3",
+            "imageSize": "small",
+            "alt": "A flower.",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "flower-4",
+            "imageSize": "small",
+            "alt": "A flower.",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "flower-5",
+            "imageSize": "small",
+            "alt": "A flower.",
+            "caption": ""
+          }
+        ]
+      }
+    }
+    ),
+    createCard({
+      id: "art-3d",
+      title: "3D Modeling",
+      description: "Digital clay.",
+      "imageKey": "shadow-image",
+      "detail": {
+        "eyebrow": "",
+        "title": "Digital Clay",
+        "summary": "",
+        "blocks": [
+          {},
+          {
+            "type": "videoEmbed",
+            "title": "Shadow - Kingdom Hearts",
+            "src": "https://youtu.be/y6dFHrv1OCU",
+            "caption": "Turn around for a class."
+          },
+          {
+            "type": "videoEmbed",
+            "title": "Kingdom Key - Kingdom Hearts",
+            "src": "https://youtu.be/zWaXwtykmes",
+            "caption": "Turn around for a class."
+          },
+          {
+            "type": "videoEmbed",
+            "title": "Abyssal Tide - Kingdom Hearts",
+            "src": "https://youtu.be/_af1tojgwGQ",
+            "caption": "Turn around for a class"
+          },
+          {
+            "type": "videoEmbed",
+            "title": "Bond of Flame - Kingdom Hearts",
+            "src": "https://youtu.be/vJ5C7Cg-pjU",
+            "caption": "Turn around for a class."
+          },
+          {
+            "type": "image",
+            "srcKey": "mouse-3d",
+            "imageSize": "small",
+            "alt": "Mouse monster",
+            "caption": "A mouse monster."
           }
         ]
       }
@@ -401,14 +562,103 @@ const pageCardsBySection = {
       id: "art-monsters",
       title: "Monsters",
       description: "Creature design and monsters.",
-      imageKey: "cow-monster",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "",
-        summary: "",
-        blocks: [
+      "imageKey": "cow-monster",
+      "detail": {
+        "eyebrow": "",
+        "title": "Here There Be Monsters",
+        "summary": "I love to draw what I dream. It makes them feel real.",
+        "blocks": [
+          {},
           {
+            "type": "image",
+            "srcKey": "004",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Mouth"
+          },
+          {
+            "type": "image",
+            "srcKey": "armpit",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Armpit"
+          },
+          {
+            "type": "image",
+            "srcKey": "cow-monster",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Cow"
+          },
+          {
+            "type": "image",
+            "srcKey": "dragon",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Dragon"
+          },
+          {
+            "type": "image",
+            "srcKey": "fascinated",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Fascination"
+          },
+          {
+            "type": "image",
+            "srcKey": "holes",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Holes"
+          },
+          {
+            "type": "image",
+            "srcKey": "masked",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Masked"
+          },
+          {
+            "type": "image",
+            "srcKey": "mimic",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Mimic"
+          },
+          {
+            "type": "image",
+            "srcKey": "moth",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Moth"
+          },
+          {
+            "type": "image",
+            "srcKey": "mouse",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Mouse"
+          },
+          {
+            "type": "image",
+            "srcKey": "needle-fly",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Needle Fly"
+          },
+          {
+            "type": "image",
+            "srcKey": "spider",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Spider"
+          },
+          {
+            "type": "image",
+            "srcKey": "trio",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Trio"
           }
         ]
       }
@@ -417,30 +667,150 @@ const pageCardsBySection = {
       id: "art-trading-cards",
       title: "Trading Cards",
       description: "Art for trading card games, featuring anime inspired characters and landscapes.",
-      imageKey: "suletta",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "",
-        summary: "",
-        blocks: [
-          {
-          }
-        ]
-      }
-    }),
+        "imageKey": "suletta",
+        "detail": {
+          "eyebrow": "",
+          "title": "Trading Cards",
+          "summary": "An ever growing collection of art for trading card games, mine included.",
+          "blocks": [
+            {},
+            {
+              "type": "heading",
+              "text": "Gundam TCG Custom Resources"
+            },
+            {
+              "type": "image",
+              "srcKey": "resource-1",
+              "imageSize": "full",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "srcKey": "resource-2",
+              "imageSize": "full",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "srcKey": "resource-3",
+              "imageSize": "full",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "srcKey": "resource-4",
+              "imageSize": "full",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "srcKey": "resource-5",
+              "imageSize": "full",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "srcKey": "cougar",
+              "imageSize": "full",
+              "alt": "",
+              "caption": "Future Art"
+            },
+            {
+              "type": "heading",
+              "text": "Hearth and Harvest Art Coming soon!"
+            }
+          ]
+        }
+      }),
     createCard({
       id: "digital",
       title: "Digital Art",
       description: "Photoshop, Procreate, and Maya.",
-      imageKey: "mitz",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "",
-        summary: "",
-        blocks: [
+      "imageKey": "mitz",
+      "detail": {
+        "eyebrow": "",
+        "title": "Digital Art",
+        "summary": "A collection of projects I did for fun using Photoshop and Procreate. Some are recognizable characters, and some are sillier than others. These allowed me to explore various art styles.",
+        "blocks": [
+          {},
           {
+            "type": "image",
+            "srcKey": "cat",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "kohaku",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "lady",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "library",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "makima",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "man",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "mitz",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "nami",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "queen",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "tifa",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "heading",
+            "text": "Find more on my other art pages, too!"
           }
         ]
       }
@@ -449,14 +819,67 @@ const pageCardsBySection = {
       id: "art-traditional",
       title: "Traditional Art",
       description: "Art with pen, paper, and dreams.",
-      imageKey: "lean-back",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "",
-        summary: "",
-        blocks: [
+      "imageKey": "lean-back",
+      "detail": {
+        "eyebrow": "",
+        "title": "Tradition Art",
+        "summary": "The old school way.",
+        "blocks": [
+          {},
           {
+            "type": "heading",
+            "text": "Life Drawing Studies"
+          },
+          {
+            "type": "image",
+            "srcKey": "lean-back",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "relaxed",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "shy",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "stretch",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "srcKey": "behind",
+            "imageSize": "full",
+            "alt": "",
+            "caption": ""
+          },
+          {
+            "type": "heading",
+            "text": "Animations"
+          },
+          {
+            "type": "videoEmbed",
+            "title": "The birth of a phoenix.",
+            "src": "https://youtu.be/fnnP84vNbs8",
+            "caption": ""
+          },
+          {
+            "type": "videoEmbed",
+            "title": "Flour Sack",
+            "src": "https://youtu.be/Mgq6INiG-rY",
+            "caption": ""
           }
         ]
       }
@@ -465,19 +888,131 @@ const pageCardsBySection = {
       id: "art-nsfw",
       title: "NSFW",
       description: "For something spicier. Must be 18 or older.",
-      imageKey: "lighthouse-girl",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "",
-        summary: "",
-        blocks: [
+      "imageKey": "lighthouse-girl",
+      "detail": {
+        "eyebrow": "",
+        "title": "Spicier. Enter at your own risk.",
+        "summary": "An exploration on human anatomy, varying color schemes, and the passionate nature of the human body.",
+        "blocks": [
+          {},
           {
+            "type": "heading",
+            "text": "You have been warned. Please do not go further if you dislike nudity and other topics."
+          },
+          {
+            "type": "heading",
+            "text": "."
+          },
+          {
+            "type": "heading",
+            "text": "."
+          },
+          {
+            "type": "heading",
+            "text": "."
+          },
+          {
+            "type": "heading",
+            "text": "."
+          },
+          {
+            "type": "heading",
+            "text": "."
+          },
+          {
+            "type": "image",
+            "srcKey": "dancer",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Dancer"
+          },
+          {
+            "type": "image",
+            "srcKey": "lighthouse-girl",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Lighthouse"
+          },
+          {
+            "type": "image",
+            "srcKey": "mirror",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Mirror"
+          },
+          {
+            "type": "image",
+            "srcKey": "time",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Time"
+          },
+          {
+            "type": "image",
+            "srcKey": "tall",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Tall"
+          },
+          {
+            "type": "image",
+            "srcKey": "embrace",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Embrace"
+          },
+          {
+            "type": "image",
+            "srcKey": "kiss-1",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Kiss 1"
+          },
+          {
+            "type": "image",
+            "srcKey": "kiss-2",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Kiss 2"
+          },
+          {
+            "type": "image",
+            "srcKey": "lovers",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Lovers"
+          },
+          {
+            "type": "image",
+            "srcKey": "mystery",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Mystery"
+          },
+          {
+            "type": "image",
+            "srcKey": "passion",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Passion"
+          },
+          {
+            "type": "image",
+            "srcKey": "oh-no",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Distress"
+          },
+          {
+            "type": "image",
+            "srcKey": "ubele",
+            "imageSize": "full",
+            "alt": "",
+            "caption": "Ubele, on commision"
           }
         ]
       }
-    })
-  ],
+    })],
 
   writing: [
     createCard({
