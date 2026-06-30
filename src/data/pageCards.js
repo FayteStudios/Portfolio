@@ -1,6 +1,6 @@
 ﻿import { getDetailImage } from "./detailImageRegistry.js";
 
-function createDetail({ eyebrow, title, description, pageTitle }) {
+function createDetail({ eyebrow, title, description}) {
   return {
     eyebrow,
     title,
@@ -213,7 +213,7 @@ const pageCardsBySection = {
         "blocks": [
         {
         "type": "commendation",
-        "quote": "\Mr. Paulus is a positive person that works readily with his colleagues. He is always open to suggestions and regularly works to perfect his craft.",
+        "quote": "Mr. Paulus is a positive person that works readily with his colleagues. He is always open to suggestions and regularly works to perfect his craft.",
         "attribution": "Cheryl Foster, Ernest Righetti High School"
         },
         {
@@ -1239,6 +1239,8 @@ const pageCardsBySection = {
         summary: "",
         blocks: [
           {
+            "type": "paragraph",
+            "text": "The Thing About Hilltops follows Peter Arnold, a kindergarten teacher, aspiring novelist, and deeply fractured man who has built his life around one impossible destination: a green hilltop where the woman he lost might one day take him back. To survive the months leading there, Peter clings to rituals, fantasies, and the dangerous belief that if he can just endure long enough, everything broken inside him will finally make sense. But when a lonely student, a struggling young mother, and a haunting harlequin mask enter his life, Peter is forced to confront a terrifying question: is his hilltop a dream worth chasing, or just another way to avoid living? Part psychological drama, part tragic romance, and part slow descent into the stories we tell ourselves to stay alive, The Thing About Hilltops is about obsession, grief, fatherhood, guilt, and the fragile line between hope and self-destruction."
           }
         ]
       }
@@ -1255,6 +1257,8 @@ const pageCardsBySection = {
         summary: "",
         blocks: [
           {
+            "type": "paragraph",
+            "text": "Son of Charon follows Linos, the forgotten younger son of the ferryman of the dead. Punished for a mistake that cost sixteen souls their passage, Linos spends eternity as a collector: invisible to the living, hated by his father, and forced to carry the dead inside the stitched-open wound across his body. Then Selene sees him. For the first time in centuries, Linos is not just a monster in the dark. He is a man. Awkward, wounded, bitter, funny, and desperate for something beyond duty. As Selene pulls him into the world of the living, the souls inside him begin to change him too, especially one voice that refuses to be just another passenger. Caught between love, death, obligation, and the dangerous possibility of becoming human again, Linos must decide what he is willing to lose for the chance to be more than Charon’s son. Darkly romantic, tragic, mythological, and deeply strange, Son of Charon is a story about grief, identity, and the brutal cost of being seen."
           }
         ]
       }
@@ -1282,19 +1286,22 @@ const pageCardsBySection = {
       id: "contact-socials",
       title: "Social Links",
       description: "A central place for all social platforms.",
-      imageKey: "profile",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "The Man.",
-        summary: "",
-        blocks: [
+      "imageKey": "",
+      "detail": {
+        "eyebrow": "",
+        "title": "Social Links",
+        "summary": "Nathanael is currently working on developing his online presence to increase his reach. For now:",
+        "blocks": [
           {
-            type: "image",
-            srcKey: "profile",
-            imageSize: "medium",
-            alt: "Self portrait of Nathanael Paulus.",
-            caption: "A self portrait of Nathanael."
+            "type": "heading",
+            "text": ""
+          },
+          {
+            "type": "list",
+            "title": "",
+            "items": [
+              "www.linkedin.com/in/nathanael-paulus"
+            ]
           }
         ]
       }
