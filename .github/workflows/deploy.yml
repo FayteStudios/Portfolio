@@ -29,11 +29,25 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
       - name: Install dependencies
         run: npm ci
 
       - name: Build app
         run: npm run build
+
+      - name: Publish RPGWO Tools (Blazor)
+        run: dotnet publish MyTools.Web/MyTools.Web.csproj -c Release -o mytools-publish
+
+      - name: Add RPGWO Tools into dist
+        run: |
+          mkdir -p dist/RPGWOTools
+          cp -r mytools-publish/wwwroot/. dist/RPGWOTools/
+          cp dist/RPGWOTools/index.html dist/RPGWOTools/404.html
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3

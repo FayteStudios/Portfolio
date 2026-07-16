@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sprite Warp Editor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23202020'/%3E%3Cpath d='M6 6h20v20H6z' fill='none' stroke='%23444' stroke-width='1'/%3E%3Cpath d='M16 2v8M16 22v8M2 16h8M22 16h8' stroke='%23ff3b30' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='none' stroke='%23ff3b30' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Sprite Warp Editor</h1>
+  <p class="tagline">Compose, position, and anchor sprite layers — entirely in your browser. Nothing is uploaded anywhere.</p>
+</header>
+
+<main class="workspace">
+
+  <section class="panel layers-panel">
+    <h2>Layers</h2>
+    <div id="layerList" class="layer-list"></div>
+    <div class="button-row">
+      <button id="btnRemoveLayer">Remove Selected</button>
+    </div>
+    <div class="button-row">
+      <button id="btnLayerUp">Move Up</button>
+      <button id="btnLayerDown">Move Down</button>
+    </div>
+    <button id="btnClearLayers" class="secondary full-width">Clear All Layers</button>
+    <p class="hint">Layer order: items lower in the list draw on top. Use Up/Down to reorder.</p>
+  </section>
+
+  <section class="panel browser-panel">
+    <h2>Sprite Library</h2>
+    <div id="dropzone" class="dropzone">
+      <div class="dropzone-text">Drag &amp; drop images or folders here</div>
+      <div class="button-row">
+        <button id="btnUploadFiles">Upload Files</button>
+        <button id="btnUploadFolder">Upload Folder</button>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" multiple hidden>
+      <input type="file" id="folderInput" webkitdirectory multiple hidden>
+    </div>
+    <div class="button-row">
+      <button id="btnPrevPage">Prev</button>
+      <div id="pageLabel" class="page-label">Page 0 / 0</div>
+      <button id="btnNextPage">Next</button>
+    </div>
+    <div id="thumbGrid" class="thumb-grid"></div>
+    <button id="btnClearLibrary" class="danger full-width">Clear Library</button>
+    <p id="persistNote" class="hint"></p>
+  </section>
+
+  <section class="panel canvas-panel">
+    <h2>Edit Canvas</h2>
+    <div class="canvas-wrap">
+      <canvas id="editCanvas" width="320" height="320"></canvas>
+    </div>
+    <div class="button-row canvas-size-row">
+      <span class="row-label">Canvas Size:</span>
+      <button data-canvas-size="256">256</button>
+      <button data-canvas-size="320">320</button>
+      <button data-canvas-size="512">512</button>
+    </div>
+  </section>
+
+  <section class="panel transform-panel">
+    <h2>Selected Layer</h2>
+    <div class="field-grid">
+      <label>X <input type="number" id="fieldX" value="0"></label>
+      <label>Y <input type="number" id="fieldY" value="0"></label>
+      <label>Width <input type="number" id="fieldW" value="64"></label>
+      <label>Height <input type="number" id="fieldH" value="64"></label>
+    </div>
+    <button id="btnApplyTransform" class="full-width">Apply Layer Transform</button>
+
+    <h3>Quick Size</h3>
+    <div class="quick-size-grid">
+      <button data-qw="64" data-qh="64">64 × 64</button>
+      <button data-qw="64" data-qh="128">64 × 128</button>
+      <button data-qw="128" data-qh="64">128 × 64</button>
+      <button data-qw="128" data-qh="128">128 × 128</button>
+      <button data-qw="192" data-qh="192">192 × 192</button>
+    </div>
+
+    <h3>Anchor</h3>
+    <div class="field-grid">
+      <label>Anchor X <input type="number" id="fieldAnchorX" value="32"></label>
+      <label>Anchor Y <input type="number" id="fieldAnchorY" value="32"></label>
+    </div>
+    <button id="btnApplyAnchor" class="full-width">Apply Anchor</button>
+    <div class="button-row">
+      <button id="btnCenterAnchor">Center Anchor</button>
+      <button id="btnBottomAnchor">Bottom-Center Anchor</button>
+    </div>
+
+    <h3>Save Type</h3>
+    <div class="radio-row">
+      <label><input type="radio" name="kind" value="char" checked> CHARACTER</label>
+      <label><input type="radio" name="kind" value="item"> ITEM</label>
+    </div>
+
+    <button id="btnCommit" class="primary full-width">Commit Sprite</button>
+
+    <details class="controls-help">
+      <summary>Controls</summary>
+      <ul>
+        <li>Click a thumbnail to add it as a layer</li>
+        <li>Drag the selected sprite to move it</li>
+        <li>Shift + click sets the anchor</li>
+        <li>Arrow keys move the selected layer</li>
+        <li>Shift + arrows resize by 1px</li>
+        <li>Ctrl + arrows resize by 8px</li>
+        <li>Red cross = anchor point</li>
+      </ul>
+    </details>
+  </section>
+
+</main>
+
+<section class="panel export-panel">
+  <h2>Committed Sprites <span id="committedCount">(0)</span></h2>
+  <div id="committedList" class="committed-list">
+    <div class="empty-hint">Nothing committed yet this session.</div>
+  </div>
+  <div class="button-row">
+    <button id="btnDownloadManifest">Download Manifest (sprite_info.yaml)</button>
+    <button id="btnDownloadZip" class="primary">Download All (.zip)</button>
+    <button id="btnClearCommitted" class="secondary">Clear List</button>
+  </div>
+</section>
+
+<div id="toast" class="toast"></div>
+
+<script src="db.js"></script>
+<script src="zip.js"></script>
+<script src="yaml.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

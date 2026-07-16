@@ -1,0 +1,504 @@
+@page "/map"
+@inject AppState AppState
+@inject MapEditorState State
+@inject MapCanvasInterop Canvas
+@inject InteropService Interop
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<PageTitle>MyTools Web - Map Editor</PageTitle>
+
+@if (!AppState.IsLoaded)
+{
+    <h1>Map Editor</h1>
+    <p>The map editor renders real items/monsters/sprites from your loaded server folder.
+       <a href="/">Open a server folder on the Dashboard</a> first.</p>
+}
+else
+{
+    <div class="mapEditorShell">
+        <div class="mapEditorTopbar">
+            <strong>@State.MapTitle</strong>
+            <span class="spacer"></span>
+            <label>W <input type="number" min="8" max="2000" @bind="newWidth" style="width:70px" /></label>
+            <label>H <input type="number" min="8" max="2000" @bind="newHeight" style="width:70px" /></label>
+            <input type="text" placeholder="Name" @bind="newName" style="width:120px" />
+            <button @onclick="CreateNewMap">New</button>
+            <label class="btn">Open .map/.rsf
+                <input type="file" accept=".map,.rsf" style="display:none" @ref="openMapInput" @onchange="OnOpenMapFile" />
+            </label>
+            <button @onclick="ExportMap" disabled="@(!State.IsLoaded)">Export MAP</button>
+            <button @onclick="ExportRsf" disabled="@(!State.IsLoaded)">Export RSF</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(State.LastError))
+        {
+            <p class="error-text">@State.LastError</p>
+        }
+
+        <div class="mapEditorBody">
+            <aside class="panel mapLeftPanel">
+                <div class="section">
+                    <canvas class="minimapCanvas" width="240" height="160" @ref="minimapCanvasEl"></canvas>
+                    <div class="tabs">
+                        <button class="@(sidebarMode=="used"?"active":"")" @onclick='() => SetSidebarMode("used")'>Used</button>
+                        <button class="@(sidebarMode=="spawns"?"active":"")" @onclick='() => SetSidebarMode("spawns")'>Spawns</button>
+                        <button class="@(sidebarMode=="locks"?"active":"")" @onclick='() => SetSidebarMode("locks")'>Locks</button>
+                        <button class="@(sidebarMode=="triggers"?"active":"")" @onclick='() => SetSidebarMode("triggers")'>Triggers</button>
+                    </div>
+                    <div class="entry-list" style="max-height:40vh;">
+                        @foreach (var row in SidebarRows())
+                        {
+                            <div class="entry-row" @onclick="() => JumpTo(row.x, row.y)">
+                                x @row.x, y @row.y - @row.summary
+                            </div>
+                        }
+                        @if (!SidebarRows().Any())
+                        {
+                            <div class="entry-row"><em>Nothing here yet.</em></div>
+                        }
+                    </div>
+                </div>
+            </aside>
+
+            <section class="mapCenterPanel">
+                <div class="canvasWrap">
+                    <div class="canvasStack">
+                        <canvas @ref="mapCanvasEl" width="640" height="480"></canvas>
+                        <canvas @ref="overlayCanvasEl" class="mapOverlay" width="640" height="480"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="panel mapRightPanel">
+                <div class="section">
+                    <h2>Tools</h2>
+                    <div class="segmented">
+                        <button class="@(State.Layer==MapLayer.Surface?"active":"")" @onclick='() => SetLayer(MapLayer.Surface)'>Surface</button>
+                        <button class="@(State.Layer==MapLayer.Item?"active":"")" @onclick='() => SetLayer(MapLayer.Item)'>Item</button>
+                        <button class="@(State.Layer==MapLayer.Monster?"active":"")" @onclick='() => SetLayer(MapLayer.Monster)'>Monster</button>
+                    </div>
+                    <div class="segmented">
+                        <button class="@(State.Tool==MapTool.Paint?"active":"")" @onclick='() => SetTool(MapTool.Paint)'>Paint</button>
+                        <button class="@(State.Tool==MapTool.Erase?"active":"")" @onclick='() => SetTool(MapTool.Erase)'>Erase</button>
+                        <button class="@(State.Tool==MapTool.Inspect?"active":"")" @onclick='() => SetTool(MapTool.Inspect)'>Inspect</button>
+                    </div>
+                    <label class="field">Brush <input type="number" min="1" max="10" value="@State.Brush" @onchange="OnBrushChanged" /></label>
+                </div>
+
+                <div class="section">
+                    <h2>View</h2>
+                    <label class="check"><input type="checkbox" @bind="State.View.showSurface" @bind:after="Redraw" /> Surface</label>
+                    <label class="check"><input type="checkbox" @bind="State.View.showItems" @bind:after="Redraw" /> Items</label>
+                    <label class="check"><input type="checkbox" @bind="State.View.showMonsters" @bind:after="Redraw" /> Monsters</label>
+                    <label class="check"><input type="checkbox" @bind="State.View.showGrid" @bind:after="Redraw" /> Grid</label>
+                    <div class="segmented">
+                        <button class="@(State.View.tileSize==32?"active":"")" @onclick='() => SetZoom(32)'>32</button>
+                        <button class="@(State.View.tileSize==16?"active":"")" @onclick='() => SetZoom(16)'>16</button>
+                        <button class="@(State.View.tileSize==8?"active":"")" @onclick='() => SetZoom(8)'>8</button>
+                    </div>
+                </div>
+
+                <div class="section tileInspector @(State.InspectorLocked?"locked":"")">
+                    <div class="windowTitle">
+                        <span>@(State.InspectorLocked ? "Tile Locked" : "Current Tile")</span>
+                        @if (State.InspectorLocked)
+                        {
+                            <button @onclick="UnlockInspector">Unlock</button>
+                        }
+                    </div>
+                    <div class="inspectGrid">
+                        <span>X</span><strong>@State.Inspector.x</strong>
+                        <span>Y</span><strong>@State.Inspector.y</strong>
+                        <span>Surface</span><strong>@State.Inspector.surfaceId</strong>
+                        <span>Item</span><strong>@State.Inspector.itemId @State.Inspector.itemName</strong>
+                        <span>Monster</span><strong>@State.Inspector.monsterId @State.Inspector.monsterName</strong>
+                    </div>
+                    @if (State.InspectorLocked)
+                    {
+                        <div class="tileEditor">
+                            <label>Surface ID <input type="number" @bind="State.Inspector.surfaceId" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Item ID <input type="number" @bind="State.Inspector.itemId" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Spawn Ticks <input type="number" @bind="State.Inspector.itemTimeout" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Uses <input type="number" @bind="State.Inspector.itemUses" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Reset <input type="number" @bind="State.Inspector.itemReset" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Trigger <input type="number" @bind="State.Inspector.itemTrigger" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Data 0 <input type="number" @bind="State.Inspector.itemData1" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Data 1 <input type="number" @bind="State.Inspector.itemData2" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Data 2 <input type="number" @bind="State.Inspector.itemData3" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Data 3 <input type="number" @bind="State.Inspector.itemData4" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Data 4 <input type="number" @bind="State.Inspector.itemData5" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Put In <input type="number" @bind="State.Inspector.itemPutIn" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Writing <textarea rows="2" maxlength="200" @bind="State.Inspector.itemText" @bind:after="State.SaveLockedTile"></textarea></label>
+                            <label>Monster ID <input type="number" @bind="State.Inspector.monsterId" @bind:after="State.SaveLockedTile" /></label>
+                            <label>Monster Ticks <input type="number" @bind="State.Inspector.monsterTimeout" @bind:after="State.SaveLockedTile" /></label>
+                        </div>
+                    }
+                </div>
+
+                <div class="section">
+                    <button class="@(generatorOpen?"active":"")" @onclick="ToggleGenerator">Generator</button>
+                    @if (generatorOpen)
+                    {
+                        <GeneratorPanel State="State" />
+                    }
+                </div>
+
+                <div class="section">
+                    <h2>Paint Defaults</h2>
+                    @if (State.Layer == MapLayer.Item)
+                    {
+                        <div class="tileEditor compactEditor">
+                            <label>Spawn Ticks <input type="number" @bind="State.PaintDefaults.itemTimeout" /></label>
+                            <label>Data 0 <input type="number" @bind="State.PaintDefaults.itemData0" /></label>
+                            <label>Data 1 <input type="number" @bind="State.PaintDefaults.itemData1" /></label>
+                            <label>Reset <input type="number" @bind="State.PaintDefaults.itemReset" /></label>
+                            <label>Uses <input type="number" @bind="State.PaintDefaults.itemUses" /></label>
+                            <label>Trigger <input type="number" @bind="State.PaintDefaults.itemTrigger" /></label>
+                            <label>Put In <input type="number" @bind="State.PaintDefaults.itemPutIn" /></label>
+                            <label>Writing <textarea rows="2" maxlength="200" @bind="State.PaintDefaults.itemText"></textarea></label>
+                        </div>
+                    }
+                    else if (State.Layer == MapLayer.Monster)
+                    {
+                        <label>Spawn Ticks <input type="number" @bind="State.PaintDefaults.monsterTimeout" /></label>
+                    }
+                    else
+                    {
+                        <p class="hint">Surface painting uses the selected ID below.</p>
+                    }
+                </div>
+
+                <div class="section grow">
+                    <h2>Palette</h2>
+                    <input class="search" type="search" placeholder="Search" @bind="State.Search" @bind:event="oninput" />
+                    <label class="field">Selected ID <input type="number" value="@SelectedId" @onchange="OnSelectedIdChanged" /></label>
+                    <div class="palette">
+                        @foreach (var entry in FilteredPalette().Take(200))
+                        {
+                            <button type="button" class="paletteItem @(entry.id==SelectedId?"active":"")" @onclick="() => SelectPalette(entry.id)">
+                                <PaletteIcon Layer="@LayerName()" EntryId="entry.id" Image="entry.image" ImageType="entry.imageType" />
+                                <span class="paletteText">
+                                    <strong>@entry.name</strong>
+                                    <span>@entry.id</span>
+                                </span>
+                            </button>
+                        }
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+}
+
+@code {
+    private ElementReference mapCanvasEl;
+    private ElementReference overlayCanvasEl;
+    private ElementReference minimapCanvasEl;
+    private ElementReference openMapInput;
+    private DotNetObjectReference<MapEditor>? selfRef;
+    private bool initialized;
+    private bool mouseDown;
+    private (int x, int y)? hoverTile;
+    private string sidebarMode = "used";
+    private bool generatorOpen;
+
+    private void ToggleGenerator() => generatorOpen = !generatorOpen;
+    private int newWidth = 100, newHeight = 100;
+    private string newName = "New Map";
+
+    protected override void OnInitialized()
+    {
+        AppState.Changed += OnAppStateChanged;
+        State.Changed += OnStateChanged;
+        State.RebuildCatalog();
+    }
+
+    private async void OnAppStateChanged()
+    {
+        State.RebuildCatalog();
+        await LoadSheets();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnStateChanged()
+    {
+        await Redraw();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && AppState.IsLoaded)
+        {
+            selfRef = DotNetObjectReference.Create(this);
+            await Canvas.InitAsync(mapCanvasEl, overlayCanvasEl, minimapCanvasEl, selfRef);
+            initialized = true;
+            await LoadSheets();
+            await Redraw();
+        }
+    }
+
+    private async Task LoadSheets()
+    {
+        if (!initialized) return;
+        var sheets = State.GetSpriteSheetBytes()
+            .Select(s => new SheetPayload { kind = s.kind, number = s.number, bytesBase64 = Convert.ToBase64String(s.bytes) });
+        await Canvas.LoadSheetsAsync(sheets);
+    }
+
+    private async Task Redraw()
+    {
+        if (!initialized || State.Map == null) return;
+        await Canvas.SetViewAsync(State.Map.width, State.Map.height, State.View.tileSize);
+        await Canvas.SetBrushAsync(State.Brush);
+        var payload = BuildPayload();
+        await Canvas.DrawMapAsync(payload);
+        await Canvas.DrawMinimapAsync(payload);
+        await UpdateOverlay();
+    }
+
+    private async Task UpdateOverlay()
+    {
+        if (!initialized) return;
+        TilePayload? hover = hoverTile is { } h ? new TilePayload { x = h.x, y = h.y } : null;
+        TilePayload? locked = State.InspectorLocked ? new TilePayload { x = State.Inspector.x, y = State.Inspector.y } : null;
+        await Canvas.DrawOverlayAsync(hover, locked);
+    }
+
+    private MapDrawPayload BuildPayload()
+    {
+        var map = State.Map!;
+        var payload = new MapDrawPayload
+        {
+            width = map.width,
+            height = map.height,
+            showSurface = State.View.showSurface,
+            showItems = State.View.showItems,
+            showMonsters = State.View.showMonsters,
+            showGrid = State.View.showGrid
+        };
+
+        foreach (var kv in map.surfaces)
+            payload.surfaces.Add(new SurfaceCellPayload { x = kv.Key.x, y = kv.Key.y, surface = kv.Value });
+
+        foreach (var item in map.items.Values)
+        {
+            var def = State.GetItem(item.itemId);
+            payload.items.Add(new EntityCellPayload { x = item.x, y = item.y, image = def?.image ?? 0, imageType = def?.imageType ?? 0 });
+        }
+
+        foreach (var monster in map.monsters.Values)
+        {
+            var def = State.GetMonster(monster.monsterId);
+            payload.monsters.Add(new EntityCellPayload { x = monster.x, y = monster.y, image = def?.image ?? 0, imageType = def?.imageType ?? 0 });
+        }
+
+        return payload;
+    }
+
+    [JSInvokable]
+    public async Task OnCanvasDown(int x, int y, int button)
+    {
+        if (!State.IsLoaded) return;
+
+        if (button == 1)
+        {
+            // LockInspectorAt/UnlockInspector raise State.Changed, which OnStateChanged already
+            // turns into a redraw - an explicit call here would race it.
+            if (State.InspectorLocked) State.UnlockInspector();
+            else State.LockInspectorAt(x, y);
+            return;
+        }
+
+        if (button != 0) return;
+
+        mouseDown = true;
+        State.EndStroke();
+        State.ApplyToolAt(x, y);
+        await Redraw();
+    }
+
+    [JSInvokable]
+    public async Task OnCanvasMove(int x, int y)
+    {
+        if (!State.IsLoaded) return;
+        hoverTile = (x, y);
+
+        if (mouseDown && State.Tool != MapTool.Inspect)
+        {
+            State.ApplyStrokeTo(x, y);
+            await Redraw();
+        }
+        else
+        {
+            if (!State.InspectorLocked) State.SetInspectorFromTile(x, y);
+            await UpdateOverlay();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    [JSInvokable]
+    public void OnCanvasUp()
+    {
+        mouseDown = false;
+        State.EndStroke();
+    }
+
+    [JSInvokable]
+    public async Task OnCanvasLeave()
+    {
+        hoverTile = null;
+        await UpdateOverlay();
+    }
+
+    // These State methods (NewMap/OpenMapBytes/OpenRsfText/GenerateMap/LockInspectorAt/...) all
+    // raise State.Changed themselves, which OnStateChanged turns into a redraw - none of the
+    // methods below call Redraw again, since doing so races the canvas resize/draw calls and can
+    // leave the canvas blank (concurrent canvas.width writes clear its content).
+    private void CreateNewMap()
+    {
+        State.NewMap(newWidth, newHeight, string.IsNullOrWhiteSpace(newName) ? "New Map" : newName);
+    }
+
+    private async Task OnOpenMapFile(ChangeEventArgs e)
+    {
+        WorkspaceFileDto? file = await Interop.ReadSingleFileAsync(openMapInput);
+        if (file == null) return;
+
+        if (file.path.EndsWith(".rsf", StringComparison.OrdinalIgnoreCase))
+        {
+            byte[] bytes = Convert.FromBase64String(file.bytesBase64);
+            State.OpenRsfText(System.Text.Encoding.UTF8.GetString(bytes), file.path);
+        }
+        else
+        {
+            State.OpenMapBytes(Convert.FromBase64String(file.bytesBase64), file.path);
+        }
+    }
+
+    private async Task ExportMap()
+    {
+        byte[] bytes = State.ExportMapBytes();
+        await Interop.DownloadBlobAsync(Convert.ToBase64String(bytes), $"{State.ExportFileBaseName()}.map", "application/octet-stream");
+    }
+
+    private async Task ExportRsf()
+    {
+        string text = State.ExportRsfText();
+        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(text);
+        await Interop.DownloadBlobAsync(Convert.ToBase64String(bytes), $"{State.ExportFileBaseName()}.rsf", "text/plain");
+    }
+
+    private void SetLayer(MapLayer layer) => State.SetLayer(layer);
+    private void SetTool(MapTool tool) => State.SetTool(tool);
+
+    private async Task SetZoom(int size)
+    {
+        State.View.tileSize = size;
+        await Redraw();
+    }
+
+    private void OnBrushChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int value))
+            State.Brush = Math.Clamp(value, 1, 10);
+    }
+
+    private void UnlockInspector() => State.UnlockInspector();
+
+    private string LayerName() => State.Layer switch
+    {
+        MapLayer.Surface => "surface",
+        MapLayer.Item => "item",
+        _ => "monster"
+    };
+
+    private int SelectedId => State.Layer switch
+    {
+        MapLayer.Surface => State.SelectedSurface,
+        MapLayer.Item => State.SelectedItem,
+        _ => State.SelectedMonster
+    };
+
+    private void SelectPalette(int id)
+    {
+        switch (State.Layer)
+        {
+            case MapLayer.Surface: State.SelectedSurface = id; break;
+            case MapLayer.Item: State.SelectedItem = id; break;
+            case MapLayer.Monster: State.SelectedMonster = id; break;
+        }
+        State.SetTool(MapTool.Paint);
+    }
+
+    private void OnSelectedIdChanged(ChangeEventArgs e)
+    {
+        if (!int.TryParse(e.Value?.ToString(), out int id)) return;
+        SelectPalette(id);
+    }
+
+    private IEnumerable<(int id, string name, int image, int imageType)> FilteredPalette()
+    {
+        string search = State.Search?.Trim() ?? "";
+
+        IEnumerable<(int id, string name, int image, int imageType)> source = State.Layer switch
+        {
+            MapLayer.Surface => State.Catalog.surfaces.Select(s => (s.id, s.name, 0, 0)),
+            MapLayer.Item => State.Catalog.items.Select(i => (i.id, i.name, i.image, i.imageType)),
+            _ => State.Catalog.monsters.Select(m => (m.id, m.name, m.image, m.imageType))
+        };
+
+        if (string.IsNullOrEmpty(search))
+            return source;
+
+        return source.Where(e => e.name.Contains(search, StringComparison.OrdinalIgnoreCase) || e.id.ToString() == search);
+    }
+
+    private void SetSidebarMode(string mode) => sidebarMode = mode;
+
+    private List<(int x, int y, string summary)> SidebarRows()
+    {
+        List<(int x, int y, string summary)> rows = new();
+        if (State.Map == null) return rows;
+
+        if (sidebarMode == "used")
+        {
+            foreach (var kv in State.Map.surfaces.Take(100))
+                rows.Add((kv.Key.x, kv.Key.y, $"surface {kv.Value}"));
+            return rows;
+        }
+
+        IEnumerable<MapItemRecord> items = sidebarMode switch
+        {
+            "spawns" => State.Map.items.Values.Where(i => i.timeout > 0),
+            "locks" => State.Map.items.Values.Where(i => i.data1 != 0 || i.data2 != 0 || i.data3 != 0 || i.data4 != 0 || i.data5 != 0),
+            "triggers" => State.Map.items.Values.Where(i => i.trigger != 0),
+            _ => Enumerable.Empty<MapItemRecord>()
+        };
+
+        foreach (var item in items.Take(200))
+        {
+            var def = State.GetItem(item.itemId);
+            rows.Add((item.x, item.y, $"{item.itemId} {def?.name}"));
+        }
+
+        return rows;
+    }
+
+    private void JumpTo(int x, int y)
+    {
+        State.LockInspectorAt(x, y);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        AppState.Changed -= OnAppStateChanged;
+        State.Changed -= OnStateChanged;
+        selfRef?.Dispose();
+        if (initialized)
+        {
+            try { await Canvas.DisposeAsync(); } catch { /* ignore during teardown */ }
+        }
+    }
+}

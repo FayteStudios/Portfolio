@@ -1,0 +1,71 @@
+@inherits LayoutComponentBase
+@inject AppState State
+@implements IDisposable
+
+<div class="app-shell">
+    <nav class="app-nav">
+        <h2>MyTools Web</h2>
+        <NavLink href="/" Match="NavLinkMatch.All">Dashboard</NavLink>
+
+        @foreach (var info in MyTools.ServerFiles.All)
+        {
+            <NavLink href="@($"edit/{info.file}")">@info.displayName</NavLink>
+        }
+
+        <NavLink href="sprites">Sprite Sheets</NavLink>
+        <NavLink href="map">Map Editor</NavLink>
+    </nav>
+
+    <div class="app-main">
+        <div class="status-bar">
+            @if (State.IsLoaded)
+            {
+                <span>📁 <strong>@State.FolderDisplayName</strong></span>
+                <span class="badge">@ModeLabel()</span>
+            }
+            else
+            {
+                <span>No folder loaded yet.</span>
+            }
+
+            <span class="spacer"></span>
+
+            @if (State.IsLoaded)
+            {
+                <button @onclick="DownloadZip">Download .zip</button>
+                <button @onclick="Forget">Close Workspace</button>
+            }
+        </div>
+
+        @if (!string.IsNullOrEmpty(State.LastError))
+        {
+            <p class="error-text">@State.LastError</p>
+        }
+
+        @Body
+    </div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        State.Changed += StateHasChanged;
+        await State.InitializeAsync();
+    }
+
+    public void Dispose()
+    {
+        State.Changed -= StateHasChanged;
+    }
+
+    private string ModeLabel() => State.Mode switch
+    {
+        WorkspaceMode.FileSystemAccess => "live folder access",
+        WorkspaceMode.Upload => "uploaded copy",
+        _ => ""
+    };
+
+    private async Task DownloadZip() => await State.DownloadZipAsync();
+
+    private async Task Forget() => await State.ForgetWorkspaceAsync();
+}

@@ -1,0 +1,83 @@
+@page "/"
+@inject AppState State
+@inject InteropService Interop
+@implements IDisposable
+
+<PageTitle>MyTools Web - Dashboard</PageTitle>
+
+<h1>Dashboard</h1>
+
+@if (!State.IsLoaded)
+{
+    <div class="field-group">
+        <p>Open your RPGWO server folder to edit its ini files and sprite sheets. Nothing is
+           uploaded anywhere - everything happens in this browser tab.</p>
+
+        @if (fsaSupported)
+        {
+            <p>
+                <button class="primary" @onclick="PickFolder">Open Server Folder&hellip;</button>
+                (works fully in-place: edits are written straight back to your real files)
+            </p>
+        }
+
+        <p>
+            This browser @(fsaSupported ? "also supports" : "needs") an upload/download mode:
+            pick your server folder below, edit here, then use
+            <em>Download .zip</em> at any time to get your changes back out.
+        </p>
+        <p>
+            <input type="file" webkitdirectory multiple @ref="uploadInput" @onchange="OnUploadChanged" />
+        </p>
+    </div>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>Exists</th>
+                <th>Entries</th>
+                <th>Keys</th>
+                <th>Flags</th>
+                <th>Unrecognized lines</th>
+                <th>Error</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var status in State.Workspace!.files)
+            {
+                <tr>
+                    <td><a href="@($"edit/{status.file}")">@status.displayName</a></td>
+                    <td>@(status.exists ? "yes" : "no")</td>
+                    <td>@status.entryCount</td>
+                    <td>@status.keyCount</td>
+                    <td>@status.flagCount</td>
+                    <td>@status.rawCount</td>
+                    <td class="error-text">@status.error</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ElementReference uploadInput;
+    private bool fsaSupported;
+
+    protected override async Task OnInitializedAsync()
+    {
+        State.Changed += StateHasChanged;
+        fsaSupported = await Interop.IsFileSystemAccessSupportedAsync();
+    }
+
+    public void Dispose()
+    {
+        State.Changed -= StateHasChanged;
+    }
+
+    private async Task PickFolder() => await State.PickFolderAsync();
+
+    private async Task OnUploadChanged() => await State.LoadFromUploadAsync(uploadInput);
+}

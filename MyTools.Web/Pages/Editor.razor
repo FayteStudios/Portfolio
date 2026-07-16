@@ -1,0 +1,387 @@
+@page "/edit/{FileName}"
+@inject AppState State
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>MyTools Web - @info.displayName</PageTitle>
+
+@if (!State.IsLoaded)
+{
+    <p>No folder loaded yet. <a href="/">Go to the dashboard</a> to open one.</p>
+}
+else
+{
+    <h1>@info.displayName</h1>
+
+    @if (info.blockMode == ServerFileBlockMode.WholeFile)
+    {
+        @RenderFieldGroups()
+    }
+    else
+    {
+        <div class="two-pane">
+            <div>
+                <p>
+                    <input type="text" placeholder="Search..." value="@search" @oninput="OnSearchChanged" />
+                </p>
+                <div class="entry-list">
+                    @foreach (Definition definition in FilteredDefinitions())
+                    {
+                        <div class="entry-row @(definition.entryId == selectedId ? "selected" : "")"
+                             @onclick="() => SelectEntry(definition)">
+                            @definition.entryId - @(string.IsNullOrWhiteSpace(definition.name) ? "(unnamed)" : definition.name)
+                        </div>
+                    }
+                </div>
+                <p>
+                    <button @onclick="AddEntry">+ New</button>
+                    <button @onclick="DeleteEntry" disabled="@(selected == null)">Delete</button>
+                </p>
+            </div>
+
+            <div style="flex:1; min-width:0;">
+                @if (selected != null)
+                {
+                    @RenderFieldGroups()
+                }
+                else
+                {
+                    <p>Select an entry on the left, or create a new one.</p>
+                }
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter] public string FileName { get; set; } = "";
+
+    private ServerFile file;
+    private ServerFileInfo info;
+    private readonly DefinitionEditorService editorService = new();
+
+    private string search = "";
+    private Definition? selected;
+    private int? selectedId;
+    private List<EditorEntry> fields = new();
+    private string activeGroup = "";
+
+    protected override void OnInitialized()
+    {
+        State.Changed += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        State.Changed -= StateHasChanged;
+    }
+
+    protected override void OnParametersSet()
+    {
+        file = Enum.Parse<ServerFile>(FileName);
+        info = ServerFiles.Get(file);
+        selected = null;
+        selectedId = null;
+        fields = new();
+
+        if (info.blockMode == ServerFileBlockMode.WholeFile && State.IsLoaded)
+        {
+            List<Definition> whole = State.Workspace!.GetDefinitions(file);
+            if (whole.Count > 0)
+                SelectEntry(whole[0]);
+        }
+        else if (State.IsLoaded && State.SelectedFile == file && State.SelectedEntryId.HasValue)
+        {
+            Definition? match = State.Workspace!.GetDefinitions(file)
+                .FirstOrDefault(d => d.entryId == State.SelectedEntryId.Value);
+
+            if (match != null)
+                SelectEntry(match);
+        }
+    }
+
+    private IEnumerable<Definition> FilteredDefinitions()
+    {
+        List<Definition> all = State.Workspace!.GetDefinitions(file);
+
+        if (string.IsNullOrWhiteSpace(search))
+            return all;
+
+        return all.Where(d =>
+            d.entryId.ToString().Contains(search, StringComparison.OrdinalIgnoreCase) ||
+            (d.name?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false));
+    }
+
+    private void OnSearchChanged(ChangeEventArgs e) => search = e.Value?.ToString() ?? "";
+
+    private async void SelectEntry(Definition definition)
+    {
+        selected = definition;
+        selectedId = definition.entryId;
+        fields = editorService.BuildFormFields(State.Workspace!, file, definition);
+
+        IGrouping<string, EditorEntry>? firstGroup = fields
+            .GroupBy(f => string.IsNullOrWhiteSpace(f.group) ? "General" : f.group)
+            .FirstOrDefault();
+
+        activeGroup = firstGroup?.Key ?? "";
+
+        await State.SetSelectionAsync(file, definition.entryId);
+        StateHasChanged();
+    }
+
+    private RenderFragment RenderFieldGroups() => builder =>
+    {
+        var groups = fields
+            .GroupBy(f => string.IsNullOrWhiteSpace(f.group) ? "General" : f.group)
+            .ToList();
+
+        int seq = 0;
+
+        builder.OpenElement(seq++, "div");
+        builder.AddAttribute(seq++, "class", "tabs");
+
+        foreach (var group in groups)
+        {
+            string groupName = group.Key;
+            builder.OpenElement(seq++, "button");
+            builder.AddAttribute(seq++, "class", groupName == activeGroup ? "active" : "");
+            builder.AddAttribute(seq++, "onclick", EventCallback.Factory.Create(this, () => { activeGroup = groupName; StateHasChanged(); }));
+            builder.AddContent(seq++, groupName);
+            builder.CloseElement();
+        }
+
+        builder.CloseElement();
+
+        var activeFields = groups.FirstOrDefault(g => g.Key == activeGroup)?.ToList() ?? new();
+
+        builder.OpenElement(seq++, "div");
+        builder.AddAttribute(seq++, "class", "field-group");
+
+        foreach (EditorEntry field in activeFields)
+        {
+            builder.OpenElement(seq++, "div");
+            builder.AddAttribute(seq++, "class", "field-row");
+            builder.OpenElement(seq++, "label");
+            builder.AddAttribute(seq++, "title", field.description);
+            builder.AddContent(seq++, string.IsNullOrWhiteSpace(field.label) ? field.key : field.label);
+            builder.CloseElement();
+
+            RenderFieldInput(builder, ref seq, field);
+
+            builder.CloseElement();
+        }
+
+        builder.CloseElement();
+
+        builder.OpenElement(seq++, "p");
+        builder.OpenElement(seq++, "button");
+        builder.AddAttribute(seq++, "class", "primary");
+        builder.AddAttribute(seq++, "onclick", EventCallback.Factory.Create(this, Save));
+        builder.AddContent(seq++, "Save");
+        builder.CloseElement();
+        builder.CloseElement();
+    };
+
+    private void RenderFieldInput(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder, ref int seq, EditorEntry field)
+    {
+        if (DefinitionEditorService.IsIdentityField(info, field))
+        {
+            // This is the entry's own id/name - it lives in the block marker line, not a plain
+            // field, so renumbering/renaming isn't a simple field edit. Shown for reference only.
+            builder.OpenElement(seq++, "input");
+            builder.AddAttribute(seq++, "type", "text");
+            builder.AddAttribute(seq++, "value", field.value);
+            builder.AddAttribute(seq++, "disabled", true);
+            builder.AddAttribute(seq++, "title", "The entry's id/name is read-only here - use New/Delete to add or remove entries.");
+            builder.CloseElement();
+            return;
+        }
+
+        if (field.isFlag)
+        {
+            builder.OpenElement(seq++, "input");
+            builder.AddAttribute(seq++, "type", "checkbox");
+            builder.AddAttribute(seq++, "checked", field.value == "true");
+            builder.AddAttribute(seq++, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e =>
+                field.value = (e.Value is bool b && b) ? "true" : ""));
+            builder.CloseElement();
+            return;
+        }
+
+        if (field.hasPicker && IsEntityPicker(field.picker, out List<Definition> options))
+        {
+            builder.OpenElement(seq++, "select");
+            builder.AddAttribute(seq++, "value", field.value);
+            builder.AddAttribute(seq++, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e => field.value = e.Value?.ToString() ?? ""));
+            builder.OpenElement(seq++, "option");
+            builder.AddAttribute(seq++, "value", "");
+            builder.AddContent(seq++, "(none)");
+            builder.CloseElement();
+
+            foreach (Definition option in options)
+            {
+                builder.OpenElement(seq++, "option");
+                builder.AddAttribute(seq++, "value", option.entryId.ToString());
+                builder.AddContent(seq++, $"{option.entryId} - {option.name}");
+                builder.CloseElement();
+            }
+
+            builder.CloseElement();
+            return;
+        }
+
+        if (field.hasPicker && IsSpritePicker(field.picker))
+        {
+            builder.OpenElement(seq++, "input");
+            builder.AddAttribute(seq++, "type", "text");
+            builder.AddAttribute(seq++, "value", field.value);
+            builder.AddAttribute(seq++, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e => field.value = e.Value?.ToString() ?? ""));
+            builder.CloseElement();
+
+            string? thumb = TryGetSpriteThumbnail(field.picker, field.value);
+
+            if (thumb != null)
+            {
+                builder.OpenElement(seq++, "img");
+                builder.AddAttribute(seq++, "src", thumb);
+                builder.AddAttribute(seq++, "style", "width:32px;height:32px;image-rendering:pixelated;margin-left:0.5rem;");
+                builder.CloseElement();
+            }
+
+            builder.OpenElement(seq++, "a");
+            builder.AddAttribute(seq++, "href", "/sprites");
+            builder.AddAttribute(seq++, "style", "margin-left:0.5rem;font-size:0.85rem;");
+            builder.AddContent(seq++, "browse");
+            builder.CloseElement();
+            return;
+        }
+
+        builder.OpenElement(seq++, "input");
+        builder.AddAttribute(seq++, "type", field.kind.Equals("number", StringComparison.OrdinalIgnoreCase) ? "number" : "text");
+        builder.AddAttribute(seq++, "value", field.value);
+        builder.AddAttribute(seq++, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e => field.value = e.Value?.ToString() ?? ""));
+        builder.CloseElement();
+    }
+
+    private bool IsEntityPicker(string picker, out List<Definition> options)
+    {
+        options = picker.ToLowerInvariant() switch
+        {
+            "itempicker" => State.Workspace!.items,
+            "monsterpicker" => State.Workspace!.monsters,
+            "skillpicker" => State.Workspace!.skills,
+            "magicpicker" => State.Workspace!.magic,
+            "animationpicker" => State.Workspace!.animations,
+            _ => new List<Definition>()
+        };
+
+        return options.Count > 0 || picker.ToLowerInvariant() is "itempicker" or "monsterpicker" or "skillpicker" or "magicpicker" or "animationpicker";
+    }
+
+    private bool IsSpritePicker(string picker) => picker.ToLowerInvariant() is
+        "sprite" or "itemsprite" or "monstersprite" or "playersprite" or "wearsprite";
+
+    private string? TryGetSpriteThumbnail(string picker, string value)
+    {
+        if (!int.TryParse(value, out int id))
+            return null;
+
+        string prefix = picker.ToLowerInvariant() switch
+        {
+            "monstersprite" => "monster",
+            "playersprite" => "player",
+            "wearsprite" => "wear",
+            _ => "item"
+        };
+
+        try
+        {
+            ItemSpriteService sprites = new(State.Fs);
+            using var image = sprites.GetSpriteImage("", prefix, id);
+            return image == null ? null : ImageWebUtil.ToPngDataUrl(image);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private async Task Save()
+    {
+        if (selected == null)
+            return;
+
+        IniDoc? doc = State.Workspace!.GetDoc(file);
+
+        if (doc == null)
+            return;
+
+        editorService.Commit(doc, file, selected, fields);
+        await State.SaveIniAsync(file, doc);
+
+        Definition? refreshed = State.Workspace!.GetDefinitions(file)
+            .FirstOrDefault(d => d.entryId == selected.entryId);
+
+        if (refreshed != null)
+            SelectEntry(refreshed);
+    }
+
+    private async Task AddEntry()
+    {
+        IniDoc? doc = State.Workspace!.GetDoc(file);
+        if (doc == null) return;
+
+        List<Definition> definitions = State.Workspace!.GetDefinitions(file);
+
+        if (info.blockMode == ServerFileBlockMode.NamedKeyBlock)
+        {
+            string? name = await JS.InvokeAsync<string?>("prompt", "Name for the new entry:");
+
+            if (string.IsNullOrWhiteSpace(name))
+                return;
+
+            editorService.AddEntry(doc, file, 0, name);
+            await State.SaveIniAsync(file, doc);
+
+            Definition? added = State.Workspace!.GetDefinitions(file)
+                .FirstOrDefault(d => d.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            if (added != null)
+                SelectEntry(added);
+        }
+        else
+        {
+            int newId = editorService.NextFreeId(definitions);
+            editorService.AddEntry(doc, file, newId, null);
+            await State.SaveIniAsync(file, doc);
+
+            Definition? added = State.Workspace!.GetDefinitions(file)
+                .FirstOrDefault(d => d.entryId == newId);
+
+            if (added != null)
+                SelectEntry(added);
+        }
+    }
+
+    private async Task DeleteEntry()
+    {
+        if (selected == null) return;
+
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", $"Delete entry {selected.entryId} - {selected.name}?");
+
+        if (!confirmed)
+            return;
+
+        IniDoc? doc = State.Workspace!.GetDoc(file);
+        if (doc == null) return;
+
+        editorService.DeleteEntry(doc, file, selected);
+        await State.SaveIniAsync(file, doc);
+
+        selected = null;
+        selectedId = null;
+        fields = new();
+        await State.SetSelectionAsync(file, null);
+    }
+}

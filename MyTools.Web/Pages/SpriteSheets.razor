@@ -1,0 +1,370 @@
+@page "/sprites"
+@using Microsoft.AspNetCore.Components.Forms
+@using SixLabors.ImageSharp
+@using SixLabors.ImageSharp.PixelFormats
+@inject AppState State
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>MyTools Web - Sprite Sheets</PageTitle>
+
+<h1>Sprite Sheets</h1>
+
+@if (!State.IsLoaded)
+{
+    <p>No folder loaded yet. <a href="/">Go to the dashboard</a> to open one.</p>
+}
+else
+{
+    <div class="field-group">
+        <div class="field-row">
+            <label>Sheet prefix</label>
+            <input type="text" value="@prefix" @oninput="e => prefix = e.Value?.ToString() ?? string.Empty" style="max-width:160px;" />
+            <button @onclick="LoadSheets">Load Sheets</button>
+        </div>
+
+        @if (sheets.Count > 0)
+        {
+            <table>
+                <thead><tr><th>Sheet</th><th>File</th><th>Size</th><th>Sprite IDs</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (var sheet in sheets)
+                    {
+                        <tr>
+                            <td>@sheet.sheetNumber</td>
+                            <td>@sheet.FileName</td>
+                            <td>@sheet.columns x @sheet.rows</td>
+                            <td>@sheet.FirstSpriteId - @sheet.LastSpriteId</td>
+                            <td><button @onclick="() => ViewSheet(sheet)">View</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p><em>No sheets loaded yet for this prefix.</em></p>
+        }
+    </div>
+
+    @if (viewedSheet != null)
+    {
+        <div class="field-group">
+            <h2>@viewedSheet.FileName</h2>
+            <p>Click a tile to arm it for the composer below, and to fill in the Replace Cell fields.</p>
+            <div class="sprite-grid" style="grid-template-columns: repeat(@viewedSheet.columns, 34px);">
+                @foreach (var tile in viewedTiles)
+                {
+                    <div class="sprite-cell" title="Sprite @tile.spriteId" @onclick="() => ArmTile(tile)">
+                        <img src="@tile.dataUrl" />
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <div class="field-group">
+        <h2>Compose New Sheet</h2>
+        <p>Arm a tile above, then click a cell below to place it. @(armed != null ? $"Armed: sprite {armed.Value.spriteId}" : "Nothing armed.")</p>
+        <div class="sprite-grid">
+            @for (int i = 0; i < 100; i++)
+            {
+                int index = i;
+                <div class="sprite-cell" @onclick="() => PlaceArmed(index)">
+                    @if (composeCells[index] != null)
+                    {
+                        <img src="@composeCells[index]!.dataUrl" />
+                    }
+                </div>
+            }
+        </div>
+        <p>
+            <label>Output prefix: <input type="text" value="@composePrefix" @oninput="e => composePrefix = e.Value?.ToString() ?? string.Empty" style="max-width:120px;" /></label>
+            <button class="primary" @onclick="SaveComposedSheet">Save New Sheet</button>
+            <button @onclick="ClearCompose">Clear Grid</button>
+        </p>
+    </div>
+
+    <div class="field-group">
+        <h2>Replace Sprite Cell</h2>
+        <div class="field-row">
+            <label>Sheet path</label>
+            <input type="text" value="@replaceSheetPath" @oninput="e => replaceSheetPath = e.Value?.ToString() ?? string.Empty" />
+        </div>
+        <div class="field-row">
+            <label>Column / Row</label>
+            <input type="number" value="@replaceColumn" @oninput="e => replaceColumn = ParseIntOr(e.Value, 0)" style="max-width:80px;" />
+            <input type="number" value="@replaceRow" @oninput="e => replaceRow = ParseIntOr(e.Value, 0)" style="max-width:80px;" />
+        </div>
+        <div class="field-row">
+            <label>Replacement image</label>
+            <InputFile OnChange="OnReplacementFileSelected" />
+        </div>
+        <button class="primary" @onclick="ReplaceCell" disabled="@(replacementBytes == null)">Replace Cell</button>
+        @if (!string.IsNullOrEmpty(spriteError))
+        {
+            <p class="error-text">@spriteError</p>
+        }
+    </div>
+
+    <div class="field-group">
+        <h2>Batch Build Sheets From Loose Sprites</h2>
+        <p>Pick already-cropped single-sprite images (32-64px). They'll be packed 10x10 into new numbered sheets for the prefix above.</p>
+        <InputFile multiple OnChange="OnBatchFilesSelected" />
+        <button class="primary" @onclick="BuildSheets" disabled="@(batchFiles.Count == 0)">Build Sheets (@batchFiles.Count selected)</button>
+    </div>
+
+    <div class="field-group">
+        <h2>Find Sprite Usages</h2>
+        <div class="field-row">
+            <label>Category</label>
+            <select value="@usageCategory" @onchange="OnUsageCategoryChanged">
+                <option value="item">item</option>
+                <option value="monster">monster</option>
+                <option value="player">player</option>
+                <option value="wearing">wearing</option>
+            </select>
+            <label>Sprite ID</label>
+            <input type="number" value="@usageSpriteId" @oninput="e => usageSpriteId = ParseIntOr(e.Value, 0)" style="max-width:100px;" />
+            <button @onclick="FindUsages">Find</button>
+        </div>
+
+        @if (usageResults.Count > 0)
+        {
+            <table>
+                <thead><tr><th>File</th><th>Entry</th><th>Field</th></tr></thead>
+                <tbody>
+                    @foreach (var r in usageResults)
+                    {
+                        <tr><td>@r.file</td><td>@r.entryId - @r.entryName</td><td>@r.fieldLabel</td></tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else if (usageSearched)
+        {
+            <p><em>No references found.</em></p>
+        }
+    </div>
+}
+
+@code {
+    private string prefix = "item";
+    private string composePrefix = "item";
+    private List<ItemSpriteService.SpriteSheet> sheets = new();
+    private ItemSpriteService.SpriteSheet? viewedSheet;
+    private List<(int index, int spriteId, string dataUrl)> viewedTiles = new();
+
+    private sealed record ComposeCell(string sourcePath, int sourceIndex, int sourceColumns, int spriteId, string dataUrl);
+    private ComposeCell?[] composeCells = new ComposeCell?[100];
+    private (string sourcePath, int sourceIndex, int sourceColumns, int spriteId, string dataUrl)? armed;
+
+    private string replaceSheetPath = "";
+    private int replaceColumn;
+    private int replaceRow;
+    private byte[]? replacementBytes;
+    private string? spriteError;
+
+    private List<(string name, byte[] bytes)> batchFiles = new();
+
+    private string usageCategory = "item";
+    private int usageSpriteId;
+    private bool usageSearched;
+    private List<SpriteUsageService.SpriteReference> usageResults = new();
+
+    private ItemSpriteService Sprites() => new(State.Fs);
+
+    protected override void OnInitialized()
+    {
+        State.Changed += StateHasChanged;
+        LoadSheets();
+    }
+
+    public void Dispose()
+    {
+        State.Changed -= StateHasChanged;
+    }
+
+    private void LoadSheets()
+    {
+        sheets = Sprites().LoadSheets("", prefix).ToList();
+        viewedSheet = null;
+        viewedTiles.Clear();
+    }
+
+    private void ViewSheet(ItemSpriteService.SpriteSheet sheet)
+    {
+        viewedSheet = sheet;
+        viewedTiles.Clear();
+        replaceSheetPath = sheet.path;
+
+        ItemSpriteService service = Sprites();
+        using Image<Rgba32> sheetImage = service.LoadSheetImage(sheet.path);
+
+        for (int i = 0; i < sheet.SpriteCount; i++)
+        {
+            using Image<Rgba32> tile = service.CropTile(sheetImage, i, sheet.columns);
+            viewedTiles.Add((i, sheet.FirstSpriteId + i, ImageWebUtil.ToPngDataUrl(tile)));
+        }
+    }
+
+    private void ArmTile((int index, int spriteId, string dataUrl) tile)
+    {
+        if (viewedSheet == null) return;
+
+        armed = (viewedSheet.path, tile.index, viewedSheet.columns, tile.spriteId, tile.dataUrl);
+
+        int col = tile.index % viewedSheet.columns;
+        int row = tile.index / viewedSheet.columns;
+        replaceSheetPath = viewedSheet.path;
+        replaceColumn = col;
+        replaceRow = row;
+    }
+
+    private void PlaceArmed(int targetIndex)
+    {
+        if (armed == null) return;
+
+        var a = armed.Value;
+        composeCells[targetIndex] = new ComposeCell(a.sourcePath, a.sourceIndex, a.sourceColumns, a.spriteId, a.dataUrl);
+    }
+
+    private void ClearCompose()
+    {
+        composeCells = new ComposeCell?[100];
+    }
+
+    private async Task SaveComposedSheet()
+    {
+        spriteError = null;
+        ItemSpriteService service = Sprites();
+        Dictionary<string, Image<Rgba32>> cache = new();
+        List<(int index, Image<Rgba32> thumbnail)> placements = new();
+
+        try
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                ComposeCell? cell = composeCells[i];
+                if (cell == null) continue;
+
+                if (!cache.TryGetValue(cell.sourcePath, out Image<Rgba32>? sheetImage))
+                {
+                    sheetImage = service.LoadSheetImage(cell.sourcePath);
+                    cache[cell.sourcePath] = sheetImage;
+                }
+
+                placements.Add((i, service.CropTile(sheetImage, cell.sourceIndex, cell.sourceColumns)));
+            }
+
+            if (placements.Count == 0)
+            {
+                spriteError = "Nothing placed in the grid yet.";
+                return;
+            }
+
+            int nextNumber = service.LoadSheets("", composePrefix)
+                .Select(s => s.sheetNumber).DefaultIfEmpty(-1).Max() + 1;
+
+            string targetPath = ServerFiles.CombineVirtual(service.GetSpritesFolder(""), $"{composePrefix}{nextNumber}.bmp");
+
+            service.ComposeAndSaveSheet(targetPath, placements, 10, 10);
+            await State.FlushPathsAsync(new[] { targetPath });
+
+            ClearCompose();
+            LoadSheets();
+        }
+        catch (Exception ex)
+        {
+            spriteError = ex.Message;
+        }
+        finally
+        {
+            foreach (Image<Rgba32> img in cache.Values) img.Dispose();
+            foreach ((int _, Image<Rgba32> thumbnail) in placements) thumbnail.Dispose();
+        }
+    }
+
+    private async Task OnReplacementFileSelected(InputFileChangeEventArgs e)
+    {
+        using MemoryStream ms = new();
+        await e.File.OpenReadStream(10_000_000).CopyToAsync(ms);
+        replacementBytes = ms.ToArray();
+    }
+
+    private async Task ReplaceCell()
+    {
+        spriteError = null;
+
+        if (replacementBytes == null || string.IsNullOrWhiteSpace(replaceSheetPath))
+            return;
+
+        const string tempPath = "_replace_upload.tmp";
+        State.Fs.WriteAllBytes(tempPath, replacementBytes);
+
+        try
+        {
+            Sprites().ReplaceSprite(replaceSheetPath, replaceColumn, replaceRow, tempPath);
+            await State.FlushPathsAsync(new[] { replaceSheetPath });
+
+            if (viewedSheet != null && viewedSheet.path == replaceSheetPath)
+                ViewSheet(viewedSheet);
+        }
+        catch (Exception ex)
+        {
+            spriteError = ex.Message;
+        }
+        finally
+        {
+            State.Fs.Remove(tempPath);
+        }
+    }
+
+    private async Task OnBatchFilesSelected(InputFileChangeEventArgs e)
+    {
+        batchFiles.Clear();
+
+        foreach (IBrowserFile file in e.GetMultipleFiles(200))
+        {
+            using MemoryStream ms = new();
+            await file.OpenReadStream(10_000_000).CopyToAsync(ms);
+            batchFiles.Add((file.Name, ms.ToArray()));
+        }
+    }
+
+    private async Task BuildSheets()
+    {
+        spriteError = null;
+        const string tempFolder = "_batch_upload";
+
+        foreach ((string name, byte[] bytes) in batchFiles)
+            State.Fs.WriteAllBytes(ServerFiles.CombineVirtual(tempFolder, name), bytes);
+
+        try
+        {
+            List<ItemSpriteService.SheetBuildResult> results = Sprites().BuildSheetsFromFolder(tempFolder, "", prefix);
+            await State.FlushPathsAsync(results.Select(r => r.path));
+            batchFiles.Clear();
+            LoadSheets();
+        }
+        catch (Exception ex)
+        {
+            spriteError = ex.Message;
+        }
+        finally
+        {
+            State.Fs.RemoveFolder(tempFolder);
+        }
+    }
+
+    private void OnUsageCategoryChanged(ChangeEventArgs e) => usageCategory = e.Value?.ToString() ?? "item";
+
+    private void FindUsages()
+    {
+        usageResults = SpriteUsageService.FindReferences(State.Workspace!, usageCategory, usageSpriteId);
+        usageSearched = true;
+    }
+
+    private static int ParseIntOr(object? value, int fallback) =>
+        int.TryParse(value?.ToString(), out int parsed) ? parsed : fallback;
+}

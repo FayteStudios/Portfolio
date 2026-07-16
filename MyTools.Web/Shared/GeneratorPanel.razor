@@ -1,0 +1,144 @@
+@using MyTools.Map.Generation
+
+<div class="generatorWindow">
+    <label>Mode
+        <select @bind="Settings.mode">
+            <option value="maze">Maze</option>
+            <option value="dungeon">Dungeon</option>
+            <option value="town">Town</option>
+            <option value="world">World</option>
+            <option value="interior">Interior</option>
+            <option value="encounter">Encounter</option>
+            <option value="wilderness">Wilderness</option>
+            <option value="infrastructure">Infrastructure</option>
+            <option value="puzzle">Puzzle</option>
+            <option value="landmark">Landmark</option>
+            <option value="hazard">Hazard</option>
+        </select>
+    </label>
+
+    <label>Algorithm
+        <select @bind="SelectedLayout">
+            @foreach (string key in GeneratorRegistry.Keys(Settings.mode))
+            {
+                <option value="@key">@key</option>
+            }
+        </select>
+    </label>
+
+    <div class="miniGrid">
+        <label>Width <input type="number" min="8" max="500" @bind="Settings.width" /></label>
+        <label>Height <input type="number" min="8" max="500" @bind="Settings.height" /></label>
+        <label>Floor <input type="number" min="1" @bind="Settings.floorSurface" /></label>
+        <label>Road <input type="number" min="1" @bind="Settings.roadSurface" /></label>
+    </div>
+
+    @if (Settings.mode == "maze")
+    {
+        <div class="miniGrid">
+            <label>Path Width <input type="number" min="1" max="8" @bind="Settings.mazePathWidth" /></label>
+            <label>Dead Ends % <input type="number" min="0" max="100" @bind="Settings.mazeDeadEnds" /></label>
+        </div>
+    }
+    else if (Settings.mode == "dungeon")
+    {
+        <div class="miniGrid">
+            <label>Rooms <input type="number" min="2" max="80" @bind="Settings.questRooms" /></label>
+            <label>Min Room <input type="number" min="3" max="40" @bind="Settings.questRoomMin" /></label>
+            <label>Max Room <input type="number" min="3" max="60" @bind="Settings.questRoomMax" /></label>
+        </div>
+    }
+    else if (Settings.mode == "town")
+    {
+        <div class="miniGrid">
+            <label>Buildings <input type="number" min="1" max="120" @bind="Settings.townBuildings" /></label>
+            <label>Road Width <input type="number" min="1" max="12" @bind="Settings.townRoadWidth" /></label>
+            <label>Square <input type="checkbox" @bind="Settings.townSquare" /></label>
+        </div>
+    }
+    else if (Settings.mode == "world" || Settings.mode == "wilderness" || Settings.mode == "landmark" || Settings.mode == "encounter" || Settings.mode == "infrastructure" || Settings.mode == "hazard")
+    {
+        <div class="miniGrid">
+            <label>Sites <input type="number" min="1" max="80" @bind="Settings.worldSites" /></label>
+            <label>Noise Scale <input type="number" min="4" max="120" @bind="Settings.worldNoiseScale" /></label>
+            <label>Water Level <input type="number" min="0.05" max="0.9" step="0.01" @bind="Settings.worldWaterLevel" /></label>
+            <label>Water <input type="number" min="1" @bind="Settings.worldWaterSurface" /></label>
+            <label>Forest <input type="number" min="1" @bind="Settings.worldForestSurface" /></label>
+            <label>Mountain <input type="number" min="1" @bind="Settings.worldMountainSurface" /></label>
+        </div>
+    }
+
+    <div class="miniGrid">
+        <label>Monsters <input type="checkbox" @bind="Settings.monsterSpawns" /></label>
+        <label>Mobs <input type="checkbox" @bind="Settings.monsterMobSpawns" /></label>
+        <label>Count <input type="number" min="0" max="500" @bind="Settings.monsterSpawnCount" /></label>
+        <label>Monster IDs <input type="text" @bind="Settings.monsterIds" placeholder="comma separated, optional" /></label>
+    </div>
+
+    <label>Seed <input type="text" @bind="Settings.seed" placeholder="blank = random" /></label>
+
+    @if (!string.IsNullOrEmpty(State.LastError))
+    {
+        <p class="error-text">@State.LastError</p>
+    }
+
+    <div class="generatorActions">
+        <button type="button" class="primary" @onclick="Generate">Generate</button>
+        <button type="button" @onclick="Regenerate">Regenerate</button>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public MapEditorState State { get; set; } = null!;
+
+    private GeneratorSettings Settings => State.GeneratorSettings;
+
+    private string SelectedLayout
+    {
+        get => Settings.mode switch
+        {
+            "maze" => Settings.mazeLayout,
+            "dungeon" => Settings.dungeonLayout,
+            "town" => Settings.townLayout,
+            "world" => Settings.worldLayout,
+            "interior" => Settings.interiorLayout,
+            "encounter" => Settings.encounterLayout,
+            "wilderness" => Settings.wildernessLayout,
+            "infrastructure" => Settings.infrastructureLayout,
+            "puzzle" => Settings.puzzleLayout,
+            "landmark" => Settings.landmarkLayout,
+            "hazard" => Settings.hazardLayout,
+            _ => ""
+        };
+        set
+        {
+            switch (Settings.mode)
+            {
+                case "maze": Settings.mazeLayout = value; break;
+                case "dungeon": Settings.dungeonLayout = value; break;
+                case "town": Settings.townLayout = value; break;
+                case "world": Settings.worldLayout = value; break;
+                case "interior": Settings.interiorLayout = value; break;
+                case "encounter": Settings.encounterLayout = value; break;
+                case "wilderness": Settings.wildernessLayout = value; break;
+                case "infrastructure": Settings.infrastructureLayout = value; break;
+                case "puzzle": Settings.puzzleLayout = value; break;
+                case "landmark": Settings.landmarkLayout = value; break;
+                case "hazard": Settings.hazardLayout = value; break;
+            }
+        }
+    }
+
+    private void Generate()
+    {
+        // State.GenerateMap raises State.Changed itself - the page's own subscription to that
+        // event triggers the redraw. Calling Redraw again here from this component would race
+        // it (concurrent canvas resize + draw calls can leave the canvas blank).
+        State.GenerateMap(regenerate: false);
+    }
+
+    private void Regenerate()
+    {
+        State.GenerateMap(regenerate: true);
+    }
+}

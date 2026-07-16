@@ -1,0 +1,17 @@
+@inject MapCanvasInterop Canvas
+
+<canvas width="32" height="32" @ref="canvasRef"></canvas>
+
+@code {
+    [Parameter] public string Layer { get; set; } = "surface";
+    [Parameter] public int EntryId { get; set; }
+    [Parameter] public int Image { get; set; }
+    [Parameter] public int ImageType { get; set; }
+
+    private ElementReference canvasRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Canvas.DrawIconAsync(canvasRef, Layer, EntryId, Image, ImageType);
+    }
+}
