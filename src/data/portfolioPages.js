@@ -28,54 +28,54 @@ export const portfolioPages = [
     id: "about",
     title: "Nathanael Paulus",
     subtitle: "Learn.",
-    rank: "Sun",
-    arcanaType: "Major",
-    accent: "sun",
-    artImageKey: "sun"
+    rank: "",
+    arcanaType: "",
+    accent: "",
+    artImageKey: ""
   }),
   createPortfolioPage({
     id: "game-design",
     title: "Game Design",
     subtitle: "Explore.",
-    rank: "Queen",
-    arcanaType: "Wands",
-    accent: "wands",
-    artImageKey: "queen-wands"
+    rank: "",
+    arcanaType: "",
+    accent: "",
+    artImageKey: ""
   }),
   createPortfolioPage({
     id: "coding",
     title: "Coding",
     subtitle: "Emerge.",
-    rank: "Ace",
-    arcanaType: "Swords",
-    accent: "swords",
-    artImageKey: "ace-swords"
+    rank: "",
+    arcanaType: "",
+    accent: "",
+    artImageKey: ""
   }),
   createPortfolioPage({
     id: "art",
     title: "Art",
     subtitle: "Discover.",
-    rank: "Moon",
-    arcanaType: "Major",
-    accent: "moon",
-    artImageKey: "moon"
+    rank: "",
+    arcanaType: "",
+    accent: "",
+    artImageKey: ""
   }),
   createPortfolioPage({
     id: "writing",
     title: "Writing",
     subtitle: "Inspire.",
-    rank: "Knight",
-    arcanaType: "Cups",
-    accent: "cups",
-    artImageKey: "knight-cups"
+    rank: "",
+    arcanaType: "",
+    accent: "",
+    artImageKey: ""
   }),
   createPortfolioPage({
     id: "contact",
     title: "Contact",
     subtitle: "Commune",
-    rank: "Page",
-    arcanaType: "Pentacles",
-    accent: "pentacles",
-    artImageKey: "page-pentacles"
+    rank: "",
+    arcanaType: "",
+    accent: "",
+    artImageKey: ""
   })
 ];
