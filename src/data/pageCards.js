@@ -248,22 +248,6 @@ const pageCardsBySection = {
 
   "game-design": [
     createCard({
-      id: "beetlerpg",
-      title: "Beetle RPG",
-      description: "A roleplaying game about beetles.",
-      imageKey: "beetle",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "",
-        summary: "",
-        blocks: [
-          {
-          }
-        ]
-      }
-    }),
-    createCard({
       id: "fayte",
       title: "Fayte",
       description: "An oldschool online rpg fashioned after RPGWO.",
@@ -1355,11 +1339,292 @@ const pageCardsBySection = {
       title: "Entangled",
       description: "A dating sim with consequences.",
       imageKey: "barista-luna-confused",
-      pageTitle: "About",
+      pageTitle: "Entangled",
       detail: {
         eyebrow: "",
         title: "Entangled",
-        summary: "A dating sim with consequences.",
+        summary: "A narrative dating-sim prototype built around branching dialogue, persistent session state, time progression, and location-driven storytelling",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Entangled is a Unity-based conversational dating-sim prototype centered on character relationships, branching dialogue, scheduled activities, and progression through a small interconnected town."
+          },
+          {
+            type: "paragraph",
+            text: "The prototype established the original gameplay and data structures that informed later experimentation in related projects. Its most substantial technical contributions are found in its dialogue architecture, global flag system, calendar progression, location navigation, and scene-spanning state management."
+          },
+          {
+            type: "paragraph",
+            text: "Rather than treating conversations, time, and travel as unrelated features, Entangled connects them through a shared progression model:"
+          },
+          {
+            type: "list",
+            items: [
+              "Dialogue choices can modify global state",
+              "Dialogue exits can advance time",
+              "Time and flags can change which locations are available",
+              "Scene travel updates the player's current location",
+              "Persistent managers preserve state while Unity scenes change",
+              "ScriptableObjects allow narrative content and destinations to be authored as data"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The result is a prototype in which narrative progression is driven by the interaction between conversation choices, world state, time, and location."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Conditional, Evolving Conversations" },
+          {
+            type: "paragraph",
+            text: "Dialogue choices can be shown, hidden, or redirected according to stored conditions. This allows a conversation to respond to prior events such as:"
+          },
+          {
+            type: "list",
+            items: [
+              "Whether the player has met a character",
+              "Whether a location has been discovered",
+              "Which route the player previously selected",
+              "How far a relationship has progressed",
+              "Whether a scripted event has occurred",
+              "Which stage of the story is currently active"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The system therefore supports conversations that evolve over repeated visits rather than always presenting the same static dialogue tree."
+          },
+          { type: "heading", text: "Choices That Change the World" },
+          {
+            type: "paragraph",
+            text: "Dialogue is not only presentational. Lines and choices can update global state when they are entered or selected. This supports operations such as:"
+          },
+          {
+            type: "list",
+            items: [
+              "Setting a Boolean flag",
+              "Clearing a Boolean flag",
+              "Updating an integer progression value",
+              "Unlocking a destination",
+              "Recording a prior decision",
+              "Marking a narrative event as complete"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "By allowing dialogue content to modify shared game state, narrative choices can affect later scenes and interactions without requiring every destination to communicate directly with every other destination."
+          },
+          { type: "heading", text: "Dialogue Drives the Gameplay Loop" },
+          {
+            type: "paragraph",
+            text: "A dialogue line can trigger an action when the conversation ends. These exit actions connect dialogue to the rest of the game and can perform operations such as:"
+          },
+          {
+            type: "list",
+            items: [
+              "Traveling to another location",
+              "Advancing the calendar",
+              "Starting another conversation",
+              "Updating global flags",
+              "Triggering a scripted event"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "This makes dialogue a functional part of the gameplay loop. A conversation can directly cause time to pass, move the player elsewhere, or alter what becomes available next."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Calendar and Time as a Narrative Resource" },
+          {
+            type: "paragraph",
+            text: "Entangled includes a calendar system that tracks hour, day, month, and season. The prototype defines six recognizable periods:"
+          },
+          {
+            type: "list",
+            items: ["Early", "Morning", "Afternoon", "Evening", "Night", "Late"]
+          },
+          {
+            type: "paragraph",
+            text: "This provides the narrative systems with a shared vocabulary for when events occur."
+          },
+          {
+            type: "paragraph",
+            text: "Time can advance in response to gameplay actions, particularly dialogue exit actions, location transitions, scripted events, and activities that consume time. This allows the game to represent time as a narrative resource. A choice is not only about what the player says; it may also determine how much of the day remains available."
+          },
+          { type: "heading", text: "Time as a Narrative Gate" },
+          {
+            type: "paragraph",
+            text: "Although the prototype does not yet contain a full NPC schedule resolver, its calendar already provides conditions that narrative and location systems can react to. Time can be used to determine:"
+          },
+          {
+            type: "list",
+            items: [
+              "Whether an activity is available",
+              "Whether a destination should be displayed",
+              "Which dialogue should be entered",
+              "Whether an event can occur",
+              "Which story branch should advance",
+              "Whether travel should consume part of the day"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "This establishes the foundation for a dating-sim structure in which attention and time are limited resources."
+          },
+          { type: "divider" },
+          { type: "heading", text: "A Town of Discrete Destinations" },
+          {
+            type: "paragraph",
+            text: "Entangled organizes its world as a collection of discrete named destinations. Locations include places such as:"
+          },
+          {
+            type: "list",
+            items: [
+              "Home",
+              "The medium's residence",
+              "Grocery store",
+              "Café",
+              "Arcade",
+              "Bar",
+              "Book-related destinations"
+            ]
+          },
+          { type: "heading", text: "Menu-Driven Overworld" },
+          {
+            type: "paragraph",
+            text: "The overworld is intentionally menu-driven rather than based on direct character movement. Players choose a destination from an interface containing location buttons. This design emphasizes:"
+          },
+          {
+            type: "list",
+            items: [
+              "Narrative pacing",
+              "Intentional destination selection",
+              "Fast access to social encounters",
+              "Limited daily decision-making",
+              "Reduced travel downtime"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The navigation system is therefore structured around choosing what to do next rather than physically traversing a large map."
+          },
+          { type: "heading", text: "World Discovery Through Story, Not Exploration" },
+          {
+            type: "paragraph",
+            text: "Individual destination buttons can be shown or hidden according to global flags. This allows the world menu to expand as the player learns more about the town. For example, a destination may remain hidden until:"
+          },
+          {
+            type: "list",
+            items: [
+              "A character mentions it",
+              "An introductory event is completed",
+              "A relationship reaches a threshold",
+              "A story route is selected",
+              "A discovery flag is set"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "World discovery is represented through narrative progression rather than geographical exploration."
+          },
+          { type: "divider" },
+          { type: "heading", text: "The Core Loop" },
+          {
+            type: "paragraph",
+            text: "The strongest contribution of Entangled is not any one isolated system. It is the way its core systems connect. A dialogue choice can:"
+          },
+          {
+            type: "list",
+            items: [
+              "Set a global flag",
+              "Change an integer value",
+              "Advance the current conversation",
+              "End the conversation",
+              "Advance time",
+              "Unlock a destination",
+              "Trigger travel to a new scene"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The destination scene can then:"
+          },
+          {
+            type: "list",
+            items: [
+              "Reconnect its UI to the persistent dialogue manager",
+              "Read the updated global state",
+              "Present different dialogue",
+              "Display newly available locations",
+              "React to the new time period"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "This creates a reusable narrative loop:"
+          },
+          {
+            type: "callout",
+            text: "Enter a location → speak with a character → make a choice → update state → spend time → unlock or travel somewhere new"
+          },
+          {
+            type: "paragraph",
+            text: "That loop is central to the project's identity as a conversational dating sim."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Current Prototype Boundaries" },
+          {
+            type: "paragraph",
+            text: "The current Entangled prototype demonstrates:"
+          },
+          {
+            type: "list",
+            items: [
+              "Branching dialogue",
+              "ScriptableObject-authored narrative data",
+              "Conditional choice routing",
+              "Boolean and integer global flags",
+              "Dialogue-controlled state changes",
+              "Dialogue exit actions",
+              "Calendar progression",
+              "Named time periods",
+              "Data-defined destinations",
+              "Menu-driven location travel",
+              "Conditional destination visibility",
+              "Scene fade transitions",
+              "Persistent scene-spanning state"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The analyzed prototype does not currently demonstrate:"
+          },
+          {
+            type: "list",
+            items: [
+              "Real-time overworld movement",
+              "A complete NPC scheduling and location resolver",
+              "Disk-based save and load persistence",
+              "Combat",
+              "A generalized inventory and item system"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "Those systems should not be presented as completed Entangled features."
+          }
+        ]
+      }
+    }),
+    createCard({
+      id: "beetlerpg",
+      title: "Beetle RPG",
+      description: "A roleplaying game about beetles.",
+      imageKey: "beetle",
+      pageTitle: "About",
+      detail: {
+        eyebrow: "",
+        title: "",
+        summary: "",
         blocks: [
           {
           }
@@ -3561,13 +3826,713 @@ const pageCardsBySection = {
       title: "Entangled",
       description: "Programming work tied to Entangled.",
       imageKey: "emma",
-      pageTitle: "About",
+      pageTitle: "Entangled",
       detail: {
         eyebrow: "",
-        title: "",
-        summary: "",
+        title: "Entangled",
+        summary: "A narrative dating-sim prototype built around branching dialogue, persistent session state, time progression, and location-driven storytelling",
         blocks: [
           {
+            type: "paragraph",
+            text: "Entangled is a Unity-based conversational dating-sim prototype centered on character relationships, branching dialogue, scheduled activities, and progression through a small interconnected town."
+          },
+          {
+            type: "paragraph",
+            text: "The prototype established the original gameplay and data structures that informed later experimentation in related projects. Its most substantial technical contributions are found in its dialogue architecture, global flag system, calendar progression, location navigation, and scene-spanning state management."
+          },
+          {
+            type: "paragraph",
+            text: "Rather than treating conversations, time, and travel as unrelated features, Entangled connects them through a shared progression model:"
+          },
+          {
+            type: "list",
+            items: [
+              "Dialogue choices can modify global state",
+              "Dialogue exits can advance time",
+              "Time and flags can change which locations are available",
+              "Scene travel updates the player's current location",
+              "Persistent managers preserve state while Unity scenes change",
+              "ScriptableObjects allow narrative content and destinations to be authored as data"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The result is a prototype in which narrative progression is driven by the interaction between conversation choices, world state, time, and location."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Unity Architecture" },
+          {
+            type: "paragraph",
+            text: "Entangled was developed in Unity using a combination of:"
+          },
+          {
+            type: "list",
+            items: [
+              "C#",
+              "MonoBehaviours",
+              "ScriptableObjects",
+              "TextMeshPro",
+              "Unity scene management",
+              "Coroutines",
+              "Persistent singleton managers",
+              "Inspector-authored narrative data"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The prototype separates authored content from scene presentation where practical."
+          },
+          {
+            type: "paragraph",
+            text: "Dialogue, locations, conditions, and global state are represented through reusable data structures, while scene-level components handle presentation, input, animation, and transitions."
+          },
+          {
+            type: "paragraph",
+            text: "This allows the narrative systems to remain consistent even as the player moves between independently constructed Unity scenes."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Branching Dialogue System" },
+          {
+            type: "paragraph",
+            text: "Dialogue is authored through a hierarchy of ScriptableObjects rather than being embedded directly into scene scripts."
+          },
+          {
+            type: "list",
+            title: "The core structure includes",
+            items: [
+              "Dialogue conversations",
+              "Dialogue lines",
+              "Player choices",
+              "Conditional transitions",
+              "Entry and exit actions",
+              "State-changing effects"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "A conversation can move from a line into one or more player choices, route into another line, or exit into a new gameplay state."
+          },
+          {
+            type: "paragraph",
+            text: "Conceptually, the flow resembles:"
+          },
+          {
+            type: "callout",
+            text: "Dialogue line → available choices → conditional destination → next line or exit action"
+          },
+          {
+            type: "paragraph",
+            text: "This gives the dialogue system enough structure to support both straightforward conversations and state-dependent branching."
+          },
+          { type: "heading", text: "Conditional Choices and Routing" },
+          {
+            type: "paragraph",
+            text: "Dialogue choices can be shown, hidden, or redirected according to stored conditions."
+          },
+          {
+            type: "list",
+            title: "The system evaluates collections of",
+            items: ["Boolean flags", "Integer flags", "Required values", "State changes"]
+          },
+          {
+            type: "paragraph",
+            text: "Conditions can affect both player-facing choices and automatic transitions between dialogue lines."
+          },
+          {
+            type: "list",
+            title: "This allows a conversation to respond to prior events such as",
+            items: [
+              "Whether the player has met a character",
+              "Whether a location has been discovered",
+              "Which route the player previously selected",
+              "How far a relationship has progressed",
+              "Whether a scripted event has occurred",
+              "Which stage of the story is currently active"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The system therefore supports conversations that evolve over repeated visits rather than always presenting the same static dialogue tree."
+          },
+          { type: "heading", text: "Dialogue State Changes" },
+          {
+            type: "paragraph",
+            text: "Dialogue is not only presentational."
+          },
+          {
+            type: "paragraph",
+            text: "Lines and choices can update global state when they are entered or selected. This supports operations such as:"
+          },
+          {
+            type: "list",
+            items: [
+              "Setting a Boolean flag",
+              "Clearing a Boolean flag",
+              "Updating an integer progression value",
+              "Unlocking a destination",
+              "Recording a prior decision",
+              "Marking a narrative event as complete"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "By allowing dialogue content to modify shared game state, narrative choices can affect later scenes and interactions without requiring every destination to communicate directly with every other destination."
+          },
+          { type: "heading", text: "Dialogue Presentation Layer" },
+          {
+            type: "paragraph",
+            text: "A scene-spanning DialogueManager coordinates both dialogue logic and its visual presentation."
+          },
+          {
+            type: "list",
+            title: "It manages elements such as",
+            items: [
+              "TextMeshPro dialogue text",
+              "Speaker portraits",
+              "Character animation",
+              "Typewriter presentation",
+              "Voice playback",
+              "Choice buttons",
+              "Conversation progression",
+              "Dialogue exit behavior"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The manager persists across scene transitions, allowing conversations to use one consistent runtime controller rather than requiring every scene to contain a separately configured dialogue implementation."
+          },
+          { type: "heading", text: "Scene-Level UI Integration" },
+          {
+            type: "paragraph",
+            text: "Dialogue presentation is connected to each scene through a scene-level UI hook."
+          },
+          {
+            type: "paragraph",
+            text: "When a destination scene loads, the hook provides the persistent dialogue manager with the local interface it should control."
+          },
+          {
+            type: "paragraph",
+            text: "This solves an important Unity lifecycle problem:"
+          },
+          {
+            type: "list",
+            items: [
+              "The dialogue manager survives scene changes",
+              "Scene UI objects do not",
+              "Each newly loaded scene must reconnect its UI to the persistent manager"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The hook-based approach allows the manager to retain conversation logic and state while replacing only its scene-specific presentation references."
+          },
+          { type: "heading", text: "Typewriter and Voice Timing" },
+          {
+            type: "paragraph",
+            text: "Dialogue text is presented through coroutine-driven typewriter behavior."
+          },
+          {
+            type: "list",
+            title: "This allows the system to coordinate",
+            items: [
+              "Progressive text display",
+              "Player input",
+              "Voice playback",
+              "Animation state",
+              "Line completion",
+              "Choice activation"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "Presentation is therefore driven by the same dialogue runtime that controls narrative progression rather than by an unrelated collection of scene scripts."
+          },
+          { type: "heading", text: "Dialogue Exit Actions" },
+          {
+            type: "paragraph",
+            text: "A dialogue line can trigger an action when the conversation ends."
+          },
+          {
+            type: "list",
+            title: "These exit actions connect dialogue to the rest of the game and can perform operations such as",
+            items: [
+              "Traveling to another location",
+              "Advancing the calendar",
+              "Starting another conversation",
+              "Updating global flags",
+              "Triggering a scripted event"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "This makes dialogue a functional part of the gameplay loop."
+          },
+          {
+            type: "paragraph",
+            text: "A conversation can directly cause time to pass, move the player elsewhere, or alter what becomes available next."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Global State System" },
+          {
+            type: "paragraph",
+            text: "Entangled uses a persistent GlobalFlags ScriptableObject to track the player's session state."
+          },
+          {
+            type: "list",
+            title: "The global state includes information such as",
+            items: [
+              "Story flags",
+              "Relationship variables",
+              "Money",
+              "Character statistics",
+              "Current location",
+              "Calendar state",
+              "Discovered destinations",
+              "Event completion",
+              "Route-specific decisions"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The ScriptableObject begins from an authored set of default values and remains available to the game's scene-spanning managers."
+          },
+          {
+            type: "paragraph",
+            text: "This creates a shared source of truth for systems that need to respond to prior player actions."
+          },
+          { type: "heading", text: "Boolean and Integer Flags" },
+          {
+            type: "paragraph",
+            text: "The state model supports both Boolean and integer values."
+          },
+          {
+            type: "list",
+            title: "Boolean flags are appropriate for binary conditions such as",
+            items: [
+              "A person has been introduced",
+              "A destination has been discovered",
+              "An event has already occurred",
+              "A particular route is active"
+            ]
+          },
+          {
+            type: "list",
+            title: "Integer flags allow more granular progression, including",
+            items: [
+              "Relationship values",
+              "Repeated interaction counts",
+              "Story stages",
+              "Currency",
+              "Character statistics",
+              "Progressive unlock conditions"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "Using both types allows the prototype to represent more than simple yes-or-no story branches."
+          },
+          { type: "heading", text: "Persistent Runtime State" },
+          {
+            type: "paragraph",
+            text: "Global managers use Unity's persistent object lifecycle to survive scene loads."
+          },
+          {
+            type: "paragraph",
+            text: "This means that loading a café, home, arcade, or other location does not reset the player's broader session state."
+          },
+          {
+            type: "list",
+            title: "Scene changes replace the environment and local interface while retaining",
+            items: [
+              "Dialogue progression",
+              "Calendar values",
+              "Global flags",
+              "Player statistics",
+              "Location state",
+              "Narrative unlocks"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "This was essential because Entangled treats locations as separate Unity scenes rather than as regions inside one continuous world."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Calendar and Time Progression" },
+          {
+            type: "paragraph",
+            text: "Entangled includes a calendar system that tracks:"
+          },
+          {
+            type: "list",
+            items: ["Hour", "Day", "Month", "Season"]
+          },
+          {
+            type: "paragraph",
+            text: "Time advances through explicit progression methods rather than relying on a real-time simulation."
+          },
+          {
+            type: "list",
+            title: "The prototype defines six recognizable periods",
+            items: ["Early", "Morning", "Afternoon", "Evening", "Night", "Late"]
+          },
+          {
+            type: "paragraph",
+            text: "This provides the narrative systems with a shared vocabulary for when events occur."
+          },
+          { type: "heading", text: "Calendar Advancement" },
+          {
+            type: "paragraph",
+            text: "Time can advance in response to gameplay actions, particularly:"
+          },
+          {
+            type: "list",
+            items: [
+              "Dialogue exit actions",
+              "Location transitions",
+              "Scripted events",
+              "Activities that consume time"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The system progresses through hours, days, months, and seasons while accounting for differing month lengths."
+          },
+          {
+            type: "paragraph",
+            text: "This allows the game to represent time as a narrative resource."
+          },
+          {
+            type: "paragraph",
+            text: "A choice is not only about what the player says; it may also determine how much of the day remains available."
+          },
+          { type: "heading", text: "Time as a Narrative Gate" },
+          {
+            type: "paragraph",
+            text: "Although the prototype does not yet contain a full NPC schedule resolver, its calendar already provides conditions that narrative and location systems can react to."
+          },
+          {
+            type: "list",
+            title: "Time can be used to determine",
+            items: [
+              "Whether an activity is available",
+              "Whether a destination should be displayed",
+              "Which dialogue should be entered",
+              "Whether an event can occur",
+              "Which story branch should advance",
+              "Whether travel should consume part of the day"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "This establishes the foundation for a dating-sim structure in which attention and time are limited resources."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Location and Navigation System" },
+          {
+            type: "paragraph",
+            text: "Entangled organizes its world as a collection of discrete named destinations."
+          },
+          {
+            type: "list",
+            title: "Locations include places such as",
+            items: [
+              "Home",
+              "The medium's residence",
+              "Grocery store",
+              "Café",
+              "Arcade",
+              "Bar",
+              "Book-related destinations"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "Each location is represented through a closed location identifier and an associated LocationDefinition ScriptableObject."
+          },
+          {
+            type: "paragraph",
+            text: "That definition maps the narrative concept of a location to the Unity scene used to present it."
+          },
+          { type: "heading", text: "Data-Driven Destination Definitions" },
+          {
+            type: "paragraph",
+            text: "Location definitions separate travel data from the buttons or scenes that invoke it."
+          },
+          {
+            type: "list",
+            title: "A location can contain information such as",
+            items: [
+              "Its identifier",
+              "Its display name",
+              "Its Unity scene",
+              "Whether travel advances time",
+              "The conditions required to show it",
+              "Related discovery flags"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "This lets multiple interfaces refer to the same destination without duplicating scene names and rules throughout the project."
+          },
+          { type: "heading", text: "Menu-Driven Overworld" },
+          {
+            type: "paragraph",
+            text: "The overworld is intentionally menu-driven rather than based on direct character movement."
+          },
+          {
+            type: "paragraph",
+            text: "Players choose a destination from an interface containing location buttons. This design emphasizes:"
+          },
+          {
+            type: "list",
+            items: [
+              "Narrative pacing",
+              "Intentional destination selection",
+              "Fast access to social encounters",
+              "Limited daily decision-making",
+              "Reduced travel downtime"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The navigation system is therefore structured around choosing what to do next rather than physically traversing a large map."
+          },
+          { type: "heading", text: "Conditional Location Availability" },
+          {
+            type: "paragraph",
+            text: "Individual destination buttons can be shown or hidden according to global flags."
+          },
+          {
+            type: "paragraph",
+            text: "This allows the world menu to expand as the player learns more about the town. For example, a destination may remain hidden until:"
+          },
+          {
+            type: "list",
+            items: [
+              "A character mentions it",
+              "An introductory event is completed",
+              "A relationship reaches a threshold",
+              "A story route is selected",
+              "A discovery flag is set"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "World discovery is represented through narrative progression rather than geographical exploration."
+          },
+          { type: "heading", text: "Scene Travel Pipeline" },
+          {
+            type: "paragraph",
+            text: "Travel is coordinated through a shared WorldNavigation system."
+          },
+          {
+            type: "list",
+            title: "When the player chooses a destination, the system can",
+            items: [
+              "Update the current-location value",
+              "Optionally advance the calendar",
+              "Begin a fade transition",
+              "Load the corresponding Unity scene",
+              "Reconnect persistent managers to the new scene",
+              "Present the newly loaded destination"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "This makes scene loading part of a controlled gameplay operation rather than allowing individual buttons to call Unity's scene manager without shared state updates."
+          },
+          { type: "heading", text: "Transition Presentation" },
+          {
+            type: "paragraph",
+            text: "A ScreenFadeController manages the visual transition between scenes."
+          },
+          {
+            type: "paragraph",
+            text: "The fade disguises the hard scene boundary and gives location changes a more cohesive presentation."
+          },
+          {
+            type: "paragraph",
+            text: "Because the world is split across separate scenes, transition handling is important not only aesthetically but architecturally: it creates a predictable point at which navigation state, time, and presentation can be synchronized."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Interconnected Narrative Systems" },
+          {
+            type: "paragraph",
+            text: "The strongest technical contribution of Entangled is not any one isolated manager."
+          },
+          {
+            type: "paragraph",
+            text: "It is the way its core systems connect."
+          },
+          {
+            type: "paragraph",
+            text: "A dialogue choice can:"
+          },
+          {
+            type: "list",
+            items: [
+              "Set a global flag",
+              "Change an integer value",
+              "Advance the current conversation",
+              "End the conversation",
+              "Advance time",
+              "Unlock a destination",
+              "Trigger travel to a new scene"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The destination scene can then:"
+          },
+          {
+            type: "list",
+            items: [
+              "Reconnect its UI to the persistent dialogue manager",
+              "Read the updated global state",
+              "Present different dialogue",
+              "Display newly available locations",
+              "React to the new time period"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "This creates a reusable narrative loop:"
+          },
+          {
+            type: "callout",
+            text: "Enter a location → speak with a character → make a choice → update state → spend time → unlock or travel somewhere new"
+          },
+          {
+            type: "paragraph",
+            text: "That loop is central to the project's identity as a conversational dating sim."
+          },
+          { type: "heading", text: "Content-Driven Design" },
+          {
+            type: "paragraph",
+            text: "Entangled uses ScriptableObjects to make narrative content editable through Unity rather than encoding every conversation and destination directly in scripts."
+          },
+          {
+            type: "list",
+            title: "This supports authoring for",
+            items: [
+              "Dialogue lines",
+              "Dialogue choices",
+              "Conditional transitions",
+              "Global state changes",
+              "Location definitions",
+              "Exit actions",
+              "Character presentation"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The approach gives design and engineering a shared content model."
+          },
+          {
+            type: "paragraph",
+            text: "Narrative content can be assembled and adjusted in the editor while the runtime code remains responsible for evaluating conditions and presenting the result."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Technical Contributions" },
+          {
+            type: "paragraph",
+            text: "Entangled established several reusable systems and patterns:"
+          },
+          { type: "heading", text: "ScriptableObject-Based Dialogue" },
+          {
+            type: "paragraph",
+            text: "A branching conversation model containing lines, choices, conditional transitions, and exit behavior."
+          },
+          { type: "heading", text: "Shared Flag Vocabulary" },
+          {
+            type: "paragraph",
+            text: "Boolean and integer flags used to connect dialogue, world navigation, unlocks, and story progression."
+          },
+          { type: "heading", text: "Persistent Scene-Spanning Managers" },
+          {
+            type: "paragraph",
+            text: "Runtime controllers that preserve narrative and calendar state while location scenes are replaced."
+          },
+          { type: "heading", text: "Scene UI Rebinding" },
+          {
+            type: "paragraph",
+            text: "A hook-based approach for reconnecting persistent managers to scene-specific TextMeshPro interfaces and presentation components."
+          },
+          { type: "heading", text: "Data-Driven Navigation" },
+          {
+            type: "paragraph",
+            text: "Location definitions that map story locations to scenes while retaining conditions and time costs."
+          },
+          { type: "heading", text: "Dialogue-Driven Game Flow" },
+          {
+            type: "paragraph",
+            text: "Exit actions that allow conversations to advance time, update the world, or initiate travel."
+          },
+          { type: "heading", text: "Narrative Calendar Foundation" },
+          {
+            type: "paragraph",
+            text: "A multi-level calendar supporting hours, days, months, seasons, and six named periods of the day."
+          },
+          { type: "divider" },
+          { type: "heading", text: "Current Prototype Boundaries" },
+          {
+            type: "paragraph",
+            text: "The current Entangled prototype demonstrates:"
+          },
+          {
+            type: "list",
+            items: [
+              "Branching dialogue",
+              "ScriptableObject-authored narrative data",
+              "Conditional choice routing",
+              "Boolean and integer global flags",
+              "Dialogue-controlled state changes",
+              "Dialogue exit actions",
+              "Calendar progression",
+              "Named time periods",
+              "Data-defined destinations",
+              "Menu-driven location travel",
+              "Conditional destination visibility",
+              "Scene fade transitions",
+              "Persistent scene-spanning state"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The analyzed prototype does not currently demonstrate:"
+          },
+          {
+            type: "list",
+            items: [
+              "Real-time overworld movement",
+              "A complete NPC scheduling and location resolver",
+              "Disk-based save and load persistence",
+              "Combat",
+              "A generalized inventory and item system"
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "Those systems should not be presented as completed Entangled features."
+          },
+          { type: "divider" },
+          { type: "heading", text: "What Entangled Demonstrates Technically" },
+          {
+            type: "list",
+            title: "Entangled demonstrates the ability to",
+            items: [
+              "Build a branching narrative runtime in Unity",
+              "Represent narrative content through ScriptableObjects",
+              "Coordinate state across independently loaded scenes",
+              "Connect dialogue decisions to global game progression",
+              "Design reusable conditional-routing structures",
+              "Manage persistent and scene-local objects together",
+              "Treat time as a gameplay and narrative resource",
+              "Build data-driven destination navigation",
+              "Create editor-authored content pipelines",
+              "Connect UI presentation to reusable runtime systems",
+              "Establish technical foundations that can later be generalized into engine-independent architecture"
+            ]
           }
         ]
       }
