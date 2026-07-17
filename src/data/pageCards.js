@@ -19,7 +19,8 @@ function createCard({
   image,
   pageTitle,
   status = "Placeholder",
-  detail
+  detail,
+  ageRestricted = false
 }) {
   const resolvedImage = image || getDetailImage(imageKey);
 
@@ -31,6 +32,7 @@ function createCard({
     status,
     imageKey,
     image: resolvedImage,
+    ageRestricted,
     detail:
       detail ||
       createDetail({
@@ -1318,22 +1320,7 @@ const pageCardsBySection = {
         ]
       }
     }),
-    createCard({
-      id: "aetheric",
-      title: "Aetheric",
-      description: "A 3D tactical MMO.",
-      imageKey: "",
-      pageTitle: "About",
-      detail: {
-        eyebrow: "",
-        title: "",
-        summary: "",
-        blocks: [
-          {
-          }
-        ]
-      }
-    }),
+
     createCard({
       id: "entangled",
       title: "Entangled",
@@ -1620,6 +1607,22 @@ const pageCardsBySection = {
       title: "Beetle RPG",
       description: "A roleplaying game about beetles.",
       imageKey: "beetle",
+      pageTitle: "About",
+      detail: {
+        eyebrow: "",
+        title: "",
+        summary: "",
+        blocks: [
+          {
+          }
+        ]
+      }
+    }),    
+    createCard({
+      id: "aetheric",
+      title: "Aetheric",
+      description: "A 3D tactical MMO.",
+      imageKey: "",
       pageTitle: "About",
       detail: {
         eyebrow: "",
@@ -5010,7 +5013,8 @@ const pageCardsBySection = {
       id: "art-nsfw",
       title: "NSFW",
       description: "For something spicier. Must be 18 or older.",
-      "imageKey": "lighthouse-girl",
+      "imageKey": "",
+      ageRestricted: true,
       "detail": {
         "eyebrow": "",
         "title": "Spicier. Enter at your own risk.",

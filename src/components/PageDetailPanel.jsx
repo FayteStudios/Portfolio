@@ -1,5 +1,8 @@
+import { useState } from "react";
 import ProjectRiverCard from "./ProjectRiverCard.jsx";
 import DetailBlockRenderer from "./DetailBlockRenderer.jsx";
+import AgeGate from "./AgeGate.jsx";
+import { confirmAge, isAgeConfirmed } from "../utils/ageGate.js";
 
 function valueOrFallback(value, fallback) {
   return value === undefined || value === null ? fallback : value;
@@ -13,6 +16,15 @@ export default function PageDetailPanel({ page, card, isClosing, onBack }) {
   const summary = valueOrFallback(detail.summary, card.description || "");
 
   const hasBlocks = Array.isArray(detail.blocks) && detail.blocks.length > 0;
+
+  const [ageConfirmed, setAgeConfirmed] = useState(
+    () => !card.ageRestricted || isAgeConfirmed(card.id)
+  );
+
+  function handleAgeConfirm() {
+    confirmAge(card.id);
+    setAgeConfirmed(true);
+  }
 
   const paragraphs =
     detail.paragraphs && detail.paragraphs.length > 0
@@ -53,7 +65,9 @@ export default function PageDetailPanel({ page, card, isClosing, onBack }) {
         </header>
 
         <div className="page-detail-body">
-          {hasBlocks ? (
+          {!ageConfirmed ? (
+            <AgeGate onConfirm={handleAgeConfirm} onBack={onBack} />
+          ) : hasBlocks ? (
             <DetailBlockRenderer blocks={detail.blocks} />
           ) : (
             <>

@@ -3301,6 +3301,72 @@ body:has(.detail-builder-page),
   font-weight: 800;
 }
 
+.age-gate {
+  display: flex;
+  justify-content: center;
+  padding: clamp(24px, 6vw, 64px) 0;
+}
+
+.age-gate-panel {
+  max-width: 520px;
+  width: 100%;
+  padding: clamp(28px, 4vw, 44px);
+  border: 1px solid rgba(255, 245, 220, 0.28);
+  border-radius: clamp(20px, 2.5vw, 32px);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 231, 162, 0.14), transparent 30%),
+    linear-gradient(145deg, rgba(27, 18, 39, 0.98), rgba(8, 7, 14, 0.98));
+  text-align: center;
+}
+
+.age-gate-eyebrow {
+  margin: 0 0 10px;
+  font-size: 0.82rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255, 224, 157, 0.74);
+}
+
+.age-gate-panel h2 {
+  margin: 0 0 14px;
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  line-height: 1.2;
+}
+
+.age-gate-panel p {
+  margin: 0;
+  color: rgba(255, 246, 225, 0.74);
+  line-height: 1.5;
+}
+
+.age-gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: clamp(20px, 3vw, 28px);
+}
+
+.age-gate-confirm,
+.age-gate-decline {
+  border-radius: 999px;
+  padding: 0.8rem 1.35rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.age-gate-confirm {
+  border: 1px solid rgba(255, 244, 214, 0.9);
+  background: #fff4d6;
+  color: #171117;
+}
+
+.age-gate-decline {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: inherit;
+}
+
 .detail-block-divider hr {
   border: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.18);
