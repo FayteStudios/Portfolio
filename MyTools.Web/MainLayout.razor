@@ -39,8 +39,12 @@
 
         @if (!string.IsNullOrEmpty(State.LastError))
         {
-            <p class="error-text">@State.LastError</p>
+            <div class="error-banner">
+                <span>⚠ @State.LastError</span>
+                <button @onclick="DismissError">Dismiss</button>
+            </div>
         }
+
 
         @Body
     </div>
@@ -68,4 +72,6 @@
     private async Task DownloadZip() => await State.DownloadZipAsync();
 
     private async Task Forget() => await State.ForgetWorkspaceAsync();
+
+    private void DismissError() => State.ClearError();
 }

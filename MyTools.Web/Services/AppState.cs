@@ -30,11 +30,6 @@ namespace MyTools.Web.Services
         public List<WorkspaceFileDto> files { get; set; } = new();
     }
 
-    // Central scoped state for the app: owns the in-memory virtual filesystem and the parsed
-    // ServerWorkspace built from it, and orchestrates the two ways a real folder gets in and out
-    // of that virtual filesystem (File System Access API vs. upload/download). The ported engine
-    // (ServerWorkspaceService, IniWriter, BlockWriter, ...) only ever sees the virtual filesystem
-    // - it has no idea which mode is active.
     public sealed class AppState
     {
         private const string UiPointerKey = "ui-pointer";
@@ -49,7 +44,14 @@ namespace MyTools.Web.Services
         public string FolderDisplayName { get; private set; } = "";
         public string? LastError { get; private set; }
 
+        public void ClearError()
+        {
+            LastError = null;
+            NotifyChanged();
+        }
+
         public ServerFile? SelectedFile { get; private set; }
+
         public int? SelectedEntryId { get; private set; }
 
         public event Action? Changed;
@@ -64,10 +66,6 @@ namespace MyTools.Web.Services
 
         private void NotifyChanged() => Changed?.Invoke();
 
-        // Called once on app startup: try to silently resume a File System Access handle from a
-        // previous visit (one-click permission re-grant, not a full re-pick), otherwise fall back
-        // to whatever upload-mode snapshot was last saved to IndexedDB. Either way, a refresh
-        // should never just lose whatever was open.
         public async Task InitializeAsync()
         {
             if (await interop.IsFileSystemAccessSupportedAsync())
@@ -125,11 +123,16 @@ namespace MyTools.Web.Services
             }
             catch (Exception ex)
             {
-                LastError = ex.Message;
-                NotifyChanged();
+                if (!ex.Message.Contains("AbortError", StringComparison.OrdinalIgnoreCase))
+                {
+                    LastError = ex.Message;
+                    NotifyChanged();
+                }
+
                 return false;
             }
         }
+
 
         private async Task HydrateFromFileSystemAccessAsync(string name)
         {
@@ -180,10 +183,6 @@ namespace MyTools.Web.Services
             Workspace = workspaceService.Load("");
             NotifyChanged();
         }
-
-        // Saves one server file's IniDoc back through the same backup-then-write path the
-        // desktop app uses, then propagates the write out to wherever the real bytes need to
-        // live: the actual picked folder (File System Access) or the IndexedDB snapshot (Upload).
         public async Task SaveIniAsync(ServerFile file, IniDoc doc)
         {
             string path = ServerFiles.PathFor("", file);
@@ -214,8 +213,6 @@ namespace MyTools.Web.Services
             }
         }
 
-        // For non-ini writes (new/replaced sprite sheets) that don't go through SaveIniAsync:
-        // pushes the given paths out to wherever the real bytes need to live, same as a save.
         public async Task FlushPathsAsync(IEnumerable<string> paths)
         {
             if (Mode == WorkspaceMode.FileSystemAccess)

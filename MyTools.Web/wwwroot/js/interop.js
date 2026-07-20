@@ -1,8 +1,3 @@
-// JS interop for MyTools.Web: File System Access API (primary path, Chromium) with IndexedDB
-// handle persistence so a page refresh only needs a one-click permission re-grant, plus a
-// generic IndexedDB string-blob store used by the upload/download fallback path to snapshot
-// in-progress edits across a refresh. Everything here is invoked from C# via IJSRuntime; no
-// state lives only in C# that the browser side needs back, and vice versa.
 
 let currentHandle = null;
 
@@ -16,9 +11,6 @@ export async function pickDirectory() {
     return currentHandle.name;
 }
 
-// Called on page load to silently pick back up the last-used folder handle (if any) without
-// re-prompting a full folder picker - the browser still requires a one-click permission
-// re-grant (requestPermissionForCurrentHandle), which is unavoidable, but that's it.
 export async function restoreHandle() {
     const handle = await loadHandle();
     if (!handle) return null;
@@ -45,28 +37,28 @@ export async function requestPermissionForCurrentHandle() {
     return permission;
 }
 
-// Reads only what MyTools.Web actually needs: the known root ini filenames (whichever of them
-// exist) plus every file directly inside "Sprites" (non-recursive, matching the desktop app's
-// own convention) - not a full recursive tree walk, since a real server folder can contain a lot
-// of unrelated data. Returns [{ path, bytesBase64 }, ...].
 export async function readWorkspaceFiles(rootFileNames) {
     if (!currentHandle) return [];
 
     const results = [];
+    const wantedFiles = new Map(rootFileNames.map(name => [name.toLowerCase(), name]));
+    let spritesHandle = null;
 
-    for (const name of rootFileNames) {
-        try {
-            const fileHandle = await currentHandle.getFileHandle(name);
-            const file = await fileHandle.getFile();
-            results.push({ path: name, bytesBase64: arrayBufferToBase64(await file.arrayBuffer()) });
-        } catch {
-            // Not present - fine, most files are optional.
+    for await (const [entryName, entryHandle] of currentHandle.entries()) {
+        const lower = entryName.toLowerCase();
+
+        if (entryHandle.kind === "file" && wantedFiles.has(lower)) {
+            const file = await entryHandle.getFile();
+            results.push({
+                path: wantedFiles.get(lower),
+                bytesBase64: arrayBufferToBase64(await file.arrayBuffer())
+            });
+        } else if (entryHandle.kind === "directory" && lower === "sprites") {
+            spritesHandle = entryHandle;
         }
     }
 
-    try {
-        const spritesHandle = await currentHandle.getDirectoryHandle("Sprites");
-
+    if (spritesHandle) {
         for await (const [entryName, entryHandle] of spritesHandle.entries()) {
             if (entryHandle.kind !== "file") continue;
 
@@ -76,15 +68,31 @@ export async function readWorkspaceFiles(rootFileNames) {
                 bytesBase64: arrayBufferToBase64(await file.arrayBuffer())
             });
         }
-    } catch {
-        // No Sprites folder yet - fine.
     }
 
     return results;
 }
 
-// Writes one file back to the real, picked folder, creating any missing intermediate
-// directories (e.g. "Backups", "Sprites") along the way.
+async function getOrCreateDirectory(dir, name) {
+    for await (const [entryName, entryHandle] of dir.entries()) {
+        if (entryHandle.kind === "directory" && entryName.toLowerCase() === name.toLowerCase()) {
+            return entryHandle;
+        }
+    }
+
+    return await dir.getDirectoryHandle(name, { create: true });
+}
+
+async function getOrCreateFile(dir, name) {
+    for await (const [entryName, entryHandle] of dir.entries()) {
+        if (entryHandle.kind === "file" && entryName.toLowerCase() === name.toLowerCase()) {
+            return entryHandle;
+        }
+    }
+
+    return await dir.getFileHandle(name, { create: true });
+}
+
 export async function writeFile(path, bytesBase64) {
     if (!currentHandle) throw new Error("No folder handle - pick a folder first.");
 
@@ -92,14 +100,15 @@ export async function writeFile(path, bytesBase64) {
     let dir = currentHandle;
 
     for (let i = 0; i < parts.length - 1; i++) {
-        dir = await dir.getDirectoryHandle(parts[i], { create: true });
+        dir = await getOrCreateDirectory(dir, parts[i]);
     }
 
-    const fileHandle = await dir.getFileHandle(parts[parts.length - 1], { create: true });
+    const fileHandle = await getOrCreateFile(dir, parts[parts.length - 1]);
     const writable = await fileHandle.createWritable();
     await writable.write(base64ToArrayBuffer(bytesBase64));
     await writable.close();
 }
+
 
 export function downloadBlob(bytesBase64, fileName, mimeType) {
     const bytes = base64ToArrayBuffer(bytesBase64);
@@ -116,10 +125,6 @@ export function downloadBlob(bytesBase64, fileName, mimeType) {
     setTimeout(() => URL.revokeObjectURL(url), 30000);
 }
 
-// --- Upload fallback (Safari/Firefox - no File System Access API) ---
-// Blazor's built-in <InputFile> doesn't expose webkitRelativePath, which is the only way to
-// recover folder structure from a <input webkitdirectory> selection, so these read the raw DOM
-// element's .files directly instead.
 
 export async function readUploadedFiles(inputElement) {
     const files = inputElement.files;
@@ -129,9 +134,6 @@ export async function readUploadedFiles(inputElement) {
         const file = files[i];
         const relPath = file.webkitRelativePath || file.name;
         const parts = relPath.split("/");
-        // Drop the top-level picked-folder name itself so paths line up with the "" workspace
-        // root convention the FS Access path also uses (e.g. "Sprites/item0.bmp", not
-        // "MyServer/Sprites/item0.bmp").
         const path = parts.length > 1 ? parts.slice(1).join("/") : parts[0];
 
         results.push({ path, bytesBase64: arrayBufferToBase64(await file.arrayBuffer()) });
@@ -148,8 +150,6 @@ export function getUploadFolderName(inputElement) {
     return relPath.split("/")[0] || "uploaded-folder";
 }
 
-// Reads a single plain <input type=file> selection (Map Editor's "Open .map/.rsf" - no
-// directory/relative-path complexity needed here, just one file's name + bytes).
 export async function readSingleFile(inputElement) {
     const file = inputElement.files && inputElement.files[0];
     if (!file) return null;
@@ -157,8 +157,6 @@ export async function readSingleFile(inputElement) {
     return { path: file.name, bytesBase64: arrayBufferToBase64(await file.arrayBuffer()) };
 }
 
-// --- Generic IndexedDB string-blob store (used by the upload/download fallback path to
-// snapshot the in-memory workspace as JSON across a refresh) ---
 
 const DB_NAME = "mytools-web";
 const DB_VERSION = 1;
