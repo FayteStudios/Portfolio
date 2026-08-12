@@ -1,0 +1,64 @@
+HEARTH & HARVEST - TERMS OF SERVICE AND USER AGREEMENT
+
+Fayte Studios
+
+
+TERMS OF SERVICE
+
+Hearth & Harvest is played against other people on a live server. By
+installing the launcher and connecting to that server, you agree to the
+following.
+
+Play fair. Do not modify the client, automate play, or attempt to interfere
+with the server, the network protocol, or other players' accounts.
+
+One person, one account. Your account is yours. Do not share, sell or trade
+it, and do not use someone else's.
+
+Finish your matches. Conceding is a normal move and costs what losing costs.
+Deliberately stalling, disconnecting to avoid a loss, or manipulating the
+ladder is not.
+
+Be decent. Harassment, hate speech, threats and impersonation get you
+removed. Chat is a shared space.
+
+Ranks and records can be adjusted. Ladder standings, match history and card
+data may be corrected or reset between builds.
+
+Access can be withdrawn. Accounts that break these terms may be suspended or
+removed without notice.
+
+Report what breaks. If you find an exploit, tell us rather than using it.
+
+
+USER AGREEMENT
+
+Licence. You are granted a personal, non-exclusive, revocable licence to
+install and run the Hearth & Harvest launcher and client for the purpose of
+playing the game. You may not redistribute, sell, rent, reverse engineer,
+decompile, or create derivative works from the software, its card data, or
+its artwork.
+
+Ownership. Hearth & Harvest, its code, card designs, artwork, audio,
+characters and written content remain the property of Fayte Studios. Nothing
+here transfers ownership of any of it.
+
+Accounts and data. A password account stores a username and a hashed
+password. Signing in with Google stores the account identifier Google
+provides and your email address, and is used only to sign you in. Decks,
+match records, friends and chat messages are stored on the server so the game
+can work. Data is not sold or shared with third parties.
+
+Updates. The launcher checks for and installs updates to itself and to the
+game client each time it runs. Installing it means agreeing to that.
+
+Installation. Hearth & Harvest installs to your user profile and requires no
+administrator access. It can be removed at any time from Windows Settings,
+under Apps.
+
+No warranty. The software is provided as is, without warranty of any kind.
+
+Age. You should be 13 or older to create an account.
+
+
+Questions about any of this can go to faytestudios@gmail.com.

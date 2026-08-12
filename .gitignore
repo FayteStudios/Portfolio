@@ -23,6 +23,9 @@ MyTools.Web/publish/
 public/HnHLauncher/HnHLauncher.zip
 public/FayteLauncher/FayteLauncher.zip
 
+# Built installers. See installers/README.md.
+dist-installers/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

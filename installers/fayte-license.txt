@@ -1,0 +1,60 @@
+FAYTE - TERMS OF SERVICE AND USER AGREEMENT
+
+Fayte Studios
+
+
+TERMS OF SERVICE
+
+Fayte runs on a live server in closed beta. By installing the launcher and
+connecting to that server, you agree to the following.
+
+Play fair. Do not modify the client, automate play, or attempt to interfere
+with the server, the network protocol, or other players' accounts.
+
+One person, one account. Your account is yours. Do not share, sell or trade
+it, and do not use someone else's.
+
+Be decent. Harassment, hate speech, threats and impersonation get you
+removed. Chat is a shared space.
+
+The world is a test world. This is a beta, and characters, items and land may
+be reset between builds. Nothing in the game is property, and nothing in it
+can be exchanged for money.
+
+Access can be withdrawn. Accounts that break these terms may be suspended or
+removed without notice.
+
+Report what breaks. If you find an exploit, tell us rather than using it.
+That is the single most useful thing a tester can do.
+
+
+USER AGREEMENT
+
+Licence. You are granted a personal, non-exclusive, revocable licence to
+install and run the Fayte launcher and client for the purpose of playing the
+game. You may not redistribute, sell, rent, reverse engineer, decompile, or
+create derivative works from the software or its content.
+
+Ownership. Fayte, its code, artwork, audio, characters, world and written
+content remain the property of Fayte Studios. Nothing here transfers
+ownership of any of it.
+
+Data. Accounts store a username and a hashed password. Gameplay and
+connection data are stored on the server so the game can work and so problems
+can be diagnosed. Data is not sold or shared with third parties.
+
+Updates. The launcher checks for and installs updates to itself and to the
+game client each time it runs. Installing it means agreeing to that.
+
+Installation. Fayte installs to your user profile and requires no
+administrator access. It can be removed at any time from Windows Settings,
+under Apps.
+
+No warranty. The software is provided as is, without warranty of any kind.
+Beta software can crash, lose progress, or behave unexpectedly, and it is
+provided for testing.
+
+Age. You should be 13 or older to create an account.
+
+
+Questions about any of this can go to faytestudios@gmail.com.
