@@ -34,6 +34,15 @@ export const portfolioPages = [
     artImageKey: ""
   }),
   createPortfolioPage({
+    id: "games",
+    title: "Games",
+    subtitle: "My projects",
+    rank: "",
+    arcanaType: "",
+    accent: "",
+    artImageKey: ""
+  }),
+  createPortfolioPage({
     id: "game-design",
     title: "Game Design",
     subtitle: "Explore.",

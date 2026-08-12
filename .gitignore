@@ -17,6 +17,11 @@ dist-ssr
 [Oo]bj/
 MyTools.Web/publish/
 
+# Exceeds GitHub's 100 MB per-file limit, so it cannot be committed.
+# Host it elsewhere (e.g. a GitHub Release asset) and point the
+# download button in public/HnHLauncher/index.html at that URL.
+public/HnHLauncher/HnHLauncher.zip
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

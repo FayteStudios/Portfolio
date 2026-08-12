@@ -821,7 +821,7 @@ export default function DetailPageBuilder() {
           <h1>Detail Page Builder</h1>
           <p>
             Build a detail page with reusable blocks, then copy the generated
-            object into the matching card in pageCards.js.
+            object into the matching card in src/data/cards.
           </p>
         </header>
 
